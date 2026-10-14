@@ -94,10 +94,61 @@ def model_chunk_budget(reserve_system: int = DEFAULT_RESERVE_FOR_SYSTEM_PROMPT,
     """How many tokens of DOCUMENT TEXT can go into one extraction call for
     whichever provider is currently selected (llm_client.USE_MODEL),
     reserving headroom for the system prompt and the model's own JSON
-    output."""
+    output.
+
+    2026-10-14 (phase0/followups): a LOCAL model (vLLM/Ollama, typically an
+    8-32k window) has no entry in MODEL_CONTEXT_WINDOWS, so it used to fall
+    through to the 100k default - one "whole document" group far bigger than
+    the server accepts. When llm_client.context_window_tokens() knows the
+    window (LOCAL_LLM_CONTEXT_LENGTH, honouring USE_MODEL_INGESTION and an
+    LLM_ROUTE_ENRICHMENT* route - the enrichment calls are named
+    enrichment_group_<i>_of_<n>), that window is used via
+    llm_client.local_text_token_budget(). API providers are unchanged."""
+    local_window = _configured_local_window()
+    if local_window:
+        return llm_client.local_text_token_budget(local_window, reserve_system, reserve_output)
     window = MODEL_CONTEXT_WINDOWS.get(llm_client.USE_MODEL, 100_000)
     budget = window - reserve_system - reserve_output
     return max(budget, 2_000)  # never go below a sane floor even for a tiny/misconfigured window
+
+
+def _configured_local_window() -> int | None:
+    """2026-10-14: LOCAL_LLM_CONTEXT_LENGTH for the provider that will serve
+    the enrichment calls, or None (API provider, or LOCAL with no window
+    configured - then the old table/100k default applies and a warning says
+    so, rather than guessing a window for an unknown model). Never raises:
+    a bad USE_MODEL value surfaces on the real call, not in sizing."""
+    try:
+        window = llm_client.context_window_tokens("ingestion", name="enrichment_group")
+        if not window:
+            config = llm_client.refresh_model_config("ingestion", name="enrichment_group")
+            if config.use_model == "LOCAL":
+                step_logger.log("  WARNING: LOCAL model with no LOCAL_LLM_CONTEXT_LENGTH set - sizing "
+                                "extraction groups for a 100k window; set it to the server's max_model_len.")
+        return window
+    except Exception:
+        return None
+
+
+def generic_chunk_id(index: int, document_id: str) -> str:
+    """2026-10-14: NEW. The chunk_id a generic-document run gives its
+    index-th Chunk - `<document_id>__<index>`, the same `<namespace>__<i>`
+    shape extract_entities.act_chunk_id() gives Act chunks.
+    BUGFIX: this was the bare position index (0, 1, 2, ...) for every generic
+    document, while graph_loader/embedder MERGE Chunk nodes on chunk_id
+    ALONE - so ingesting a second generic document MERGEd its chunk "0" onto
+    the first document's chunk "0" (and onto chunk "0" of any Act ingested
+    without a namespace), overwriting text/citation and leaving the earlier
+    document's DocumentSection pointing at the wrong text. Unlike an Act run
+    a generic run ALWAYS has a document_id (main() defaults it to the file
+    stem), so this is always namespaced - deterministic for re-runs of the
+    same document, distinct across documents. Commas are replaced because
+    entities carry chunk ids as a comma-joined `source_chunk_ids` string
+    (graph_loader.load_chunk_nodes_and_links() splits on ",")."""
+    namespace = str(document_id).strip().replace(",", "_")
+    if not namespace:
+        raise ValueError("generic_chunk_id() needs a non-empty document_id")
+    return f"{namespace}__{index}"
 
 
 # --- deterministic paragraph-level chunking -----------------------------------
@@ -421,7 +472,8 @@ def main():
         if chunk_pages[i] is not None:
             props["page_number"] = chunk_pages[i]
         entity = {"id": sec_id, "type": "DocumentSection", "properties": props}
-        extract_entities.attach_pipeline_metadata(entity, doc_meta, run_timestamp, i)
+        # 2026-10-14: namespaced chunk id (was the bare index i) - see generic_chunk_id().
+        extract_entities.attach_pipeline_metadata(entity, doc_meta, run_timestamp, generic_chunk_id(i, doc_id))
         all_entities[sec_id] = entity
         structural_entity_ids.add(sec_id)
         section_entity_ids.append(sec_id)
@@ -502,7 +554,8 @@ def main():
         chunks_out_path = args.chunks_out or _os.path.join(_os.path.dirname(args.out) or ".", "chunks.json")
         chunk_records = [
             {
-                "chunk_id": i, "text": text, "entity_id": section_entity_ids[i],
+                # 2026-10-14: namespaced (was the bare index i) - see generic_chunk_id().
+                "chunk_id": generic_chunk_id(i, doc_id), "text": text, "entity_id": section_entity_ids[i],
                 "full_citation": f"{doc_meta['document_name']} — Part {i + 1}",
                 "short_title": chunking.make_short_title(text), "chunk_type": "document_section",
                 "element_type": "document_section", "file_type": doc_meta.get("file_type", ""),

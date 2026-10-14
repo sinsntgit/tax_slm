@@ -39,8 +39,10 @@ python -m framework.webapp.app --domain tax          :: leave running (http://lo
 In a second terminal:
 
 ```bat
-:: 1. Flush the response cache. Its key ignores the model, so a cached answer
-::    could be another model's answer, with fake latency. Do this before EVERY run.
+:: 1. (Optional since 2026-10-14) The runner sends bypass_cache=true, and the
+::    server's cache key now includes the answer model + prompt version, so a
+::    run is never served a cached answer. Flushing is only needed against an
+::    older server build that predates this:
 docker exec tax_kg_revised_redis redis-cli FLUSHDB
 
 :: 2. Check the gold set
@@ -52,6 +54,19 @@ python -m eval.run --gold eval/gold/ --target http://localhost:5000 --retrieval-
 :: 4. The baseline run (frontier model, set via USE_MODEL / USE_MODEL_RETRIEVAL in .env)
 python -m eval.run --gold eval/gold/ --target http://localhost:5000 --retrieval-mode hybrid --answer-mode research --judge --out eval/runs/2026-10-xx_frontier_hybrid_research --notes "USE_MODEL_RETRIEVAL=CLAUDE <model>, answer_generation v6"
 ```
+
+**Judge model.** For the SLM run, route the judge calls to the same reference
+model the baseline used (`LLM_ROUTE_ANSWER_QUALITY_JUDGE` /
+`LLM_ROUTE_ANSWER_EVALUATION` + `_MODEL`, see the main README "Judge model"),
+otherwise the SLM grades itself. The report and `eval.compare` flag answers
+whose judge was the answer model (`same_as_answer_model` in `model_info`).
+
+**Model identity.** Every response carries the server's `model_info` (answer
+provider/model, answer prompt name+version, nl2cypher prompt version, judge
+models; no secrets). The runner stores it per item (`responses/<id>.json`) and
+in the manifest (`server_settings.model_info`); the summary counts answers per
+`<provider>/<model> <prompt>@<version>` (`overall.models`), and the report
+flags a run that mixes models as **MIXED MODELS**.
 
 The results land in `eval/runs/<name>/report.md`. That folder is git-ignored
 because it holds full answers and corpus text.
@@ -112,7 +127,8 @@ should have cited ...)" caution line are stripped.
 | Metric | Definition |
 |---|---|
 | **error_rate** | Items with no usable answer divided by all items. Error types: `timeout`, `connection_error`, `http_error` (with status), `malformed_response` (2xx but not JSON, or no `answer`). |
-| **cache_hits** | Answers with `from_cache=true`. Any non-zero value makes a run invalid for comparison (see section 1). |
+| **cache_hits** | Answers with `from_cache=true`. Any non-zero value makes a run invalid for comparison (see section 1). Should always be 0 now that the runner sends `bypass_cache=true`. |
+| **models / judge_self_graded_items** | Answers per `<provider>/<model> <prompt>@<version>` from each response's `model_info` (`unknown` for a server without it), and answers whose judge resolved to the answer model itself. More than one model, or any self-graded item, is flagged in the report and by compare. |
 | **authority recall (answer)** | For each gold item: required authorities found **in the answer text** divided by the number required. Micro is the ratio of totals; macro is the mean per item. |
 | **items meeting authority threshold** | Share of items whose answer recall is at least 85% (`settings.authority_item_threshold` in gates.json). The release gate needs this to be 100%. |
 | **authority recall (sources)** | The same test run against **everything retrieval returned**: document names, citations, chunk previews, full chunk text (the runner always sends `include_full_chunks=true`), parent-section text and graph nodes. If an authority is in the sources but not the answer, generation dropped it. If it is in neither, retrieval missed it. |

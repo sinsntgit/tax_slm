@@ -1076,6 +1076,11 @@ def api_ask():
     # omitted/unknown -> get_attachment() returns None -> identical behavior
     # to before file attachment existed.
     data_session_id = body.get("data_session_id") or None
+    # 2026-10-14 (phase0/followups): NEW - opt-in, evaluation-harness request
+    # (eval/README.md): skip BOTH the answer-cache read and write, so an
+    # evaluation run is never served (or pollutes) a cached answer and its
+    # latency is real. Loose truthiness like the other optional flags above.
+    bypass_cache = bool(body.get("bypass_cache"))
     if not question:
         return jsonify({"error": "question is required"}), 400
     try:
@@ -1095,6 +1100,7 @@ def api_ask():
             question, metadata_filters, retrieval_mode, answer_mode,
             attached_file_context=attached_file_context,
             auto_evaluate=auto_evaluate, include_full_chunks=include_full_chunks,
+            bypass_cache=bypass_cache,
         )
         # 2026-09-08: NEW - surfaced for the evidence panel's "Agents
         # invoked" step (index.html) - see this route's docstring above.
@@ -1211,6 +1217,90 @@ def _resolve_include_parent_context(retrieval_mode: str, include_parent_context:
     if include_parent_context is not None:
         return bool(include_parent_context)
     return retrieval_mode != "vector_only"
+
+
+# 2026-10-14 (phase0/followups): answer_mode -> PROMPT_PACK name, mirrored from
+# _api_ask_impl()'s own _ANSWER_MODE_PROMPT_NAMES (left untouched there) so the
+# model_info/cache-key helper below resolves exactly the prompt generation uses.
+_MODEL_INFO_ANSWER_PROMPT_NAMES = {
+    "research": "answer_generation",
+    "lookup": "answer_generation_lookup",
+    "opinion": "answer_generation_opinion",
+}
+# The call names the in-pipeline judge (answer_quality.judge_answer) and the
+# grounded/general-knowledge evaluator (answer_evaluation.evaluate_answer)
+# pass to llm_client.complete() - route them with LLM_ROUTE_<NAME> (see
+# README "Judge model") so the model under test never grades itself.
+_JUDGE_CALL_NAMES = ("answer_quality_judge", "answer_evaluation")
+
+
+def _ask_model_info(answer_mode: str = "research") -> tuple[dict, str]:
+    """2026-10-14 (phase0/followups): NEW - evaluation-integrity request from
+    the eval harness (eval/README.md). Returns (model_info, cache_identity):
+
+      - model_info: what the ANSWER was (or will be) generated with -
+        provider/model resolved for the answer_generation call
+        (purpose="retrieval", so USE_MODEL_RETRIEVAL and an
+        LLM_ROUTE_ANSWER_GENERATION route both count), the answer prompt
+        name+version, the nl2cypher prompt version, and the judge models.
+        No secrets (see llm_client.describe_call_model()).
+      - cache_identity: folded into the /api/ask answer-cache key, so a run
+        against a different model or prompt version can never be served
+        another model's cached answer. Computed ONCE per request, before the
+        cache read, and reused for the write (read key == write key).
+
+    A Settings-page answer-prompt override is reported as version
+    "settings_override:<sha256[:12]>" of its text, so editing it changes the
+    key too. Best-effort: a resolution failure leaves the field None and
+    never fails the question."""
+    import hashlib
+    info: dict = {"provider": None, "model": None, "model_source": None, "route": None,
+                  "answer_prompt": {"name": None, "version": None}, "nl2cypher_prompt_version": None,
+                  "judge": {}}
+    identity = "model=?"
+    try:
+        info.update(llm_client.describe_call_model("retrieval", name="answer_generation"))
+        identity = "model=" + llm_client.model_identity_key("retrieval", name="answer_generation")
+    except Exception as e:
+        app.logger.warning(f"[model_info] could not resolve answer model: {e}")
+    prompt_name = _MODEL_INFO_ANSWER_PROMPT_NAMES.get(answer_mode, "answer_generation")
+    version = None
+    try:
+        prompt = PROMPT_PACK.get_prompt(prompt_name)
+        version = prompt.version
+        if answer_mode == "research":
+            template, is_override = prompt_config.resolve_answer_system_prompt(prompt.template)
+            if is_override:
+                version = "settings_override:" + hashlib.sha256(template.encode("utf-8")).hexdigest()[:12]
+    except Exception as e:
+        app.logger.warning(f"[model_info] could not resolve answer prompt {prompt_name!r}: {e}")
+    info["answer_prompt"] = {"name": prompt_name, "version": version}
+    try:
+        info["nl2cypher_prompt_version"] = PROMPT_PACK.get_prompt("nl2cypher").version
+    except Exception:
+        pass
+    for call_name in _JUDGE_CALL_NAMES:
+        try:
+            judge = llm_client.describe_call_model("retrieval", name=call_name)
+            judge["same_as_answer_model"] = (judge["provider"], judge["model"]) == (info["provider"], info["model"])
+            info["judge"][call_name] = judge
+        except Exception:
+            info["judge"][call_name] = None
+    identity += f"|prompt={prompt_name}@{version}"
+    return info, identity
+
+
+def _fill_discovered_model(model_info: dict) -> dict:
+    """2026-10-14: a LOCAL model left blank is only discovered by the first
+    call; after generation, report it (display only - never the cache key)."""
+    if model_info.get("provider") == "LOCAL" and not model_info.get("model"):
+        try:
+            discovered = llm_client.describe_call_model("retrieval", name="answer_generation")
+            if discovered.get("model"):
+                model_info = {**model_info, "model": discovered["model"], "model_source": discovered["model_source"]}
+        except Exception:
+            pass
+    return model_info
 
 
 def _api_ask_impl(question: str, metadata_filters: dict | None, retrieval_mode: str = "hybrid",
@@ -1354,6 +1444,13 @@ def _api_ask_impl(question: str, metadata_filters: dict | None, retrieval_mode: 
     reported_mode = mode_label or retrieval_mode
     use_parent_context = _resolve_include_parent_context(retrieval_mode, include_parent_context)
     cache_extra_key = f"{reported_mode}:{answer_mode}:{'fast' if fast_mode else 'normal'}"
+    # 2026-10-14 (phase0/followups): + the answer model identity and answer
+    # prompt version (see _ask_model_info()) - the key used to ignore the
+    # model, so after switching USE_MODEL_RETRIEVAL (e.g. frontier -> SLM)
+    # an eval run could be served the OTHER model's cached answer. Still
+    # built once here and reused for the write below.
+    model_info, model_cache_identity = _ask_model_info(answer_mode)
+    cache_extra_key += f":{model_cache_identity}"
     if not bypass_cache:
         cached = cache.get_cached_answer(question, metadata_filters, extra_key=cache_extra_key)
         if cached:
@@ -1377,6 +1474,7 @@ def _api_ask_impl(question: str, metadata_filters: dict | None, retrieval_mode: 
                 "answer": f"That doesn't look related to the {DOMAIN_CONFIG.domain_name} knowledge graph. "
                           f"Try asking about entities, relationships, or specific citations.",
                 "nodes": [], "edges": [], "source_chunks": [], "grounding": None,
+                "model_info": model_info,  # 2026-10-14: see _ask_model_info()
             }
             cache.finish_agent_run(run_id)
             observability.end_trace(trace, response)
@@ -1552,6 +1650,7 @@ def _api_ask_impl(question: str, metadata_filters: dict | None, retrieval_mode: 
             "retrieval_scope": retrieved["retrieval_scope"],
             "category_coverage": category_retrieval.summarize_category_coverage(category_results),
             "from_cache": False,
+            "model_info": model_info,  # 2026-10-14: see _ask_model_info()
         }
         cache.finish_agent_run(run_id)
         observability.end_trace(trace, response)
@@ -1986,6 +2085,12 @@ def _api_ask_impl(question: str, metadata_filters: dict | None, retrieval_mode: 
         # Semantic_Graph_Retrieval_Architecture.md.
         "semantic_graph_files": _dedupe_semantic_graph_trace(semantic_graph_trace),
         "from_cache": False,
+        # 2026-10-14 (phase0/followups): NEW - which provider/model/prompt
+        # versions produced this answer (see _ask_model_info()); the eval
+        # harness records it per item. A blank LOCAL model name that was
+        # auto-discovered during generation is filled in for display only -
+        # the cache key above is unaffected.
+        "model_info": _fill_discovered_model(model_info),
     }
 
     if not bypass_cache:
@@ -2754,6 +2859,10 @@ def api_ask_fast():
     # 2026-09-08: NEW - see _run_fast_quality_checked_ask()'s docstring for
     # the STRUCTURED_ONLY/BOTH short-circuit this enables.
     data_session_id = body.get("data_session_id") or None
+    # 2026-10-14 (phase0/followups): `bypass_cache` is accepted for symmetry
+    # with /api/ask but is a no-op here - every attempt of this loop already
+    # calls _api_ask_impl(bypass_cache=True) and nothing caches the final
+    # result, so /api/ask/fast never reads or writes the answer cache.
     if not question:
         return jsonify({"error": "question is required"}), 400
 
@@ -3536,6 +3645,10 @@ def api_settings_summary():
                 "min": settings_store.TEMPERATURE_MIN, "max": settings_store.TEMPERATURE_MAX,
                 "provider": llm_client.USE_MODEL,
             },
+            # 2026-10-14 (phase0/followups): NEW - the same model_info block
+            # /api/ask responses carry (research mode), so the evaluation
+            # harness can snapshot it into each run's manifest. No secrets.
+            "model_info": _ask_model_info("research")[0],
         })
     except Exception as e:
         app.logger.exception("Failed in /api/settings/summary")

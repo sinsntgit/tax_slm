@@ -78,6 +78,16 @@ def ask_response(answer, *, answer_mode="research", retrieval_mode="hybrid", chu
     }
 
 
+def model_info(provider="FAKE", model="fake-model", version="v7", judge_same=False):
+    """2026-10-14: same shape as framework/webapp/app.py::_ask_model_info()."""
+    judge = {"provider": provider if judge_same else "JUDGE", "model": model if judge_same else "judge-model",
+             "model_source": "configured", "route": None, "same_as_answer_model": judge_same}
+    return {"provider": provider, "model": model, "model_source": "configured", "route": None,
+            "answer_prompt": {"name": "answer_generation", "version": version},
+            "nl2cypher_prompt_version": "v7",
+            "judge": {"answer_quality_judge": judge, "answer_evaluation": dict(judge)}}
+
+
 def evaluation_response(overall=8.0):
     return {"evaluation": {"available": True, "overall": overall, "verdict": "ok", "strengths": [], "issues": [],
                            "dimensions": [{"name": "Groundedness / accuracy", "score": overall, "assessment": ""}]},
@@ -100,7 +110,9 @@ class FakeTarget:
         @self.app.route("/api/settings/summary")
         def settings():
             return jsonify({"temperature": {"value": 0.0, "provider": "FAKE"},
-                            "embedding_model": {"name": "fake-embedder"}, "neo4j": {"connected": False}})
+                            "embedding_model": {"name": "fake-embedder"}, "neo4j": {"connected": False},
+                            # 2026-10-14: the server's model_info block (phase0/followups)
+                            "model_info": model_info()})
 
         @self.app.route("/api/ask", methods=["POST"])
         @self.app.route("/api/ask/fast", methods=["POST"])

@@ -146,8 +146,13 @@ def _cluster(nodes: list[dict], resolution_key_properties: dict, min_similarity:
         if ri != rj:
             parent[rj] = ri
 
+    # 2026-10-14: same per-type compatibility veto ingest-time matching uses
+    # (KeyProperties.compatible - e.g. "X v. ITO" is never "X v. CIT").
+    compatible = entity_resolution.key_guard("CaseLaw", resolution_key_properties)
     for i in range(len(keyed)):
         for j in range(i + 1, len(keyed)):
+            if compatible is not None and not compatible(keyed[i][1], keyed[j][1]):
+                continue
             if entity_resolution.similarity(keyed[i][1], keyed[j][1]) >= min_similarity:
                 union(i, j)
 

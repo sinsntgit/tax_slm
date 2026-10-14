@@ -65,11 +65,107 @@ import re
 from dataclasses import dataclass, field, asdict
 from typing import Optional
 
-try:
-    import tiktoken
-    _ENCODING = tiktoken.get_encoding("cl100k_base")
-except Exception:
-    _ENCODING = None
+import hashlib
+import os
+import sys
+import tempfile
+import threading
+
+# 2026-10-14 (phase0/followups): AIR-GAP FIX. This used to call
+# tiktoken.get_encoding("cl100k_base") at IMPORT time. On first use tiktoken
+# downloads the BPE file from openaipublic.blob.core.windows.net with no
+# timeout of its own, so on an air-gapped customer machine (the Tax SLM
+# deployment target) importing chunking.py - i.e. every converter - could
+# hang indefinitely behind a black-holing firewall/proxy. Now:
+#   - LAZY: loaded on the first token_count() call, never at import (so a
+#     converter's load_dotenv() has run and TIKTOKEN_CACHE_DIR from .env is
+#     honoured);
+#   - BOUNDED: the load runs in a daemon thread and is abandoned after
+#     TIKTOKEN_LOAD_TIMEOUT_SECONDS (default 10);
+#   - FAIL-FAST OFFLINE: TIKTOKEN_OFFLINE=1 never touches the network - the
+#     encoding is used only if already present in the tiktoken cache;
+#   - ONCE: a failed load falls back to the existing len(text)//4 estimate for
+#     the rest of the process (logged once), instead of retrying per call.
+# Pre-seeding the cache for offline installs: README "Offline / air-gapped
+# installs (tiktoken)". `_ENCODING = None` still forces the fallback (tests).
+_ENCODING_NAME = "cl100k_base"
+# tiktoken caches each BPE file under sha1(<its URL>) - see
+# tiktoken.load.read_file_cached(); used only for the offline presence check.
+_ENCODING_URL = "https://openaipublic.blob.core.windows.net/encodings/cl100k_base.tiktoken"
+_NOT_LOADED = object()
+_ENCODING = _NOT_LOADED
+_ENCODING_LOCK = threading.Lock()
+_ENCODING_STATUS = "not_loaded"   # not_loaded | loaded | unavailable:<reason>
+
+
+def tiktoken_cache_dir() -> str:
+    """The directory tiktoken reads/writes its BPE cache in (same precedence
+    as tiktoken itself: TIKTOKEN_CACHE_DIR, DATA_GYM_CACHE_DIR, temp dir)."""
+    if "TIKTOKEN_CACHE_DIR" in os.environ:
+        return os.environ["TIKTOKEN_CACHE_DIR"]
+    if "DATA_GYM_CACHE_DIR" in os.environ:
+        return os.environ["DATA_GYM_CACHE_DIR"]
+    return os.path.join(tempfile.gettempdir(), "data-gym-cache")
+
+
+def tiktoken_cache_file() -> str:
+    return os.path.join(tiktoken_cache_dir(), hashlib.sha1(_ENCODING_URL.encode()).hexdigest())
+
+
+def _env_flag(name: str) -> bool:
+    return os.environ.get(name, "").strip().lower() in ("1", "true", "yes", "on")
+
+
+def _load_encoding():
+    """Returns the tiktoken Encoding, or None (with _ENCODING_STATUS saying
+    why) - never raises, never blocks longer than the timeout."""
+    global _ENCODING_STATUS
+    # A blank TIKTOKEN_CACHE_DIR= line in .env would reach tiktoken as "",
+    # which tiktoken treats as "disable caching" - i.e. download on EVERY
+    # process start, the opposite of what an offline install wants. Treat
+    # blank as unset (tiktoken's default temp-dir cache).
+    if os.environ.get("TIKTOKEN_CACHE_DIR", None) == "":
+        del os.environ["TIKTOKEN_CACHE_DIR"]
+    try:
+        timeout = float(os.environ.get("TIKTOKEN_LOAD_TIMEOUT_SECONDS", "10") or 10)
+    except ValueError:
+        timeout = 10.0
+    if _env_flag("TIKTOKEN_OFFLINE") and not os.path.exists(tiktoken_cache_file()):
+        _ENCODING_STATUS = f"unavailable:offline and no cached {_ENCODING_NAME} at {tiktoken_cache_file()}"
+        return None
+    result: dict = {}
+
+    def _worker():
+        try:
+            import tiktoken
+            result["enc"] = tiktoken.get_encoding(_ENCODING_NAME)
+        except Exception as e:  # ImportError, network error, hash mismatch...
+            result["err"] = f"{type(e).__name__}: {e}"
+
+    t = threading.Thread(target=_worker, name="tiktoken-load", daemon=True)
+    t.start()
+    t.join(timeout)
+    if "enc" in result:
+        _ENCODING_STATUS = "loaded"
+        return result["enc"]
+    _ENCODING_STATUS = ("unavailable:" + result["err"]) if "err" in result else \
+        f"unavailable:load timed out after {timeout:.0f}s (no network? pre-seed TIKTOKEN_CACHE_DIR)"
+    return None
+
+
+def get_encoding():
+    """The cl100k encoding, loaded once on first use (see the AIR-GAP FIX
+    note above), or None when unavailable."""
+    global _ENCODING
+    if _ENCODING is _NOT_LOADED:
+        with _ENCODING_LOCK:
+            if _ENCODING is _NOT_LOADED:
+                enc = _load_encoding()
+                if enc is None:
+                    print(f"[chunking] tiktoken {_ENCODING_NAME} {_ENCODING_STATUS} - token counts use the "
+                          f"~4 chars/token estimate instead.", file=sys.stderr, flush=True)
+                _ENCODING = enc
+    return _ENCODING
 
 
 def token_count(text: str) -> int:
@@ -78,7 +174,7 @@ def token_count(text: str) -> int:
     encoding is fine regardless of which LLM provider is actually configured."""
     if not text:
         return 0
-    if _ENCODING is not None:
+    if get_encoding() is not None:
         try:
             return len(_ENCODING.encode(text))
         except Exception:
