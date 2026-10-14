@@ -75,7 +75,7 @@ appropriate code"):
   `.generation()` methods this code (and the pre-existing `/api/ask` wiring)
   depends on, so an unpinned install would have silently produced zero traces.
 - **Model name from `.env`, live at runtime** — `USE_MODEL` picks the
-  provider (CLAUDE/GEMINI/GPT); `CLAUDE_MODEL_NAME`/`GEMINI_MODEL_NAME`/
+  provider (CLAUDE/GEMINI/GPT/LOCAL); `CLAUDE_MODEL_NAME`/`GEMINI_MODEL_NAME`/
   `GPT_MODEL_NAME` optionally override the exact model string per provider
   (falls back to `llm_client.MODEL_NAME_DEFAULTS` if unset). All of this is
   re-read from `.env` on **every** `complete()` call
@@ -125,6 +125,74 @@ appropriate code"):
   `.env`. Regardless of the configured structure, the answer always states
   the detected intent and, for every citation, the document name, the
   precise structural citation, and the page number when available.
+
+## Running with a local model (vLLM/Ollama)
+
+`USE_MODEL=LOCAL` sends calls to any OpenAI-compatible server (vLLM, Ollama,
+LM Studio) instead of Claude/Gemini/GPT — the basis of the self-hosted "Tax
+SLM". It uses the same machinery as the API providers: live `.env` reload,
+ingestion/retrieval split, temperature from the Settings page, Langfuse
+generations, token usage (when the server reports it).
+
+```bash
+# vLLM (GPU host) - OpenAI-compatible API on :8000/v1
+vllm serve Qwen/Qwen2.5-14B-Instruct --served-model-name tax-slm \
+    --max-model-len 32768 --port 8000 --api-key change-me
+# fine-tuned LoRA adapters can be served side by side and picked per call:
+#   --enable-lora --lora-modules nl2cypher-lora=/models/nl2cypher-lora
+
+# or Ollama (CPU/laptop) - OpenAI-compatible API on :11434/v1
+ollama pull qwen2.5:7b-instruct
+```
+
+```ini
+USE_MODEL=LOCAL                       # or keep CLAUDE and route single calls (below)
+LOCAL_LLM_BASE_URL=http://gpu-host:8000/v1     # Ollama: http://localhost:11434/v1
+LOCAL_MODEL_NAME=tax-slm              # = --served-model-name; blank = first model at /v1/models
+LOCAL_LLM_API_KEY=change-me           # only if the server uses --api-key
+LOCAL_LLM_CONTEXT_LENGTH=32768        # = --max-model-len; output tokens are shrunk to fit
+LOCAL_LLM_MAX_TOKENS=2048             # optional hard cap on output tokens
+```
+
+Failures (timeout, connection refused, HTTP 4xx/5xx) raise
+`llm_client.LocalLLMError` with a hint (wrong served model name, missing
+`/v1`, bad API key, context overflow). Models whose chat template has no
+system role (e.g. Gemma) are detected on the first 400 and the system prompt
+is prepended to the user message from then on (`LOCAL_LLM_SYSTEM_ROLE=0`
+forces this). A leading `<think>…</think>` block (Qwen3/R1-style) is stripped.
+If the host uses an HTTP proxy, add the model server's host to `NO_PROXY`.
+
+**Per-call routing (gradual rollout).** `LLM_ROUTE_<CALL_NAME>=LOCAL` moves
+one call type onto the local model while everything else stays on the API
+model; `LLM_ROUTE_<CALL_NAME>_MODEL=<name>` also overrides the model (e.g. a
+per-task LoRA adapter). Precedence: call route > `USE_MODEL_<PURPOSE>` >
+`USE_MODEL`. Matching is longest-prefix over `_`-separated segments, so
+`LLM_ROUTE_CASE_LAW_EXTRACTION` covers every `case_law_extraction_<file>`
+call and `LLM_ROUTE_ANSWER_GENERATION` also covers `answer_generation_retry`.
+Hot-reloaded; to un-route while running set the value blank.
+
+| Purpose | Call names (`name=` passed to `llm_client.complete`) |
+|---|---|
+| retrieval | `intent_detection`, `nl2cypher`, `retrieval_plan`, `evidence_sufficiency`, `case_law_classification`, `tribunal_bucketing`, `fact_sheet_extraction`, `agent_routing`, `agent_merge`, `hierarchical_synthesis`, `structured_data_query`, `answer_generation`, `answer_generation_retry`, `answer_evaluation`, `answer_evaluation_general_knowledge`, `answer_quality_judge`, `document_qa`, `opinion_generation` |
+| ingestion | `case_law_extraction_<file>`, `circular_extraction_<file>`, `treaty_preamble_<file>`, `semantic_layer_group_<i>_of_<n>` (Act extraction), `enrichment_group_<i>_of_<n>` (generic docs), `temporal_metadata`, `act_correspondence_tier1`, `act_correspondence_tier2` |
+
+**Training-data capture.** `LLM_CALL_LOG=1` appends every `complete()` call
+(call name, purpose, provider, model, route, prompt version, system prompt,
+user content, output/error, latency, token usage, timestamp) to
+`data/llm_calls/llm_calls_<date>.jsonl` (`LLM_CALL_LOG_DIR` to change;
+`data/` is gitignored). **These files contain client data** — off by
+default; PAN/Aadhaar/e-mail/phone are masked with the domain PII masker's
+detectors before writing (and nothing is written if the masker can't load),
+but names and facts in free text are not. Scores can be attached later with
+`llm_call_log.annotate(llm_call_log.last_call_id(), judge_score=0.9)`.
+Convert to chat-format fine-tuning JSONL (one file per call family,
+`{"messages": [system, user, assistant]}`):
+
+```bash
+python -m framework.cli.export_training_data --out data/training_exports/run1 \
+    --call nl2cypher --call intent_detection --since 2026-10-01 --until 2026-10-31 \
+    --provider CLAUDE --min-judge-score 0.8      # dedup on system+user by default
+```
 
 ## Layout
 
