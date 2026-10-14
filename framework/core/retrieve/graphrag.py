@@ -45,6 +45,77 @@ GRAPH_QUERY_TIMEOUT_SECONDS = int(os.environ.get("NEO4J_STATEMENT_TIMEOUT_SECOND
 
 MAX_DESCENDANT_CHUNKS = 40  # cap per retrieve() call - see get_chunk_ids_via_graph_traversal()
 
+# 2026-10-14: was a hardcoded max_tokens=300 in nl_to_cypher(). The nl2cypher
+# prompt's own worked examples (OVERRULES-by-topic, the demerger metadata
+# query, OPTIONAL MATCH correspondence lookups) already run 60-120 tokens, and
+# a question combining a section + concept + case filter routinely needs more
+# - at 300 the model's output could be cut mid-clause, and a cut query that
+# happens to still parse (e.g. a WHERE that lost its last OR-branch) silently
+# answers a DIFFERENT question. 1024 leaves ample headroom while still
+# bounding cost; env-overridable like the other retrieval knobs here.
+# Truncated output is additionally detected and dropped - see
+# cypher_incompleteness_reason().
+NL2CYPHER_MAX_TOKENS = int(os.environ.get("NL2CYPHER_MAX_TOKENS", "1024"))
+
+# A Cypher query that ENDS on one of these keywords/operators was cut off
+# mid-clause (nothing valid can follow e.g. a bare WHERE/AND or a trailing
+# comma). Deliberately excludes '*' (`RETURN *` is valid) and END/closing
+# brackets (bracket balance is checked separately).
+_DANGLING_CYPHER_TAIL_RE = re.compile(
+    r"(?:\b(?:WHERE|AND|OR|XOR|NOT|MATCH|OPTIONAL|WITH|RETURN|ORDER|BY|LIMIT|SKIP|CONTAINS|STARTS|ENDS|"
+    r"IN|AS|UNWIND|DISTINCT|IS|CASE|WHEN|THEN|ELSE|UNION|CALL|YIELD)|[,.:=<>+\-/|])\s*$",
+    re.IGNORECASE,
+)
+_CYPHER_BRACKET_PAIRS = {")": "(", "]": "[", "}": "{"}
+
+
+def cypher_incompleteness_reason(cypher: str) -> str | None:
+    """2026-10-14: NEW. Returns a short reason string if `cypher` looks
+    TRUNCATED or structurally incomplete (so it must not be executed), else
+    None. Deterministic, no Neo4j round-trip: unbalanced ()/[]/{} brackets,
+    an unterminated string/backtick literal, no RETURN clause at all (a read
+    query cannot end without one), or a dangling trailing keyword/operator
+    (`... WHERE n.x =`, `... AND`, `RETURN n,`). "NO_QUERY"/empty input is not
+    this function's concern - returns None for it. Not a full parser: a cut
+    that happens to land on a clause boundary of a still-valid query cannot
+    be detected from the text alone; the raised NL2CYPHER_MAX_TOKENS above
+    is what makes that case rare."""
+    text = (cypher or "").strip()
+    if not text or text == "NO_QUERY":
+        return None
+    stack: list[str] = []
+    quote: str | None = None
+    i = 0
+    while i < len(text):
+        ch = text[i]
+        if quote:
+            if ch == "\\" and quote != "`":
+                i += 2
+                continue
+            if ch == quote:
+                quote = None
+        elif ch in ("'", '"', "`"):
+            quote = ch
+        elif ch in "([{":
+            stack.append(ch)
+        elif ch in ")]}":
+            if not stack or stack[-1] != _CYPHER_BRACKET_PAIRS[ch]:
+                return f"unbalanced '{ch}'"
+            stack.pop()
+        i += 1
+    if quote:
+        return f"unterminated {quote} literal"
+    if stack:
+        return f"unclosed '{stack[-1]}'"
+    # Keyword checks run on the text with string literals blanked out, so a
+    # literal like 'act no. 15 of 2024, and' can't fake a RETURN or a tail.
+    no_literals = re.sub(r"'(?:\\.|[^'\\])*'|\"(?:\\.|[^\"\\])*\"|`[^`]*`", "''", text)
+    if not re.search(r"\bRETURN\b", no_literals, re.IGNORECASE):
+        return "no RETURN clause"
+    if _DANGLING_CYPHER_TAIL_RE.search(no_literals):
+        return "ends mid-clause"
+    return None
+
 # 2026-09-07: NEW - bounds for comprehensive_graph_retrieval()'s fixed,
 # LLM-free traversal (see that method's docstring). HOPS=2 (not 6, like
 # get_chunk_ids_via_graph_traversal()'s PART_OF descendant walk) because this
@@ -186,9 +257,20 @@ class GraphRAGRetriever:
             labels=", ".join(schema["node_labels"]),
             rel_types=", ".join(schema["relationship_types"]),
         )
-        text = llm_client.complete(system=system, user_content=question, max_tokens=300,
+        text = llm_client.complete(system=system, user_content=question, max_tokens=NL2CYPHER_MAX_TOKENS,
                                     trace=trace, name="nl2cypher").strip()
         text = re.sub(r"^```(cypher)?|```$", "", text, flags=re.MULTILINE).strip()
+        # 2026-10-14: a single trailing ';' is harmless to the model's intent
+        # but the Python driver rejects it - strip rather than fail.
+        text = re.sub(r";\s*$", "", text).strip()
+        # 2026-10-14: NEW - a truncated/unbalanced query is treated exactly
+        # like NO_QUERY (graph path skipped, vector/citation paths still run)
+        # instead of being executed - see cypher_incompleteness_reason().
+        problem = cypher_incompleteness_reason(text)
+        if problem:
+            logger.warning(f"[graphrag] nl2cypher output looks incomplete ({problem}) - treating as NO_QUERY. "
+                           f"Output was: {text[:300]!r}")
+            return "NO_QUERY"
         return text
 
     def run_graph_retrieval(self, question: str, trace=None) -> dict:
