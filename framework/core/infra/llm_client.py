@@ -121,6 +121,18 @@ _clients: dict[str, object] = {}   # keyed by provider name, one cached SDK clie
 PURPOSE_ENV_KEYS = {"ingestion": "USE_MODEL_INGESTION", "retrieval": "USE_MODEL_RETRIEVAL"}
 
 
+# 2026-10-14: BUGFIX - MOVED here from further down this file.
+# refresh_model_config() runs once at IMPORT time (see the call right after
+# its definition) and reads this constant as its last-resort fallback, but it
+# used to be defined ~120 lines below that call, so importing this module
+# raised NameError on any machine whose .env sets neither
+# GPT_REASONING_EFFORT_<PURPOSE> nor GPT_REASONING_EFFORT - i.e. every fresh
+# install. It only worked on the dev machine because its .env happens to set
+# GPT_REASONING_EFFORT_RETRIEVAL, which short-circuits the `or` chain before
+# the undefined name is reached. Found by the offline import smoke test.
+GPT_REASONING_EFFORT_DEFAULT = os.environ.get("GPT_REASONING_EFFORT", "minimal")
+
+
 def refresh_model_config(purpose: str = "retrieval") -> ModelConfig:
     """Re-reads USE_MODEL(_INGESTION/_RETRIEVAL) / <PROVIDER>_MODEL_NAME /
     LLM_TIMEOUT_SECONDS from .env and returns a fresh, immutable ModelConfig
@@ -330,7 +342,8 @@ def _complete_gemini(config: ModelConfig, system: str, user_content: str, max_to
 # supplies the hardcoded fallback when NEITHER GPT_REASONING_EFFORT_<PURPOSE>
 # NOR plain GPT_REASONING_EFFORT is set in .env, mirroring how
 # MODEL_NAME_DEFAULTS is the last-resort fallback for model_name.
-GPT_REASONING_EFFORT_DEFAULT = os.environ.get("GPT_REASONING_EFFORT", "minimal")
+# 2026-10-14: GPT_REASONING_EFFORT_DEFAULT itself MOVED up to sit before
+# refresh_model_config() - see the note there.
 GPT_REASONING_TOKEN_BUDGET = int(os.environ.get("GPT_REASONING_TOKEN_BUDGET", "2000"))
 
 _reasoning_effort_supported = None

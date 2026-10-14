@@ -27,8 +27,17 @@ A Neo4j-backed Tax Knowledge Graph + GraphRAG retrieval system for Indian income
 
 ## Version control status
 
-This project was **not** a git repository as of 2026-08-28. If you've since run `git init` here, update this section and set up `.gitignore` (exclude `.env`, `venv/`, any local Neo4j data volumes) before your first commit - check whether the person handling this wants the existing 200+ item task/change history captured in a first commit message or left as a clean starting point.
+2026-10-14: now a git repository (branch `main`), developed in a cloud workspace and pushed to a private GitHub repo; the owner pulls it to the Windows dev machine (D:\tax_kg_poc_revised) to run against Docker. `.gitignore` excludes `.env`, `venv/`, all of `data/` (corpus, uploads, graphs, vector stores) and `kpmg_tax_slm_documents_artifacts/` (client deliverables). Small public/fictitious samples used by tests live in `tests/fixtures/`. The pre-git change history lives in the dated code comments, not in git.
+
+## Team workflow (multiple agents)
+
+- One branch per workstream (`phase0/<area>`), merged into `main` only after the full test suite passes.
+- Stay inside your workstream's files; if you must touch a shared file (`app.py`, `tax_prompts.py`, `pipeline.py`, `llm_client.py`, `schema.json`), make the smallest additive change and add NEW prompt versions rather than editing existing ones.
+- Prompts: never edit a registered PromptVersion's text - append a new version with `notes` explaining why.
+- Every change ships with tests under `tests/` that exercise the real logic.
 
 ## Testing this project
 
-No formal test suite exists yet - verification has been ad hoc (`py_compile` + hand-written mocked tests + real-sample-file runs, per the convention above). Neo4j and the LLM provider(s) configured in `.env` are both required for true end-to-end runs; most logic can and should be verified with mocks first (see `Testing_Graph_First_Retrieval.md` for a recent worked example).
+- `pytest` from the repo root (cloud venv: `/home/claude/venv/bin/python -m pytest`). `tests/conftest.py` installs offline stand-ins for `sentence_transformers` (no Hugging Face access in the cloud) - code must import and run with them.
+- No Neo4j server in the cloud: unit tests mock the driver/session. Tests that need real Neo4j/LLM/.env are marked `@pytest.mark.live` and only run with `TAXKG_LIVE_TESTS=1` on the dev machine.
+- `tests/test_smoke_imports.py` must always pass - it already caught an import-time NameError in `llm_client.py` (2026-10-14).
