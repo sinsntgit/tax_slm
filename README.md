@@ -227,6 +227,33 @@ python -m framework.cli.export_training_data --out data/training_exports/run1 \
     --provider CLAUDE --min-judge-score 0.8      # dedup on system+user by default
 ```
 
+**Offline / air-gapped installs (tiktoken).** The converters count tokens
+with tiktoken's `cl100k_base` encoding (`chunking.token_count()`), which
+tiktoken downloads from `openaipublic.blob.core.windows.net` on first use.
+The load is lazy (never at import), bounded by `TIKTOKEN_LOAD_TIMEOUT_SECONDS`
+(default 10) and, if it fails or times out, falls back to a ~4 chars/token
+estimate for the rest of the process (logged once) - so ingestion never
+hangs, but chunk sizes are then approximate. To get exact counts offline,
+pre-seed the cache on a machine with internet and copy it across:
+
+```bat
+:: connected machine (same tiktoken version as requirements.txt)
+set TIKTOKEN_CACHE_DIR=C:\tax_slm\tiktoken_cache
+python -c "import tiktoken; tiktoken.get_encoding('cl100k_base')"
+:: -> creates C:\tax_slm\tiktoken_cache\9b5ad71b2ce5302211f9c61530b329a4922fc6a4
+:: copy that folder to the customer machine
+```
+
+```ini
+# customer machine .env - TIKTOKEN_OFFLINE=1 never attempts the download
+TIKTOKEN_CACHE_DIR=D:\tax_slm\tiktoken_cache
+TIKTOKEN_OFFLINE=1
+```
+
+The cached file name is tiktoken's sha1 of the download URL and its content
+is hash-checked by tiktoken on load. Leave `TIKTOKEN_CACHE_DIR` unset rather
+than blank (a blank value is treated as unset).
+
 ## Evaluation
 
 The gold-set evaluation harness and the release gates (frontier baseline compared with the Tax SLM) live in `eval/`. See [`eval/README.md`](eval/README.md).
