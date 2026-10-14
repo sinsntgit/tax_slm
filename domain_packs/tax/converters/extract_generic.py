@@ -100,6 +100,27 @@ def model_chunk_budget(reserve_system: int = DEFAULT_RESERVE_FOR_SYSTEM_PROMPT,
     return max(budget, 2_000)  # never go below a sane floor even for a tiny/misconfigured window
 
 
+def generic_chunk_id(index: int, document_id: str) -> str:
+    """2026-10-14: NEW. The chunk_id a generic-document run gives its
+    index-th Chunk - `<document_id>__<index>`, the same `<namespace>__<i>`
+    shape extract_entities.act_chunk_id() gives Act chunks.
+    BUGFIX: this was the bare position index (0, 1, 2, ...) for every generic
+    document, while graph_loader/embedder MERGE Chunk nodes on chunk_id
+    ALONE - so ingesting a second generic document MERGEd its chunk "0" onto
+    the first document's chunk "0" (and onto chunk "0" of any Act ingested
+    without a namespace), overwriting text/citation and leaving the earlier
+    document's DocumentSection pointing at the wrong text. Unlike an Act run
+    a generic run ALWAYS has a document_id (main() defaults it to the file
+    stem), so this is always namespaced - deterministic for re-runs of the
+    same document, distinct across documents. Commas are replaced because
+    entities carry chunk ids as a comma-joined `source_chunk_ids` string
+    (graph_loader.load_chunk_nodes_and_links() splits on ",")."""
+    namespace = str(document_id).strip().replace(",", "_")
+    if not namespace:
+        raise ValueError("generic_chunk_id() needs a non-empty document_id")
+    return f"{namespace}__{index}"
+
+
 # --- deterministic paragraph-level chunking -----------------------------------
 
 def split_into_paragraph_chunks(text: str, target_tokens: int = 600) -> list[str]:
@@ -421,7 +442,8 @@ def main():
         if chunk_pages[i] is not None:
             props["page_number"] = chunk_pages[i]
         entity = {"id": sec_id, "type": "DocumentSection", "properties": props}
-        extract_entities.attach_pipeline_metadata(entity, doc_meta, run_timestamp, i)
+        # 2026-10-14: namespaced chunk id (was the bare index i) - see generic_chunk_id().
+        extract_entities.attach_pipeline_metadata(entity, doc_meta, run_timestamp, generic_chunk_id(i, doc_id))
         all_entities[sec_id] = entity
         structural_entity_ids.add(sec_id)
         section_entity_ids.append(sec_id)
@@ -502,7 +524,8 @@ def main():
         chunks_out_path = args.chunks_out or _os.path.join(_os.path.dirname(args.out) or ".", "chunks.json")
         chunk_records = [
             {
-                "chunk_id": i, "text": text, "entity_id": section_entity_ids[i],
+                # 2026-10-14: namespaced (was the bare index i) - see generic_chunk_id().
+                "chunk_id": generic_chunk_id(i, doc_id), "text": text, "entity_id": section_entity_ids[i],
                 "full_citation": f"{doc_meta['document_name']} — Part {i + 1}",
                 "short_title": chunking.make_short_title(text), "chunk_type": "document_section",
                 "element_type": "document_section", "file_type": doc_meta.get("file_type", ""),
