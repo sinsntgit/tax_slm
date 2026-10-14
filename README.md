@@ -171,6 +171,39 @@ per-task LoRA adapter). Precedence: call route > `USE_MODEL_<PURPOSE>` >
 call and `LLM_ROUTE_ANSWER_GENERATION` also covers `answer_generation_retry`.
 Hot-reloaded; to un-route while running set the value blank.
 
+**Judge model (so the SLM never grades itself).** The in-pipeline judge
+(`answer_quality.judge_answer`, call `answer_quality_judge`) and the grounded /
+general-knowledge evaluator (`answer_evaluation.evaluate_answer`, calls
+`answer_evaluation` and `answer_evaluation_general_knowledge`) are ordinary
+named calls, so per-call routing gives them their own model - no separate
+setting is needed. Recommended config when the SLM is under test:
+
+```ini
+USE_MODEL_RETRIEVAL=LOCAL                          # the model under test answers
+LLM_ROUTE_ANSWER_QUALITY_JUDGE=CLAUDE              # the reference model judges
+LLM_ROUTE_ANSWER_QUALITY_JUDGE_MODEL=claude-sonnet-4-5
+LLM_ROUTE_ANSWER_EVALUATION=CLAUDE                 # also covers answer_evaluation_general_knowledge
+LLM_ROUTE_ANSWER_EVALUATION_MODEL=claude-sonnet-4-5
+```
+
+Keep the judge identical for the baseline and the candidate run. Do NOT use
+`LLM_ROUTE_ANSWER=...`: by prefix it would also route `answer_generation`.
+Unset, the judges follow today's behaviour (the retrieval model).
+`/api/ask` responses and `/api/settings/summary` carry a `model_info` block
+(provider, model, answer prompt name+version, nl2cypher prompt version, and
+each judge's provider/model with `same_as_answer_model`) - never keys or the
+server URL - and the answer cache key includes the answer model and answer
+prompt version, so switching models can never serve another model's cached
+answer. `/api/ask` also accepts `"bypass_cache": true` (no cache read or write);
+the eval harness always sends it.
+
+**Ingestion chunk groups on a small window.** Generic-document extraction
+(`extract_generic.py`) packs the document into as few LLM calls as fit the
+model's context window. For LOCAL it uses `LOCAL_LLM_CONTEXT_LENGTH` (for
+`USE_MODEL_INGESTION=LOCAL` or an `LLM_ROUTE_ENRICHMENT=LOCAL` route) - set it,
+otherwise a 100k window is assumed and a warning is logged. The Ingest page's
+"LLM chunk budget" shows the same figure.
+
 | Purpose | Call names (`name=` passed to `llm_client.complete`) |
 |---|---|
 | retrieval | `intent_detection`, `nl2cypher`, `retrieval_plan`, `evidence_sufficiency`, `case_law_classification`, `tribunal_bucketing`, `fact_sheet_extraction`, `agent_routing`, `agent_merge`, `hierarchical_synthesis`, `structured_data_query`, `answer_generation`, `answer_generation_retry`, `answer_evaluation`, `answer_evaluation_general_knowledge`, `answer_quality_judge`, `document_qa`, `opinion_generation` |

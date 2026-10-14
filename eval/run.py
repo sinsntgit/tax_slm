@@ -88,8 +88,13 @@ def effective_modes(item: dict, args) -> tuple[str, str]:
 
 
 def ask_body(item: dict, answer_mode: str, retrieval_mode: str) -> dict:
+    # 2026-10-14 (phase0/followups): bypass_cache=true - the server skips both
+    # the answer-cache read and write, so a run can never be served a cached
+    # (possibly other-model) answer with fake latency, and no longer depends
+    # on flushing Redis first. (Records saved before this field existed have a
+    # different body, so a resumed old run re-asks them - intentionally.)
     return {"question": item["question"], "answer_mode": answer_mode, "retrieval_mode": retrieval_mode,
-            "include_full_chunks": True}
+            "include_full_chunks": True, "bypass_cache": True}
 
 
 def _server_settings(target: str) -> tuple[dict | None, str | None]:
@@ -106,6 +111,9 @@ def _server_settings(target: str) -> tuple[dict | None, str | None]:
         "temperature": ((s.get("temperature") or {}).get("value")),
         "embedding_model": ((s.get("embedding_model") or {}).get("name")),
         "neo4j_connected": ((s.get("neo4j") or {}).get("connected")),
+        # 2026-10-14 (phase0/followups): provider/model/prompt versions/judge
+        # models the server reports (no secrets) - None on an older server.
+        "model_info": s.get("model_info"),
     }
     return snapshot, None
 
@@ -210,6 +218,9 @@ def run(args) -> int:
                 "latency_s": res.latency_s, "attempt_log": res.attempt_log,
                 "started_at": started, "finished_at": now_iso(),
                 "response": res.response, "raw_text": res.raw_text, "error": res.error,
+                # 2026-10-14 (phase0/followups): copied out of the response for
+                # quick inspection; scoring reads it from response.model_info.
+                "model_info": (res.response or {}).get("model_info") if isinstance(res.response, dict) else None,
             }
             write_json_atomic(record_path(out, it["id"]), rec)
         if need_judge and rec and rec.get("status") == "ok":

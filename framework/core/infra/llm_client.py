@@ -803,6 +803,39 @@ def context_window_tokens(purpose: str = "ingestion", name: str | None = None) -
     return config.context_length if config.use_model == "LOCAL" else None
 
 
+def describe_call_model(purpose: str = "retrieval", name: str | None = None) -> dict:
+    """2026-10-14 (phase0/followups): NEW - which provider/model WOULD serve
+    this purpose + call name right now, for evaluation integrity (the
+    /api/ask answer-cache key and the model_info block in responses and
+    /api/settings/summary). Deliberately contains NO secrets: never the API
+    key and never LOCAL_LLM_BASE_URL (a URL can embed credentials). A LOCAL
+    model left blank (server-chosen, see _discover_local_model()) reports
+    the model already discovered for that endpoint when there is one, else
+    "" with model_source="server_default" - leave unset rather than guess."""
+    config = refresh_model_config(purpose, name=name)
+    model, source = config.model_name, "configured"
+    if config.use_model == "LOCAL" and not model:
+        model = _local_discovered_models.get(config.base_url or "", "")
+        source = "discovered" if model else "server_default"
+    return {"provider": config.use_model, "model": model, "model_source": source, "route": config.route}
+
+
+def model_identity_key(purpose: str = "retrieval", name: str | None = None) -> str:
+    """2026-10-14 (phase0/followups): NEW - a compact, stable string naming
+    the model that would serve this call, for cache keys. Unlike
+    describe_call_model() it is FIXED for a given configuration: a blank
+    LOCAL model name is identified by a short hash of the endpoint URL
+    (never the URL itself) instead of the discovered model, which only
+    becomes known after the first call - so a cache read key computed
+    before generation always equals the write key computed after it."""
+    config = refresh_model_config(purpose, name=name)
+    model = config.model_name
+    if config.use_model == "LOCAL" and not model:
+        import hashlib
+        model = "auto@" + hashlib.sha256((config.base_url or "").encode("utf-8")).hexdigest()[:10]
+    return f"{config.use_model}/{model}"
+
+
 # 2026-10-14 (phase0/followups): chunk-group sizing for a LOCAL window. The
 # ingestion converters count document text with tiktoken cl100k (~4 chars per
 # token on English legal text), while _local_effective_max_tokens() estimates

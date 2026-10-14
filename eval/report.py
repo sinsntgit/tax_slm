@@ -93,6 +93,11 @@ def aggregate(rows: list[dict], *, authority_item_threshold: float = 0.85) -> di
         "error_rate": _rate(len(errors), n),
         "error_types": dict(Counter(((r.get("error") or {}).get("type") or "missing") for r in errors)),
         "cache_hits": sum(1 for r in ok if r.get("from_cache")),
+        # 2026-10-14 (phase0/followups): answer model + prompt identities seen
+        # (from each response's model_info) and items whose judge was the
+        # answer model itself - see metrics.model_label()/judge_self_graded().
+        "models": dict(Counter((r.get("model") or "unknown") for r in ok)),
+        "judge_self_graded_items": sum(1 for r in ok if r.get("judge_self_graded")),
         "no_context_answers": sum(1 for r in ok if r.get("no_context")),
         "citations": {
             "fabricated_total": fabricated_total,
@@ -187,6 +192,9 @@ def _headline_rows(o: dict) -> list[tuple[str, str]]:
         ("Latency p50 / p95 / max (s)",
          f"{fmt_num(o['latency']['all']['p50'], 1)} / {fmt_num(o['latency']['all']['p95'], 1)} / {fmt_num(o['latency']['all']['max'], 1)}"),
         ("Cache hits (must be 0 for a valid run)", str(o["cache_hits"])),
+        ("Answer model(s) (provider/model prompt@version)",
+         "; ".join(f"{k} x{v}" for k, v in sorted((o.get("models") or {}).items())) or "-"),
+        ("Items judged by the answer model itself", str(o.get("judge_self_graded_items", 0))),
     ]
 
 
@@ -206,6 +214,12 @@ def render_report(summary: dict, rows: list[dict]) -> str:
         lines += ["", f"> **INVALID FOR COMPARISON:** {o['cache_hits']} answer(s) were served from the response cache "
                       "(from_cache=true) - latency is not real and the answer may come from a different model. "
                       "Flush Redis and re-run those items (see eval/README.md)."]
+    if len(o.get("models") or {}) > 1:
+        lines += ["", "> **MIXED MODELS:** answers in this run came from more than one model/prompt "
+                      f"({', '.join(sorted(o['models']))}). Re-run the odd ones out into a clean --out."]
+    if o.get("judge_self_graded_items"):
+        lines += ["", f"> **SELF-GRADED:** {o['judge_self_graded_items']} answer(s) were judged by the same model "
+                      "that wrote them. Route the judge calls to a reference model (eval/README.md, 'Judge model')."]
 
     lines += ["", "## Headline", "", "| Metric | Value |", "|---|---|"]
     lines += [f"| {k} | {v} |" for k, v in _headline_rows(o)]

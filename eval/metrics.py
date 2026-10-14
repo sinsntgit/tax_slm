@@ -563,5 +563,30 @@ def score_item(gold: dict, record: dict, *, authority_item_threshold: float = 0.
         "must_not_claim": check_must_not_claim(body, gold.get("must_not_claim")),
         "key_points": check_key_points(body, gold.get("expected_key_points")),
         "judge": extract_judge_scores(response, record.get("judge")),
+        # 2026-10-14 (phase0/followups): which model + prompt produced this
+        # answer (the server's model_info block) - None for a server that
+        # predates model_info. A run whose items disagree is mixed and flagged.
+        "model": model_label(response.get("model_info")),
+        "judge_self_graded": judge_self_graded(response.get("model_info")),
     })
     return base
+
+
+def model_label(model_info: dict | None) -> str | None:
+    """2026-10-14: compact "<provider>/<model> <prompt>@<version>" identity of
+    the answer model, from the server's model_info (no secrets in it)."""
+    if not isinstance(model_info, dict) or not model_info.get("provider"):
+        return None
+    prompt = model_info.get("answer_prompt") or {}
+    model = model_info.get("model") or "(server default)"
+    return f"{model_info['provider']}/{model} {prompt.get('name')}@{prompt.get('version')}"
+
+
+def judge_self_graded(model_info: dict | None) -> bool | None:
+    """True when any judge call (answer_quality_judge / answer_evaluation)
+    resolved to the SAME provider+model as the answer - the model under test
+    grading itself. None when the server did not report judges."""
+    judges = (model_info or {}).get("judge") if isinstance(model_info, dict) else None
+    if not judges:
+        return None
+    return any(bool((j or {}).get("same_as_answer_model")) for j in judges.values())

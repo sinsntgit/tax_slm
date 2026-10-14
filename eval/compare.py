@@ -137,6 +137,18 @@ def comparability_warnings(cm: dict, bm: dict, cand_rows, base_rows, cand_sum, b
     for name, s in (("candidate", cand_sum), ("baseline", base_sum)):
         if s["cache_hits"]:
             w.append(f"{name} run has {s['cache_hits']} cache hit(s) - flush Redis and re-run those items.")
+        # 2026-10-14 (phase0/followups): model_info-based integrity checks.
+        models = s.get("models") or {}
+        if len(models) > 1:
+            w.append(f"{name} run mixes answer models/prompts {sorted(models)} - not a clean run.")
+        if s.get("judge_self_graded_items"):
+            w.append(f"{name} run has {s['judge_self_graded_items']} answer(s) judged by the answer model itself - "
+                     f"judge.* scores are self-grades (route LLM_ROUTE_ANSWER_QUALITY_JUDGE / "
+                     f"LLM_ROUTE_ANSWER_EVALUATION to a reference model).")
+    cand_models, base_models = set(cand_sum.get("models") or {}), set(base_sum.get("models") or {})
+    if cand_models and cand_models == base_models and cand_models != {"unknown"}:
+        w.append(f"Candidate and baseline report the same answer model/prompt {sorted(cand_models)} - "
+                 f"is this really a comparison of two different configurations?")
     if not (cm.get("judge") and bm.get("judge")):
         w.append("--judge was not used for both runs, so evaluation.* (the /api/ask/evaluate scorecard) "
                  "cannot be compared.")

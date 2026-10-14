@@ -61,6 +61,10 @@ def _ask(**kw):
                                 supplementary_chunks=CHUNKS, **kw)
 
 
+def _mode_part(extra_key):
+    return extra_key.split(":model=")[0]
+
+
 def test_resolve_rule():
     r = webapp._resolve_include_parent_context
     assert r("hybrid", None) is True
@@ -75,7 +79,9 @@ def test_simple_rag_vector_only_still_excludes_parent_context(harness):
     assert harness["retriever"].parent_calls == []
     assert PARENT_TEXT not in harness["prompts"][0]
     assert response["retrieval_mode"] == "vector_only"
-    assert harness["cache_writes"] == ["vector_only:research:fast"]
+    # 2026-10-14: the key now also carries ":model=...|prompt=..." (see
+    # app._ask_model_info()); the mode part is what this test pins down.
+    assert [_mode_part(k) for k in harness["cache_writes"]] == ["vector_only:research:fast"]
 
 
 def test_explicit_include_parent_context_reaches_the_llm(harness):
@@ -86,8 +92,8 @@ def test_explicit_include_parent_context_reaches_the_llm(harness):
     assert ref["parent_context"]["parent_id"] == "ITA2025__Section_159"
     # cached + reported under its own mode, not as a Simple RAG answer
     assert response["retrieval_mode"] == "agentic"
-    assert harness["cache_writes"] == ["agentic:research:fast"]
-    assert harness["cache_reads"] == ["agentic:research:fast"]
+    assert [_mode_part(k) for k in harness["cache_writes"]] == ["agentic:research:fast"]
+    assert harness["cache_reads"] == harness["cache_writes"]
 
 
 def test_agentic_branch_passes_parent_context_through(harness, monkeypatch):
