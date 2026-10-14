@@ -238,6 +238,20 @@ def compute_content_hash(text: str) -> str:
     return hashlib.sha256((text or "").encode("utf-8")).hexdigest()[:16]
 
 
+def act_chunk_id(index: int, act_namespace: str | None):
+    """2026-10-14: NEW. The chunk_id an Act run gives its index-th Chunk.
+    BUGFIX: this was the bare position index ("0".."~4000") for every Act,
+    while graph_loader/embedder MERGE Chunk nodes by chunk_id ALONE - so
+    ingesting a second Act (the Income-tax Act, 1961 next to the 2025 Act)
+    silently MERGED its chunk "5" onto the first Act's chunk "5": the later
+    run's text/citation/entity_id overwrote the earlier one, while the
+    earlier Act's entities kept hasSourceChunk edges to the now-wrong text.
+    Entity ids were already Act-namespaced (chunking.generate_entity_id(),
+    2026-08-27) but chunk ids never were. Prefixed with the same namespace
+    whenever one is in use; unchanged bare index for a namespace-less run."""
+    return f"{act_namespace}__{index}" if act_namespace else index
+
+
 def attach_pipeline_metadata(entity: dict, doc_meta: dict, run_timestamp: str, chunk_index: int | None):
     """
     Mutates entity["properties"] in place, adding all the pipeline-derived
@@ -541,7 +555,10 @@ def main():
     # 03_build_graph.py's Chunk-node linking can find each entity's source
     # text. Built from chunking.py's fine-grained Chunk list (index order is
     # preserved verbatim into chunks.json below).
-    chunk_index_by_entity: dict[str, int] = {c.entity_id: i for i, c in enumerate(parsed["chunks"])}
+    # 2026-10-14: values are act_chunk_id()s (namespaced when the run has an
+    # Act namespace) - see that function for the cross-Act collision it fixes.
+    chunk_index_by_entity: dict[str, int | str] = {
+        c.entity_id: act_chunk_id(i, act_namespace) for i, c in enumerate(parsed["chunks"])}
 
     # Entities chunking.py produced deterministically (Section/SubSection/
     # Clause/SubClause/Proviso/Explanation) are ALREADY guaranteed unique -
@@ -739,7 +756,8 @@ def main():
         # text - so 03_build_graph.py can store it on the Chunk node and
         # 05_embed_chunks.py / webapp/retrieval.py can filter/cite on it.
         chunk_records = [
-            {"chunk_id": i, "text": c.content, **c.to_dict(), "file_type": doc_meta.get("file_type", "")}
+            {"chunk_id": act_chunk_id(i, act_namespace), "text": c.content, **c.to_dict(),
+             "file_type": doc_meta.get("file_type", "")}
             for i, c in enumerate(parsed["chunks"])
         ]
         with open(chunks_out_path, "w", encoding="utf-8") as f:

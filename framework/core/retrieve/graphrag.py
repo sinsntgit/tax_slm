@@ -150,7 +150,37 @@ GRAPH_EXPANSION_REL_TYPES = [
     "DISTINGUISHES_CASE", "DISTINGUISHED_BY", "RELIED_ON_BY", "RELIES_ON",
     "SUPERSEDES", "SUPERSEDED_BY", "WITHDRAWS", "WITHDRAWN_BY",
     "AMENDS", "AMENDED_BY", "OVERRIDES", "OVERRIDDEN_BY",
+    # 2026-10-14: NEW - Income-tax Act 1961 <-> 2025 section correspondence
+    # (written by domain_packs/tax/converters/build_act_correspondence.py,
+    # both directions) - connects one provision to its renumbered
+    # counterpart in the other Act, exactly the "different but substantively
+    # related authority" this list is for.
+    "CORRESPONDS_TO",
 ]
+
+# 2026-10-14: NEW - see GraphRAGRetriever.get_act_correspondence_context().
+ACT_CORRESPONDENCE_REL = "CORRESPONDS_TO"
+# Statutory-provision labels chunking.py mints (Act-namespaced ids) - the
+# only node types a section correspondence lookup can start from.
+ACT_PROVISION_LABELS = {"Section", "SubSection", "Clause", "SubClause", "Proviso", "Explanation"}
+MAX_CORRESPONDING_SECTIONS = 5
+MAX_CHUNKS_PER_CORRESPONDING_SECTION = 6
+MAX_CITATION_MATCHES = 5
+
+
+_ACT_NAMESPACE_RE = re.compile(
+    r"^(?:(?:Proviso|Explanation)\w*?_to_)?(?P<ns>.+?)__(?:Section|SubSection|Clause|SubClause)_")
+
+
+def act_namespace_of(entity_id: str | None) -> str | None:
+    """2026-10-14: NEW. The Act namespace of an Act-provision id, per
+    chunking.generate_entity_id() ("ITA1961__Section_90" -> "ITA1961",
+    "Proviso_to_ITA2025__Section_9" -> "ITA2025"), or None when the id has
+    no '<ns>__Section_/SubSection_/Clause_/SubClause_' shape (un-namespaced
+    single-Act ids, "__superseded__" clones of those, non-Act entities) -
+    never guessed beyond that literal shape."""
+    m = _ACT_NAMESPACE_RE.match(str(entity_id or ""))
+    return m.group("ns") if m else None
 
 # vector_top_k sizes the CANDIDATE POOL fed to the reranker, not the final
 # answer set - reranker.rerank()'s own top_n/min_relevance decide what
@@ -987,6 +1017,130 @@ class GraphRAGRetriever:
             return None
         return dict(record)
 
+    # --- ACT-AWARE CITATION LOOKUP + 1961 <-> 2025 CORRESPONDENCE -------------
+    # 2026-10-14: NEW. The Income-tax Act, 2025 (in force 1 April 2026)
+    # renumbers the 1961 Act's sections. With both Acts ingested, a Chunk's
+    # full_citation ("Section 90") is AMBIGUOUS - chunking.generate_
+    # full_citation() carries no Act - while entity ids are Act-namespaced
+    # ("ITA1961__Section_90" vs "ITA2025__Section_90", two unrelated
+    # provisions). retrieve_by_citation() (LIMIT 1, unordered) silently
+    # picked one Act's chunk at random. These helpers return EVERY Act's
+    # match, labelled with its Act, plus the provision each one CORRESPONDS_TO
+    # in the other Act (build_act_correspondence.py's edges).
+
+    def _act_names(self, session, namespaces: set[str]) -> dict[str, str]:
+        if not namespaces:
+            return {}
+        rows = session.run("MATCH (a:Act) WHERE a.id IN $ids RETURN a.id AS id, a.actName AS name",
+                           ids=sorted(namespaces))
+        return {r["id"]: r["name"] for r in rows if r["name"]}
+
+    def retrieve_citation_matches(self, citation: str, limit: int = MAX_CITATION_MATCHES) -> list[dict]:
+        """Every Chunk whose full_citation equals `citation` (up to `limit`),
+        each with `act_namespace` (from its entity id - None for an
+        un-namespaced single-Act graph) and `act_name` (the Act node's
+        actName, else the entity's document_name; None if neither is set -
+        left unset rather than guessed). Same row fields as
+        retrieve_by_citation() otherwise."""
+        if not citation:
+            return []
+        with neo4j_client.get_session() as session:
+            rows = [dict(r) for r in session.run(
+                """
+                MATCH (c:Chunk {full_citation: $citation})
+                OPTIONAL MATCH (e {id: c.entity_id})
+                RETURN c.chunk_id AS chunk_id, c.content AS text, c.full_citation AS full_citation,
+                       c.short_title AS short_title, c.chunk_type AS chunk_type,
+                       c.element_type AS element_type, c.section AS section, c.subsection AS subsection,
+                       c.clause AS clause, c.sub_clause AS sub_clause, c.entity_id AS entity_id,
+                       c.has_proviso AS has_proviso, c.has_explanation AS has_explanation, c.chapter AS chapter,
+                       e.document_name AS document_name
+                ORDER BY c.entity_id
+                LIMIT $limit
+                """,
+                citation=citation, limit=limit,
+            )]
+            for r in rows:
+                r["act_namespace"] = act_namespace_of(r.get("entity_id"))
+            names = self._act_names(session, {r["act_namespace"] for r in rows if r["act_namespace"]})
+        for r in rows:
+            r["act_name"] = names.get(r["act_namespace"]) or r.get("document_name") or None
+        return rows
+
+    def get_act_correspondence_context(self, entity_ids: list[str],
+                                       max_sections: int = MAX_CORRESPONDING_SECTIONS,
+                                       chunks_per_section: int = MAX_CHUNKS_PER_CORRESPONDING_SECTION) -> dict:
+        """For each provision entity id (a Section or anything PART_OF one),
+        finds its Section and follows CORRESPONDS_TO to the corresponding
+        Section of the OTHER Act. Returns {"rows": [...], "chunks": [...]}:
+        `rows` are flat dicts (safe for plain_rows / the LLM's graph-results
+        JSON) naming both provisions, the Act each belongs to, and the edge's
+        basis/confidence; `chunks` are the corresponding Sections' own text
+        chunks (the Section and its PART_OF descendants, document order,
+        capped per section) in retrieve()'s candidate shape with
+        source="act_correspondence". Empty when no CORRESPONDS_TO edge exists
+        - build_act_correspondence.py maps only Sections cited by ingested
+        case law, so most sections legitimately have none."""
+        entity_ids = sorted({str(e) for e in entity_ids if e})
+        if not entity_ids:
+            return {"rows": [], "chunks": []}
+        with neo4j_client.get_session() as session:
+            pairs = [dict(r) for r in session.run(
+                f"""
+                UNWIND $eids AS eid
+                MATCH (e {{id: eid}})-[:PART_OF*0..6]->(s:Section)
+                MATCH (s)-[r:{ACT_CORRESPONDENCE_REL}]->(t:Section)
+                RETURN DISTINCT s.id AS from_id, s.full_citation AS from_citation,
+                       s.document_name AS from_document_name,
+                       t.id AS to_id, t.full_citation AS to_citation, t.document_name AS to_document_name,
+                       t.marginal_heading AS to_heading, elementId(t) AS to_db_id,
+                       r.basis AS basis, r.confidence AS confidence
+                ORDER BY from_id, to_id
+                LIMIT $limit
+                """,
+                eids=entity_ids, limit=max_sections,
+            )]
+            if not pairs:
+                return {"rows": [], "chunks": []}
+            names = self._act_names(session, {ns for p in pairs for ns in
+                                              (act_namespace_of(p["from_id"]), act_namespace_of(p["to_id"])) if ns})
+            chunks, seen = [], set()
+            for p in pairs:
+                for c in session.run(
+                    """
+                    MATCH (t) WHERE elementId(t) = $db_id
+                    MATCH (t)<-[:PART_OF*0..6]-(d)-[:hasSourceChunk]->(c:Chunk)
+                    RETURN DISTINCT c.chunk_id AS chunk_id, c.content AS text, c.line_start AS line_start
+                    ORDER BY line_start
+                    LIMIT $k
+                    """,
+                    db_id=p["to_db_id"], k=chunks_per_section,
+                ):
+                    cid = c["chunk_id"]
+                    if cid is None or cid in seen or not c["text"]:
+                        continue
+                    seen.add(cid)
+                    chunks.append({"chunk_id": cid, "text": c["text"], "source": "act_correspondence",
+                                   "similarity": None})
+
+        def act_label(entity_id, document_name):
+            ns = act_namespace_of(entity_id)
+            return names.get(ns) or document_name or ns
+
+        rows = []
+        for p in pairs:
+            from_act = act_label(p["from_id"], p["from_document_name"])
+            to_act = act_label(p["to_id"], p["to_document_name"])
+            rows.append({
+                "act_correspondence": f"{p['from_citation']} of {from_act} corresponds to "
+                                      f"{p['to_citation']} of {to_act}",
+                "cited_provision": p["from_citation"], "cited_provision_act": from_act,
+                "corresponding_provision": p["to_citation"], "corresponding_provision_act": to_act,
+                "corresponding_provision_heading": p["to_heading"],
+                "correspondence_basis": p["basis"], "correspondence_confidence": p["confidence"],
+            })
+        return {"rows": rows, "chunks": chunks}
+
     def find_cross_references(self, entity_id: str) -> dict:
         with neo4j_client.get_session() as session:
             outgoing = list(session.run(
@@ -1167,7 +1321,12 @@ class GraphRAGRetriever:
         semantic_graph = retrieval_mode == "semantic_graph"
 
         citation = None if vector_only else self.extract_citation(question)
-        citation_chunk = self.retrieve_by_citation(citation) if citation else None
+        # 2026-10-14: was retrieve_by_citation() (LIMIT 1) - with both the
+        # 1961 and 2025 Acts ingested "Section X" matches one chunk PER Act,
+        # and one was dropped arbitrarily. Every Act's match is now a
+        # citation candidate (see retrieve_citation_matches()).
+        citation_matches = self.retrieve_citation_matches(citation) if citation else []
+        citation_chunk = citation_matches[0] if citation_matches else None
         if citation and not citation_chunk:
             logger.info(f"[graphrag] Question named citation {citation!r} but no chunk matched it exactly - "
                         f"falling back to graph/vector retrieval.")
@@ -1206,7 +1365,24 @@ class GraphRAGRetriever:
 
         graph_chunks = self.get_chunks_by_ids(graph_chunk_ids)
 
-        graph_found_something = bool(graph_chunks or citation_chunk)
+        # 2026-10-14: NEW - 1961 <-> 2025 Act correspondence. From every
+        # cited provision (citation path) and every NL2Cypher-matched Act
+        # provision node, follow CORRESPONDS_TO to the renumbered provision in
+        # the other Act: its chunks become candidates and a row naming both
+        # provisions + their Acts goes into plain_rows (which reaches the
+        # answer LLM as graph-results JSON). Not in vector_only (graph-free
+        # baseline). Best-effort - a failure here must not lose the rest.
+        correspondence = {"rows": [], "chunks": []}
+        if not vector_only:
+            seed_entity_ids = [m["entity_id"] for m in citation_matches if m.get("entity_id")] + [
+                n["id"] for n in matched_nodes if n.get("label") in ACT_PROVISION_LABELS and n.get("id")]
+            if seed_entity_ids:
+                try:
+                    correspondence = self.get_act_correspondence_context(seed_entity_ids)
+                except Exception as e:
+                    logger.warning(f"[graphrag] act-correspondence lookup failed, continuing without it: {e}")
+
+        graph_found_something = bool(graph_chunks or citation_chunk or correspondence["chunks"])
 
         run_vector = vector_only or (
             config["vector_mode"] == "always"
@@ -1279,12 +1455,17 @@ class GraphRAGRetriever:
 
         seen_ids = {c["chunk_id"] for c in graph_chunks}
         citation_candidate = []
-        if citation_chunk and citation_chunk["chunk_id"] not in seen_ids:
-            citation_candidate = [{
-                "chunk_id": citation_chunk["chunk_id"], "text": citation_chunk["text"],
-                "source": "citation", "similarity": None,
-            }]
-            seen_ids.add(citation_chunk["chunk_id"])
+        for match in citation_matches:  # 2026-10-14: every Act's match, not just the first
+            if match["chunk_id"] not in seen_ids:
+                citation_candidate.append({
+                    "chunk_id": match["chunk_id"], "text": match["text"],
+                    "source": "citation", "similarity": None,
+                })
+                seen_ids.add(match["chunk_id"])
+        for c in correspondence["chunks"]:
+            if c["chunk_id"] not in seen_ids:
+                citation_candidate.append(dict(c))
+                seen_ids.add(c["chunk_id"])
 
         expansion_candidates = []
         for c in graph_expansion_chunks:
@@ -1306,7 +1487,8 @@ class GraphRAGRetriever:
         # --- PII MASKING (single enforcement point) ---------------------------
         context = f"question={question[:80]!r}"
         matched_nodes = self.pii.mask_nodes(matched_nodes, context=context)
-        plain_rows_masked = self.pii.mask_plain_rows(graph_result["plain_rows"], context=context)
+        plain_rows_masked = self.pii.mask_plain_rows(graph_result["plain_rows"] + correspondence["rows"],
+                                                      context=context)
         candidate_chunks = self.pii.mask_chunks(candidate_chunks, context=context)
 
         return {
