@@ -1,0 +1,6 @@
+{
+  "min_relevance": 0.45,
+  "fallback_relevance": 0.3,
+  "fallback_max_chunks": 5,
+  "top_n": 40
+}

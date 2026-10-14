@@ -1,0 +1,3296 @@
+{
+  "classes": [
+    {
+      "name": "RiskAssessment",
+      "parents": [
+        "Layer_OpinionGeneration"
+      ],
+      "comment": [
+        "Composite judgment of technical strength and litigation exposure."
+      ]
+    },
+    {
+      "name": "CaseLaw",
+      "parents": [
+        "Layer_JudicialInternationalInterpretiveAuthority"
+      ],
+      "comment": [
+        "A structured judicial decision - captured as reasoning, not just judgment text."
+      ]
+    },
+    {
+      "name": "Dividend",
+      "parents": [
+        "Transaction"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Transaction",
+      "parents": [
+        "Layer_FactsLayer"
+      ],
+      "comment": [
+        "The commercial or corporate event giving rise to potential tax consequences."
+      ]
+    },
+    {
+      "name": "FirmOpinion",
+      "parents": [
+        "Layer_FirmIntellectualCapital"
+      ],
+      "comment": [
+        "A formal KPMG tax opinion - facts through recommendation, in one record."
+      ]
+    },
+    {
+      "name": "PartyAttribute",
+      "parents": [
+        "Layer_FactsLayer",
+        "ControlledVocabulary"
+      ],
+      "comment": [
+        "A qualifying attribute of a Party that determines which provisions apply."
+      ]
+    },
+    {
+      "name": "CBDTCircular",
+      "parents": [
+        "Circular"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Circular",
+      "parents": [
+        "DelegatedLegislation"
+      ],
+      "comment": []
+    },
+    {
+      "name": "ExplanatoryCircular",
+      "parents": [
+        "Circular"
+      ],
+      "comment": []
+    },
+    {
+      "name": "ClientEngagementDocument",
+      "parents": [
+        "Layer_FirmIntellectualCapital"
+      ],
+      "comment": [
+        "Engagement deliverable embedding a real fact pattern and a position."
+      ]
+    },
+    {
+      "name": "KnowledgeRepositoryItem",
+      "parents": [
+        "Layer_FirmIntellectualCapital"
+      ],
+      "comment": [
+        "Curated, anonymised position paper maintained by Knowledge Management / DPP."
+      ]
+    },
+    {
+      "name": "RestructuringProposal",
+      "parents": [
+        "ClientEngagementDocument"
+      ],
+      "comment": []
+    },
+    {
+      "name": "AdvanceRuling",
+      "parents": [
+        "Layer_AdministrativeInterpretation"
+      ],
+      "comment": [
+        "A pre-transaction determination; persuasive but not universally binding."
+      ]
+    },
+    {
+      "name": "RulingAuthority",
+      "parents": [
+        "Layer_JudicialInternationalInterpretiveAuthority"
+      ],
+      "comment": [
+        "An institution empowered to issue advance rulings (direct-tax or GST). Split out from AdvanceRuling (a document class) and from JudicialForum (case-deciding institutions) because a ruling authority is neither - it is a distinct institution type with its own bindingness rules. Added per Indian_Tax_SLM_Research_Report.md Section 4.2 defect #3."
+      ]
+    },
+    {
+      "name": "EffectiveDateNotification",
+      "parents": [
+        "Notification"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Notification",
+      "parents": [
+        "DelegatedLegislation"
+      ],
+      "comment": []
+    },
+    {
+      "name": "JudicialForum",
+      "parents": [
+        "Layer_JudicialInternationalInterpretiveAuthority"
+      ],
+      "comment": [
+        "Enumerated hierarchy establishing binding vs. persuasive weight of a case."
+      ]
+    },
+    {
+      "name": "OECDTPGuidelines",
+      "parents": [
+        "InternationalGuidance"
+      ],
+      "comment": []
+    },
+    {
+      "name": "InternationalGuidance",
+      "parents": [
+        "Layer_JudicialInternationalInterpretiveAuthority"
+      ],
+      "comment": [
+        "Non-binding but persuasive international interpretive material."
+      ]
+    },
+    {
+      "name": "Form3CEB",
+      "parents": [
+        "ComplianceForm"
+      ],
+      "comment": []
+    },
+    {
+      "name": "ComplianceForm",
+      "parents": [
+        "Layer_ComplianceProcedural"
+      ],
+      "comment": [
+        "A prescribed filing instrument tied to a provision or transaction."
+      ]
+    },
+    {
+      "name": "WithholdTax",
+      "parents": [
+        "Recommendation"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Recommendation",
+      "parents": [
+        "Layer_OpinionGeneration"
+      ],
+      "comment": [
+        "The practical next step flowing from the conclusion."
+      ]
+    },
+    {
+      "name": "StatutoryProvision",
+      "parents": [
+        "Layer_PrimarySourcesOfAuthority"
+      ],
+      "comment": [
+        "Binding primary law enacted by the legislature."
+      ]
+    },
+    {
+      "name": "TaxTreaty",
+      "parents": [
+        "Layer_PrimarySourcesOfAuthority"
+      ],
+      "comment": [
+        "Bilateral/multilateral agreement that can override domestic law for a cross-border fact pattern."
+      ]
+    },
+    {
+      "name": "Issue",
+      "parents": [
+        "Layer_OpinionGeneration"
+      ],
+      "comment": [
+        "The specific question framed for analysis."
+      ]
+    },
+    {
+      "name": "Proviso",
+      "parents": [
+        "StatutoryProvision"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Industry",
+      "parents": [
+        "Layer_FactsLayer"
+      ],
+      "comment": [
+        "Sector context that shapes issue framing and risk tolerance."
+      ]
+    },
+    {
+      "name": "LegalProposition",
+      "parents": [
+        "Thing"
+      ],
+      "comment": [
+        "A reified legal claim/interpretation - claim text, applicability conditions, supporting and opposing authorities (with role), jurisdiction, statute regime, confidence and status (settled/contested/superseded) - kept separate from the documents (CaseLaw, FirmOpinion) that assert it, so qualified and conflicting views can coexist and be queried. Added per Indian_Tax_SLM_Research_Report.md Section 4.3(a)."
+      ]
+    },
+    {
+      "name": "Conclusion",
+      "parents": [
+        "Layer_OpinionGeneration",
+        "ControlledVocabulary"
+      ],
+      "comment": [
+        "The final technical position reached."
+      ]
+    },
+    {
+      "name": "UNModelConvention",
+      "parents": [
+        "InternationalGuidance"
+      ],
+      "comment": []
+    },
+    {
+      "name": "LegalEvent",
+      "parents": [
+        "Thing"
+      ],
+      "comment": [
+        "A dated legal event (amendment, overruling, reversal, supersession, withdrawal, stay) with the instrument that caused it and its scope - lets OVERRULES/SUPERSEDED_BY/WITHDRAWN_BY/AMENDED_BY/STAYED_BY-type relationships be queried with 'when' and 'by what instrument', which a bare triple cannot express. Added per Indian_Tax_SLM_Research_Report.md Section 4.2 defect #10 / Section 4.3(b)."
+      ]
+    },
+    {
+      "name": "CaseCitation",
+      "parents": [
+        "Layer_JudicialInternationalInterpretiveAuthority"
+      ],
+      "comment": [
+        "The formal citation record for a case-law decision (reporter, volume, page, year - e.g. '(2021) 3 SCC 1'). Kept separate from CaseLaw's 'citation' text field so multiple parallel citations for the same case, or citations shared/cross-referenced across cases, can be their own node. Added while incorporating gaps flagged by the 11_extract_case_law.py extraction run."
+      ]
+    },
+    {
+      "name": "DefinitionSection",
+      "parents": [
+        "StatutoryProvision"
+      ],
+      "comment": []
+    },
+    {
+      "name": "IngestionTier",
+      "parents": [
+        "ControlledVocabulary"
+      ],
+      "comment": []
+    },
+    {
+      "name": "ControlledVocabulary",
+      "parents": [
+        "Thing"
+      ],
+      "comment": [
+        "Fixed enumerations used as attribute values across the classes above, so downstream filtering and risk-weighting stay consistent (Section 6 of the conceptual ontology document)."
+      ]
+    },
+    {
+      "name": "AARRuling",
+      "parents": [
+        "AdvanceRuling"
+      ],
+      "comment": []
+    },
+    {
+      "name": "AssessmentInstruction",
+      "parents": [
+        "Instruction"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Instruction",
+      "parents": [
+        "DelegatedLegislation"
+      ],
+      "comment": []
+    },
+    {
+      "name": "DPPPositionPaper",
+      "parents": [
+        "KnowledgeRepositoryItem"
+      ],
+      "comment": []
+    },
+    {
+      "name": "TaxTopic",
+      "parents": [
+        "Layer_JudicialInternationalInterpretiveAuthority",
+        "ControlledVocabulary"
+      ],
+      "comment": [
+        "A controlled classification tag used to categorize case law, issues and firm opinions by subject area."
+      ]
+    },
+    {
+      "name": "DelegatedLegislation",
+      "parents": [
+        "Layer_PrimarySourcesOfAuthority"
+      ],
+      "comment": [
+        "Subordinate instrument issued under statutory authority to implement, clarify or operationalise a provision."
+      ]
+    },
+    {
+      "name": "ProsecutionSection",
+      "parents": [
+        "PenaltyExposure"
+      ],
+      "comment": []
+    },
+    {
+      "name": "PenaltyExposure",
+      "parents": [
+        "Layer_ComplianceProcedural"
+      ],
+      "comment": [
+        "The statutory consequence of non-compliance or an adverse position."
+      ]
+    },
+    {
+      "name": "IncomeTaxRules",
+      "parents": [
+        "Rule"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Rule",
+      "parents": [
+        "DelegatedLegislation"
+      ],
+      "comment": []
+    },
+    {
+      "name": "JudicialForumHierarchy",
+      "parents": [
+        "ControlledVocabulary"
+      ],
+      "comment": []
+    },
+    {
+      "name": "TaxAlert",
+      "parents": [
+        "TechnicalAlert"
+      ],
+      "comment": []
+    },
+    {
+      "name": "TechnicalAlert",
+      "parents": [
+        "Layer_FirmIntellectualCapital"
+      ],
+      "comment": [
+        "Time-stamped commentary tracking a legal change and its impact on positions."
+      ]
+    },
+    {
+      "name": "SupremeCourt",
+      "parents": [
+        "JudicialForum"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Demerger",
+      "parents": [
+        "Transaction"
+      ],
+      "comment": []
+    },
+    {
+      "name": "TaxMemo",
+      "parents": [
+        "ClientEngagementDocument"
+      ],
+      "comment": []
+    },
+    {
+      "name": "ThoughtLeadership",
+      "parents": [
+        "TechnicalAlert"
+      ],
+      "comment": []
+    },
+    {
+      "name": "HighCourt",
+      "parents": [
+        "JudicialForum"
+      ],
+      "comment": []
+    },
+    {
+      "name": "PenaltySection",
+      "parents": [
+        "PenaltyExposure"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Trust",
+      "parents": [
+        "Party"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Party",
+      "parents": [
+        "Layer_FactsLayer"
+      ],
+      "comment": [
+        "An entity or person who is the subject of the tax analysis."
+      ]
+    },
+    {
+      "name": "Merger",
+      "parents": [
+        "Transaction"
+      ],
+      "comment": []
+    },
+    {
+      "name": "AAAR",
+      "parents": [
+        "RulingAuthority"
+      ],
+      "comment": []
+    },
+    {
+      "name": "HSNSACCode",
+      "parents": [
+        "Thing"
+      ],
+      "comment": [
+        "A Harmonized System of Nomenclature / Services Accounting Code used for GST classification. Added per Indian_Tax_SLM_Research_Report.md Section 4.2 defect #12 (GST substructure)."
+      ]
+    },
+    {
+      "name": "Reservation",
+      "parents": [
+        "TaxTreaty"
+      ],
+      "comment": []
+    },
+    {
+      "name": "SecondmentArrangement",
+      "parents": [
+        "Transaction"
+      ],
+      "comment": []
+    },
+    {
+      "name": "GSTRateEntry",
+      "parents": [
+        "Thing"
+      ],
+      "comment": [
+        "A GST rate applicable to an HSN/SAC code for a given effective period - the deterministic rate-table target the research report recommends routing all rate lookups to (never generate a rate). Added per Indian_Tax_SLM_Research_Report.md Section 4.2 defect #12."
+      ]
+    },
+    {
+      "name": "Memo",
+      "parents": [
+        "DeliverableOutput"
+      ],
+      "comment": []
+    },
+    {
+      "name": "DeliverableOutput",
+      "parents": [
+        "Layer_Output"
+      ],
+      "comment": [
+        "The client-facing artifact produced once analysis is complete."
+      ]
+    },
+    {
+      "name": "TechnicalMemo",
+      "parents": [
+        "TechnicalAlert"
+      ],
+      "comment": []
+    },
+    {
+      "name": "AssessmentPosition",
+      "parents": [
+        "RevenuePosition"
+      ],
+      "comment": []
+    },
+    {
+      "name": "RevenuePosition",
+      "parents": [
+        "Layer_AdministrativeInterpretation"
+      ],
+      "comment": [
+        "The tax department's actual or likely stance on an issue."
+      ]
+    },
+    {
+      "name": "TrainingDeck",
+      "parents": [
+        "TrainingMaterial"
+      ],
+      "comment": []
+    },
+    {
+      "name": "TrainingMaterial",
+      "parents": [
+        "Layer_FirmIntellectualCapital"
+      ],
+      "comment": [
+        "National-office material used for internal knowledge transfer."
+      ]
+    },
+    {
+      "name": "SafeHarbourNotification",
+      "parents": [
+        "Notification"
+      ],
+      "comment": []
+    },
+    {
+      "name": "ITATTribunal",
+      "parents": [
+        "JudicialForum"
+      ],
+      "comment": []
+    },
+    {
+      "name": "ApplyTreatyProtection",
+      "parents": [
+        "Recommendation"
+      ],
+      "comment": []
+    },
+    {
+      "name": "TransferPricingInstruction",
+      "parents": [
+        "Instruction"
+      ],
+      "comment": []
+    },
+    {
+      "name": "CIT",
+      "parents": [
+        "LitigationProcessStage"
+      ],
+      "comment": []
+    },
+    {
+      "name": "LitigationProcessStage",
+      "parents": [
+        "Layer_ComplianceProcedural"
+      ],
+      "comment": [
+        "A stage in the dispute-resolution pathway."
+      ]
+    },
+    {
+      "name": "Paragraph",
+      "parents": [
+        "TaxTreaty"
+      ],
+      "comment": []
+    },
+    {
+      "name": "RiskClassification",
+      "parents": [
+        "ControlledVocabulary"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Buyback",
+      "parents": [
+        "Transaction"
+      ],
+      "comment": []
+    },
+    {
+      "name": "OECDModelConvention",
+      "parents": [
+        "InternationalGuidance"
+      ],
+      "comment": []
+    },
+    {
+      "name": "ObtainTRC",
+      "parents": [
+        "Recommendation"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Appeal",
+      "parents": [
+        "LitigationProcessStage"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Explanation",
+      "parents": [
+        "StatutoryProvision"
+      ],
+      "comment": []
+    },
+    {
+      "name": "RiskLevel",
+      "parents": [
+        "ControlledVocabulary"
+      ],
+      "comment": []
+    },
+    {
+      "name": "GSTR",
+      "parents": [
+        "ComplianceForm"
+      ],
+      "comment": []
+    },
+    {
+      "name": "InternalGuidance",
+      "parents": [
+        "RevenuePosition"
+      ],
+      "comment": []
+    },
+    {
+      "name": "TechnicalStrength",
+      "parents": [
+        "ControlledVocabulary"
+      ],
+      "comment": []
+    },
+    {
+      "name": "AdministrativeOrder",
+      "parents": [
+        "Order"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Order",
+      "parents": [
+        "DelegatedLegislation"
+      ],
+      "comment": []
+    },
+    {
+      "name": "ApplyForLowerWHTCertificate",
+      "parents": [
+        "Recommendation"
+      ],
+      "comment": []
+    },
+    {
+      "name": "PolicyTechnicalCommitteeMinutes",
+      "parents": [
+        "TechnicalDiscussion"
+      ],
+      "comment": []
+    },
+    {
+      "name": "TechnicalDiscussion",
+      "parents": [
+        "Layer_AdministrativeInterpretation"
+      ],
+      "comment": [
+        "Non-binding policy deliberation that still informs interpretation."
+      ]
+    },
+    {
+      "name": "Annexure",
+      "parents": [
+        "StatutoryProvision"
+      ],
+      "comment": []
+    },
+    {
+      "name": "RoyaltyPayment",
+      "parents": [
+        "Transaction"
+      ],
+      "comment": []
+    },
+    {
+      "name": "MLIProvision",
+      "parents": [
+        "TaxTreaty"
+      ],
+      "comment": []
+    },
+    {
+      "name": "SafeHarbourDecisions",
+      "parents": [
+        "AdvanceRuling"
+      ],
+      "comment": []
+    },
+    {
+      "name": "IssuePaper",
+      "parents": [
+        "KnowledgeRepositoryItem"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Section",
+      "parents": [
+        "StatutoryProvision"
+      ],
+      "comment": []
+    },
+    {
+      "name": "SubSection",
+      "parents": [
+        "StatutoryProvision"
+      ],
+      "comment": []
+    },
+    {
+      "name": "TPDocumentation",
+      "parents": [
+        "ComplianceForm"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Company",
+      "parents": [
+        "Party"
+      ],
+      "comment": []
+    },
+    {
+      "name": "SeekAPA",
+      "parents": [
+        "Recommendation"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Form15CA15CB",
+      "parents": [
+        "ComplianceForm"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Newsletter",
+      "parents": [
+        "TechnicalAlert"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Individual",
+      "parents": [
+        "Party"
+      ],
+      "comment": []
+    },
+    {
+      "name": "HighCourtStage",
+      "parents": [
+        "LitigationProcessStage"
+      ],
+      "comment": [
+        "A litigation-process stage at the High Court (distinct from the HighCourt JudicialForum institution class - link the two via HAS_FORUM). Renamed from the collision-suffixed 'HighCourt_2' per Indian_Tax_SLM_Research_Report.md Section 4.2 defect #1."
+      ]
+    },
+    {
+      "name": "OECDPillarTwo",
+      "parents": [
+        "InternationalGuidance"
+      ],
+      "comment": []
+    },
+    {
+      "name": "SupremeCourtStage",
+      "parents": [
+        "LitigationProcessStage"
+      ],
+      "comment": [
+        "A litigation-process stage at the Supreme Court (distinct from the SupremeCourt JudicialForum institution class - link the two via HAS_FORUM). Renamed from the collision-suffixed 'SupremeCourt_2' per Indian_Tax_SLM_Research_Report.md Section 4.2 defect #1."
+      ]
+    },
+    {
+      "name": "Probability",
+      "parents": [
+        "ControlledVocabulary"
+      ],
+      "comment": []
+    },
+    {
+      "name": "RestructureTransaction",
+      "parents": [
+        "Recommendation"
+      ],
+      "comment": []
+    },
+    {
+      "name": "TaxpayerArgument",
+      "parents": [
+        "Argument"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Argument",
+      "parents": [
+        "Layer_OpinionGeneration"
+      ],
+      "comment": [
+        "A position advanced on an issue, for or against the taxpayer."
+      ]
+    },
+    {
+      "name": "Schedule",
+      "parents": [
+        "StatutoryProvision"
+      ],
+      "comment": []
+    },
+    {
+      "name": "ReportingRules",
+      "parents": [
+        "Rule"
+      ],
+      "comment": []
+    },
+    {
+      "name": "ExtensionCircular",
+      "parents": [
+        "Circular"
+      ],
+      "comment": []
+    },
+    {
+      "name": "AssetTransfer",
+      "parents": [
+        "Transaction"
+      ],
+      "comment": []
+    },
+    {
+      "name": "PartnershipLLP",
+      "parents": [
+        "Party"
+      ],
+      "comment": []
+    },
+    {
+      "name": "OECDCommentary",
+      "parents": [
+        "InternationalGuidance"
+      ],
+      "comment": []
+    },
+    {
+      "name": "ShareSale",
+      "parents": [
+        "Transaction"
+      ],
+      "comment": []
+    },
+    {
+      "name": "DueDiligenceReport",
+      "parents": [
+        "ClientEngagementDocument"
+      ],
+      "comment": []
+    },
+    {
+      "name": "InterestSection",
+      "parents": [
+        "PenaltyExposure"
+      ],
+      "comment": []
+    },
+    {
+      "name": "TDSForms",
+      "parents": [
+        "ComplianceForm"
+      ],
+      "comment": []
+    },
+    {
+      "name": "AARVAR",
+      "parents": [
+        "RulingAuthority"
+      ],
+      "comment": []
+    },
+    {
+      "name": "DepartmentView",
+      "parents": [
+        "RevenuePosition"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Assessment",
+      "parents": [
+        "LitigationProcessStage"
+      ],
+      "comment": []
+    },
+    {
+      "name": "TreatyNotification",
+      "parents": [
+        "Notification"
+      ],
+      "comment": [
+        "A notification that gives effect to a tax treaty (e.g. Notification No. 68/2019 adopting the India-Hong Kong DTAA) - modelled once, as a Notification, not duplicated under TaxTreaty. Deduped per Indian_Tax_SLM_Research_Report.md Section 4.2 defect #2."
+      ]
+    },
+    {
+      "name": "Chapter",
+      "parents": [
+        "StatutoryProvision"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Clause",
+      "parents": [
+        "StatutoryProvision"
+      ],
+      "comment": []
+    },
+    {
+      "name": "TransitionalProvision",
+      "parents": [
+        "StatutoryProvision"
+      ],
+      "comment": []
+    },
+    {
+      "name": "FTSPayment",
+      "parents": [
+        "Transaction"
+      ],
+      "comment": []
+    },
+    {
+      "name": "ComputationRules",
+      "parents": [
+        "Rule"
+      ],
+      "comment": []
+    },
+    {
+      "name": "ITR5ITR6",
+      "parents": [
+        "ComplianceForm"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Protocol",
+      "parents": [
+        "TaxTreaty"
+      ],
+      "comment": []
+    },
+    {
+      "name": "CaseOutcome",
+      "parents": [
+        "ControlledVocabulary"
+      ],
+      "comment": []
+    },
+    {
+      "name": "APATerms",
+      "parents": [
+        "AdvanceRuling"
+      ],
+      "comment": []
+    },
+    {
+      "name": "StateJurisdiction",
+      "parents": [
+        "Jurisdiction"
+      ],
+      "comment": [
+        "An Indian state or union territory, for SGST divergence and state-level GST AAR/AAAR jurisdiction. Subclass of the existing Jurisdiction placeholder class (itself still flagged open - see Section 9 of the conceptual ontology document / prior chat history). Added per Indian_Tax_SLM_Research_Report.md Section 4.2 defect #12."
+      ]
+    },
+    {
+      "name": "ComplianceAdvice",
+      "parents": [
+        "DeliverableOutput"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Section119Order",
+      "parents": [
+        "Order"
+      ],
+      "comment": []
+    },
+    {
+      "name": "LitigationSubmission",
+      "parents": [
+        "ClientEngagementDocument"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Act",
+      "parents": [
+        "StatutoryProvision"
+      ],
+      "comment": []
+    },
+    {
+      "name": "DRPRelatedDecisions",
+      "parents": [
+        "JudicialForum"
+      ],
+      "comment": []
+    },
+    {
+      "name": "LitigationPosition",
+      "parents": [
+        "RevenuePosition"
+      ],
+      "comment": []
+    },
+    {
+      "name": "RevenueArgument",
+      "parents": [
+        "Argument"
+      ],
+      "comment": []
+    },
+    {
+      "name": "MaintainSpecificDocumentation",
+      "parents": [
+        "Recommendation"
+      ],
+      "comment": []
+    },
+    {
+      "name": "EmergingIssueAnalysis",
+      "parents": [
+        "TrainingMaterial"
+      ],
+      "comment": []
+    },
+    {
+      "name": "OECDPillarOne",
+      "parents": [
+        "InternationalGuidance"
+      ],
+      "comment": []
+    },
+    {
+      "name": "TaxOpinion",
+      "parents": [
+        "DeliverableOutput"
+      ],
+      "comment": []
+    },
+    {
+      "name": "AuditObjection",
+      "parents": [
+        "RevenuePosition"
+      ],
+      "comment": []
+    },
+    {
+      "name": "ITAT",
+      "parents": [
+        "LitigationProcessStage"
+      ],
+      "comment": []
+    },
+    {
+      "name": "SunsetClause",
+      "parents": [
+        "StatutoryProvision"
+      ],
+      "comment": []
+    },
+    {
+      "name": "LitigationStrategy",
+      "parents": [
+        "DeliverableOutput"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Article",
+      "parents": [
+        "TaxTreaty"
+      ],
+      "comment": []
+    },
+    {
+      "name": "BoardForAdvanceRulings",
+      "parents": [
+        "RulingAuthority"
+      ],
+      "comment": []
+    },
+    {
+      "name": "FactPattern",
+      "parents": [
+        "Layer_FactsLayer"
+      ],
+      "comment": [
+        "An anonymised, reusable scenario extracted from historical engagements.",
+        "Composite class: a fact pattern is made up of a Party, a Transaction, a Jurisdiction and an Issue (see the involvesParty / involvesTransaction / raises relationships)."
+      ]
+    },
+    {
+      "name": "Layer_FirmIntellectualCapital",
+      "parents": [
+        "Thing"
+      ],
+      "comment": [
+        "Where the firm's proprietary value sits; the SME notes flag this as the single most important source layer for the KG build."
+      ]
+    },
+    {
+      "name": "Layer_JudicialInternationalInterpretiveAuthority",
+      "parents": [
+        "Thing"
+      ],
+      "comment": [
+        "The most heavily weighted interpretive layer per the SME notes."
+      ]
+    },
+    {
+      "name": "Layer_OpinionGeneration",
+      "parents": [
+        "Thing"
+      ],
+      "comment": [
+        "Mostly derived at analysis time rather than sourced from a document; this is the layer specific to opinion generation itself."
+      ]
+    },
+    {
+      "name": "Layer_ComplianceProcedural",
+      "parents": [
+        "Thing"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Jurisdiction",
+      "parents": [
+        "Thing"
+      ],
+      "comment": [
+        "Referenced by relationship domain/range in the source ontology but not yet one of the formal top-level classes - flagged for SME confirmation (Section 9 of the conceptual ontology document)."
+      ]
+    },
+    {
+      "name": "Layer_FactsLayer",
+      "parents": [
+        "Thing"
+      ],
+      "comment": [
+        "Marked \"critical\" in the SME notes: most opinions are generated from facts, not from law in the abstract."
+      ]
+    },
+    {
+      "name": "Layer_PrimarySourcesOfAuthority",
+      "parents": [
+        "Thing"
+      ],
+      "comment": [
+        "The foundation layer; binding law that nothing else can override except by amendment or a superior source."
+      ]
+    },
+    {
+      "name": "LegalConcept",
+      "parents": [
+        "Layer_JudicialInternationalInterpretiveAuthority"
+      ],
+      "comment": [
+        "A general legal principle or proposition of law (e.g. 'the proviso to Section 47(iv) applies only when the transferee company is 100% Indian-owned'), distinct from any single case - multiple cases can instantiate/apply the same concept. Added while incorporating gaps flagged by the 11_extract_case_law.py extraction run; complements (does not replace) CaseLaw's existing ratioDecidendi/holding data properties, which stay as the case-specific text."
+      ]
+    },
+    {
+      "name": "Layer_AdministrativeInterpretation",
+      "parents": [
+        "Thing"
+      ],
+      "comment": []
+    },
+    {
+      "name": "Layer_Output",
+      "parents": [
+        "Thing"
+      ],
+      "comment": [
+        "Named in the SME's own \"Suggested Final Knowledge Graph Structure\" as OUTPUT but not separately numbered as a level in the source notes."
+      ]
+    },
+    {
+      "name": "SlumpSale",
+      "parents": [
+        "Transaction"
+      ],
+      "comment": [
+        "Lump-sum transfer of an undertaking without assigning values to individual assets (ITA 1961 \u00a72(42C) / ITA 2025 \u00a72(103))."
+      ]
+    }
+  ],
+  "object_properties": [
+    {
+      "name": "IS_FORUM_OF",
+      "domain": [
+        "JudicialForum"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": "HAS_FORUM",
+      "functional": false
+    },
+    {
+      "name": "HAS_FORUM",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "JudicialForum"
+      ],
+      "inverse": "IS_FORUM_OF",
+      "functional": false
+    },
+    {
+      "name": "INTERPRETED_BY",
+      "domain": [
+        "StatutoryProvision",
+        "TaxTreaty",
+        "Issue"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": "INTERPRETS",
+      "functional": false
+    },
+    {
+      "name": "INTERPRETS",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "StatutoryProvision",
+        "TaxTreaty",
+        "Issue"
+      ],
+      "inverse": "INTERPRETED_BY",
+      "functional": false,
+      "comment": [
+        "Edge property `relation_type` (values: 'interpreted'/'applied'/'referred'/'raises_issue') disambiguates sections_interpreted vs sections_applied vs sections_referred vs an Issue this case raised - all collapse onto this one relationship type since the ontology has no separate APPLIES/REFERS_TO property for CaseLaw->StatutoryProvision. Also carries `cited_as` (the raw citation text, e.g. '9(1)(vi)') and `act` (which Act the extraction said the citation was under, if stated). Populated by extract_case_law.py; this schema (an OWL-derived JSON with no native way to declare data properties ON an object property/relationship) documents it here as a comment rather than a formal declaration - was previously undocumented entirely."
+      ]
+    },
+    {
+      "name": "AMENDS",
+      "domain": [
+        "StatutoryProvision"
+      ],
+      "range": [
+        "StatutoryProvision"
+      ],
+      "inverse": "AMENDED_BY",
+      "functional": false
+    },
+    {
+      "name": "AMENDED_BY",
+      "domain": [
+        "StatutoryProvision"
+      ],
+      "range": [
+        "StatutoryProvision"
+      ],
+      "inverse": "AMENDS",
+      "functional": false
+    },
+    {
+      "name": "IS_CITATION_OF",
+      "domain": [
+        "CaseCitation"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": "HAS_CITATION",
+      "functional": false
+    },
+    {
+      "name": "HAS_CITATION",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "CaseCitation"
+      ],
+      "inverse": "IS_CITATION_OF",
+      "functional": false
+    },
+    {
+      "name": "SUPERSEDES",
+      "domain": [
+        "DelegatedLegislation",
+        "FirmOpinion"
+      ],
+      "range": [
+        "DelegatedLegislation",
+        "FirmOpinion"
+      ],
+      "inverse": "SUPERSEDED_BY",
+      "functional": false
+    },
+    {
+      "name": "SUPERSEDED_BY",
+      "domain": [
+        "DelegatedLegislation",
+        "FirmOpinion"
+      ],
+      "range": [
+        "DelegatedLegislation",
+        "FirmOpinion"
+      ],
+      "inverse": "SUPERSEDES",
+      "functional": false
+    },
+    {
+      "name": "FOLLOWED_BY",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": "FOLLOWS",
+      "functional": false
+    },
+    {
+      "name": "FOLLOWS",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": "FOLLOWED_BY",
+      "functional": false
+    },
+    {
+      "name": "RELIED_ON_BY",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": "RELIES_ON",
+      "functional": false
+    },
+    {
+      "name": "RELIES_ON",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": "RELIED_ON_BY",
+      "functional": false
+    },
+    {
+      "name": "RELIES_ON_AUTHORITY",
+      "domain": [
+        "CaseLaw",
+        "FirmOpinion"
+      ],
+      "range": [
+        "CaseLaw",
+        "StatutoryProvision"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "WITHDRAWS",
+      "domain": [
+        "DelegatedLegislation"
+      ],
+      "range": [
+        "DelegatedLegislation"
+      ],
+      "inverse": "WITHDRAWN_BY",
+      "functional": false
+    },
+    {
+      "name": "WITHDRAWN_BY",
+      "domain": [
+        "DelegatedLegislation"
+      ],
+      "range": [
+        "DelegatedLegislation"
+      ],
+      "inverse": "WITHDRAWS",
+      "functional": false
+    },
+    {
+      "name": "DISTINGUISHED_BY",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": "DISTINGUISHES",
+      "functional": false
+    },
+    {
+      "name": "DISTINGUISHES",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": "DISTINGUISHED_BY",
+      "functional": false
+    },
+    {
+      "name": "REVERSED_BY",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": "REVERSES",
+      "functional": false
+    },
+    {
+      "name": "REVERSES",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": "REVERSED_BY",
+      "functional": false
+    },
+    {
+      "name": "OVERRULED_BY",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": "OVERRULES",
+      "functional": false
+    },
+    {
+      "name": "OVERRULES",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": "OVERRULED_BY",
+      "functional": false
+    },
+    {
+      "name": "APPROVED_BY",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": "APPROVES",
+      "functional": false
+    },
+    {
+      "name": "APPROVES",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": "APPROVED_BY",
+      "functional": false
+    },
+    {
+      "name": "OVERRIDDEN_BY",
+      "domain": [
+        "StatutoryProvision",
+        "TaxTreaty",
+        "Circular"
+      ],
+      "range": [
+        "StatutoryProvision",
+        "TaxTreaty",
+        "Circular"
+      ],
+      "inverse": "OVERRIDES",
+      "functional": false
+    },
+    {
+      "name": "APPLIES_IN_STATE",
+      "domain": [
+        "GSTRateEntry",
+        "AdvanceRuling"
+      ],
+      "range": [
+        "StateJurisdiction"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "HAS_RATE",
+      "domain": [
+        "HSNSACCode"
+      ],
+      "range": [
+        "GSTRateEntry"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "INVOLVES_TRANSACTION",
+      "domain": [
+        "FactPattern"
+      ],
+      "range": [
+        "Transaction"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "SIMILAR_TO",
+      "domain": [
+        "FirmOpinion"
+      ],
+      "range": [
+        "FirmOpinion"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "OVERRIDES",
+      "domain": [
+        "StatutoryProvision",
+        "TaxTreaty",
+        "Circular"
+      ],
+      "range": [
+        "StatutoryProvision",
+        "TaxTreaty",
+        "Circular"
+      ],
+      "inverse": "OVERRIDDEN_BY",
+      "functional": false,
+      "comment": [
+        "2026-08-28: EXTENDED. Was TaxTreaty->StatutoryProvision only, no inverse - domain/range broadened to also ",
+        "cover Circular->Circular and StatutoryProvision->StatutoryProvision precedence (e.g. a later Circular ",
+        "clarifying/overriding an earlier one), and OVERRIDDEN_BY added as the queryable inverse. Legal ",
+        "PRECEDENCE, not amendment/supersession (SUPERSEDED_BY already covers that). Domain covers Act via ",
+        "StatutoryProvision (Act is its subclass, same convention PART_OF already uses). ALWAYS conditional in ",
+        "practice (sec 90(2) treaty override only applies where more beneficial to the assessee; GAAR/PPT can in ",
+        "turn limit a treaty benefit) - every OVERRIDES edge MUST carry an overrideCondition value stating that ",
+        "condition; an edge with no condition text should be treated as a data-quality error, not an absolute ",
+        "rule. Seeded narrowly and deterministically for well-established, black-letter structural rules (sec ",
+        "90(2) DTAA-vs-Act) - NOT auto-generated by extraction, and NOT populated for case-specific precedence ",
+        "questions without legal-domain review. See Graph_First_Retrieval_Design.md Section 2.2."
+      ]
+    },
+    {
+      "name": "DISCUSSES_CHANGE",
+      "domain": [
+        "TechnicalAlert"
+      ],
+      "range": [
+        "StatutoryProvision"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "UPDATES_POSITION",
+      "domain": [
+        "TechnicalAlert"
+      ],
+      "range": [
+        "FirmOpinion"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "IMPACTS_OPINION",
+      "domain": [
+        "TechnicalAlert"
+      ],
+      "range": [
+        "FirmOpinion"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "HAS_CONCLUSION",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "Conclusion"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "GIVES_EFFECT_TO",
+      "domain": [
+        "Notification"
+      ],
+      "range": [
+        "TaxTreaty"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "TRIGGERED_BY",
+      "domain": [
+        "PenaltyExposure"
+      ],
+      "range": [
+        "Issue"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "SUPPORTED_BY",
+      "domain": [
+        "Argument"
+      ],
+      "range": [
+        "CaseLaw",
+        "DelegatedLegislation",
+        "FactPattern",
+        "InternationalGuidance"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "PRODUCES",
+      "domain": [
+        "Recommendation",
+        "Conclusion"
+      ],
+      "range": [
+        "DeliverableOutput"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "GOVERNED_BY",
+      "domain": [
+        "Issue"
+      ],
+      "range": [
+        "StatutoryProvision"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "DEFINED_BY",
+      "domain": [
+        "Issue"
+      ],
+      "range": [
+        "StatutoryProvision"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "APPLIES_TREATY",
+      "domain": [
+        "Issue"
+      ],
+      "range": [
+        "TaxTreaty"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "TAGGED_WITH",
+      "domain": [
+        "Issue"
+      ],
+      "range": [
+        "TaxTopic"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "REFERRED_TO",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "REFERENCE",
+      "domain": [
+        "StatutoryProvision",
+        "CaseLaw",
+        "InternationalGuidance"
+      ],
+      "range": [
+        "StatutoryProvision",
+        "CaseLaw",
+        "FirmOpinion"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "EMBEDS_FACT_PATTERN",
+      "domain": [
+        "ClientEngagementDocument"
+      ],
+      "range": [
+        "FactPattern"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "SCORED_BY",
+      "domain": [
+        "Conclusion"
+      ],
+      "range": [
+        "RiskAssessment"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "SUPPORTS_INTERPRETATION",
+      "domain": [
+        "InternationalGuidance"
+      ],
+      "range": [
+        "Issue"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "REFERENCED_IN",
+      "domain": [
+        "InternationalGuidance"
+      ],
+      "range": [
+        "CaseLaw",
+        "FirmOpinion"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "REQUIRED_UNDER",
+      "domain": [
+        "ComplianceForm"
+      ],
+      "range": [
+        "StatutoryProvision"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "PENALTY_FOR_NON_COMPLIANCE",
+      "domain": [
+        "ComplianceForm"
+      ],
+      "range": [
+        "PenaltyExposure"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "MITIGATED_BY",
+      "domain": [
+        "PenaltyExposure"
+      ],
+      "range": [
+        "Recommendation"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "YIELDS",
+      "domain": [
+        "RiskAssessment"
+      ],
+      "range": [
+        "Recommendation"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "STAYED_BY",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "CORRESPONDS_TO",
+      "domain": [
+        "StatutoryProvision"
+      ],
+      "range": [
+        "StatutoryProvision"
+      ],
+      "inverse": "CORRESPONDS_TO",
+      "functional": false,
+      "comment": [
+        "Cross-Act provision correspondence (e.g. Income-tax Act 1961 Section 90 (treaty override) CORRESPONDS_TO 2025 Act Section 159) - declared since early in this project but never populated by any converter until build_act_correspondence.py (added 2026-08-27; see Ontology_Legal_Review_2026-08-27.md). Edge properties: `basis` (how the mapping was derived, e.g. 'llm_text_comparison' or 'manual'), `confidence` (0-1)."
+      ]
+    },
+    {
+      "name": "LOCATED_IN",
+      "domain": [
+        "Party"
+      ],
+      "range": [
+        "Jurisdiction"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "RECEIVED_BY",
+      "domain": [
+        "Transaction"
+      ],
+      "range": [
+        "Party"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "CONTRADICTED_BY",
+      "domain": [
+        "Argument"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "STANCE_RELATION",
+      "domain": [
+        "RevenuePosition",
+        "Argument"
+      ],
+      "range": [
+        "CaseLaw",
+        "FirmOpinion"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "CONSISTENT_WITH",
+      "domain": [
+        "RevenuePosition"
+      ],
+      "range": [
+        "CaseLaw",
+        "FirmOpinion"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "SUPPORTED_BY_CIRCULAR",
+      "domain": [
+        "Argument"
+      ],
+      "range": [
+        "DelegatedLegislation"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "DISTINGUISHES_CASE",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "REQUIRES_COMPLIANCE",
+      "domain": [
+        "DeliverableOutput"
+      ],
+      "range": [
+        "ComplianceForm"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "SUPPORTED_BY_GUIDANCE",
+      "domain": [
+        "Argument"
+      ],
+      "range": [
+        "InternationalGuidance"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "WEIGHED_INTO",
+      "domain": [
+        "Argument"
+      ],
+      "range": [
+        "Conclusion"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "HAS_SUPPORTING_AUTHORITY",
+      "domain": [
+        "LegalProposition"
+      ],
+      "range": [
+        "StatutoryProvision",
+        "CaseLaw",
+        "TaxTreaty",
+        "InternationalGuidance"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "HAS_OPPOSING_AUTHORITY",
+      "domain": [
+        "LegalProposition"
+      ],
+      "range": [
+        "StatutoryProvision",
+        "CaseLaw",
+        "TaxTreaty",
+        "InternationalGuidance"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "ASSERTED_IN",
+      "domain": [
+        "LegalProposition"
+      ],
+      "range": [
+        "FirmOpinion",
+        "CaseLaw"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "CONCERNS_ISSUE",
+      "domain": [
+        "LegalProposition"
+      ],
+      "range": [
+        "Issue"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "IMPLEMENTS",
+      "domain": [
+        "DelegatedLegislation"
+      ],
+      "range": [
+        "StatutoryProvision"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "COMMON_ISSUE",
+      "domain": [
+        "Industry"
+      ],
+      "range": [
+        "Issue"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "ACCEPTED_PRACTICE",
+      "domain": [
+        "Industry"
+      ],
+      "range": [
+        "Issue"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "HIGH_RISK_AREA",
+      "domain": [
+        "Industry"
+      ],
+      "range": [
+        "Issue"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "RELIES_ON_CASE",
+      "domain": [
+        "FirmOpinion"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "CLARIFIES",
+      "domain": [
+        "DelegatedLegislation"
+      ],
+      "range": [
+        "StatutoryProvision",
+        "Issue"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "HAS_ARGUMENT",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "Argument"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "INVOLVES_PARTY",
+      "domain": [
+        "FactPattern"
+      ],
+      "range": [
+        "Party"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "INFORMS",
+      "domain": [
+        "TechnicalDiscussion"
+      ],
+      "range": [
+        "Issue"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "MODIFIED_BY_PROTOCOL",
+      "domain": [
+        "TaxTreaty"
+      ],
+      "range": [
+        "TaxTreaty"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "MODIFIED_BY_MLI",
+      "domain": [
+        "TaxTreaty"
+      ],
+      "range": [
+        "TaxTreaty"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "SUPPORTED_BY_CASE",
+      "domain": [
+        "Argument"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "SUPPORTED_BY_FACTS",
+      "domain": [
+        "Argument"
+      ],
+      "range": [
+        "FactPattern"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "APPEAL_FROM",
+      "domain": [
+        "LitigationProcessStage"
+      ],
+      "range": [
+        "LitigationProcessStage"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "CHALLENGE_TO",
+      "domain": [
+        "LitigationProcessStage"
+      ],
+      "range": [
+        "CaseLaw"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "INSTANTIATES_CONCEPT",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "LegalConcept"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "PERFORMED_IN",
+      "domain": [
+        "Transaction"
+      ],
+      "range": [
+        "Jurisdiction"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "REFERS_TO",
+      "domain": [
+        "StatutoryProvision"
+      ],
+      "range": [
+        "StatutoryProvision"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "DEFINES",
+      "domain": [
+        "StatutoryProvision"
+      ],
+      "range": [
+        "StatutoryProvision"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "EXCEPTION_TO",
+      "domain": [
+        "StatutoryProvision"
+      ],
+      "range": [
+        "StatutoryProvision"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "HAS_PROVISION",
+      "domain": [
+        "StatutoryProvision"
+      ],
+      "range": [
+        "StatutoryProvision"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "PERSUASIVE_AUTHORITY_FOR",
+      "domain": [
+        "AdvanceRuling"
+      ],
+      "range": [
+        "Issue"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "REFLECTS_ACCEPTED_PRACTICE",
+      "domain": [
+        "RevenuePosition",
+        "Industry"
+      ],
+      "range": [
+        "Issue"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "REUSABLE_ANALYSIS_FOR",
+      "domain": [
+        "KnowledgeRepositoryItem"
+      ],
+      "range": [
+        "Industry",
+        "Transaction"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "SIMILAR_FACT_PATTERN",
+      "domain": [
+        "AdvanceRuling",
+        "CaseLaw",
+        "FirmOpinion",
+        "FactPattern"
+      ],
+      "range": [
+        "AdvanceRuling",
+        "CaseLaw",
+        "FirmOpinion",
+        "FactPattern"
+      ],
+      "inverse": "SIMILAR_FACT_PATTERN",
+      "functional": false
+    },
+    {
+      "name": "HAS_TOPIC",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "TaxTopic"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "RAISES",
+      "domain": [
+        "FactPattern"
+      ],
+      "range": [
+        "Issue"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "CONTRARY_TO",
+      "domain": [
+        "RevenuePosition"
+      ],
+      "range": [
+        "CaseLaw",
+        "FirmOpinion"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "ACCEPTED_IN_PRACTICE",
+      "domain": [
+        "RevenuePosition"
+      ],
+      "range": [
+        "Issue"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "PAID_TO",
+      "domain": [
+        "Transaction"
+      ],
+      "range": [
+        "Party"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "COVERS_ISSUE",
+      "domain": [
+        "TrainingMaterial"
+      ],
+      "range": [
+        "Issue"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "HAS_ATTRIBUTE",
+      "domain": [
+        "Party"
+      ],
+      "range": [
+        "PartyAttribute"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "RELIES_ON_PROVISION",
+      "domain": [
+        "FirmOpinion"
+      ],
+      "range": [
+        "StatutoryProvision"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "EVENT_SUBJECT",
+      "domain": [
+        "LegalEvent"
+      ],
+      "range": [
+        "StatutoryProvision",
+        "CaseLaw",
+        "DelegatedLegislation",
+        "FirmOpinion"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "EVENT_INSTRUMENT",
+      "domain": [
+        "LegalEvent"
+      ],
+      "range": [
+        "StatutoryProvision",
+        "CaseLaw",
+        "DelegatedLegislation",
+        "FirmOpinion"
+      ],
+      "inverse": null,
+      "functional": false
+    },
+    {
+      "name": "PART_OF",
+      "domain": [
+        "StatutoryProvision",
+        "TaxTreaty"
+      ],
+      "range": [
+        "StatutoryProvision",
+        "TaxTreaty"
+      ],
+      "inverse": null,
+      "functional": true,
+      "comment": [
+        "Structural hierarchy: SubSection->Section, Clause->SubSection, SubClause->Clause, and (added 2026-08-27) top-level Section->Act, since Act is itself a StatutoryProvision subclass - previously top-level Sections had NO parent edge at all (Act was a declared-but-never-populated class). Populated by chunking.py; was used in code since early in this project but never declared here until now.",
+        "Extended (2026-08-27) to also cover Article->TaxTreaty: the ontology already declares Article as a TaxTreaty subclass (same shape as Section->Act) but had no relationship to attach an extracted treaty Article back to its parent TaxTreaty - same generic structural-hierarchy relation reused rather than declaring a redundant treaty-specific one. Populated by extract_treaty.py."
+      ]
+    },
+    {
+      "name": "IS_SUBSIDIARY_OF",
+      "domain": [
+        "Company"
+      ],
+      "range": [
+        "Company"
+      ],
+      "inverse": "HAS_SUBSIDIARY",
+      "functional": false,
+      "comment": [
+        "Ownership relationship for evaluating Section 47(iv) / ITA 2025 Sec 70(1)(c) corporate restructuring exemptions."
+      ]
+    },
+    {
+      "name": "HAS_SUBSIDIARY",
+      "domain": [
+        "Company"
+      ],
+      "range": [
+        "Company"
+      ],
+      "inverse": "IS_SUBSIDIARY_OF",
+      "functional": false
+    },
+    {
+      "name": "TRIGGERS_DEFAULT",
+      "domain": [
+        "ComplianceForm",
+        "Transaction"
+      ],
+      "range": [
+        "PenaltyExposure",
+        "RevenuePosition"
+      ],
+      "inverse": null,
+      "functional": false,
+      "comment": [
+        "Links failure of withholding/filing obligations to Section 201 assessee-in-default proceedings."
+      ]
+    }
+  ],
+  "data_properties": [
+    {
+      "name": "riskLevel",
+      "domain": [
+        "RiskAssessment"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "court",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "opinionApplicableLaw",
+      "domain": [
+        "FirmOpinion"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "clientConsentStatus",
+      "domain": [
+        "FirmOpinion",
+        "ClientEngagementDocument",
+        "KnowledgeRepositoryItem"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "rulingRegime",
+      "domain": [
+        "AdvanceRuling",
+        "RulingAuthority"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "riskClassification",
+      "domain": [
+        "FirmOpinion"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "opinionRecommendation",
+      "domain": [
+        "FirmOpinion"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "caseName",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "applicabilityConditions",
+      "domain": [
+        "LegalProposition"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "assessmentYear",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "eventType",
+      "domain": [
+        "LegalEvent"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "auditRisk",
+      "domain": [
+        "RiskAssessment"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "questions",
+      "domain": [
+        "FirmOpinion"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "analysis",
+      "domain": [
+        "FirmOpinion"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "caseIdentifier",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "code",
+      "domain": [
+        "HSNSACCode"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "legalIssue",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "rate",
+      "domain": [
+        "GSTRateEntry"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "effectiveTo",
+      "domain": [
+        "StatutoryProvision",
+        "DelegatedLegislation",
+        "TaxTreaty",
+        "LegalProposition",
+        "GSTRateEntry"
+      ],
+      "range": [
+        "<class 'datetime.date'>"
+      ]
+    },
+    {
+      "name": "technicalStrength",
+      "domain": [
+        "RiskAssessment"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "clientIndustry",
+      "domain": [
+        "FirmOpinion"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "taxYear",
+      "domain": [
+        "FirmOpinion",
+        "Transaction",
+        "Issue"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "opinionJurisdiction",
+      "domain": [
+        "FirmOpinion"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "eventDate",
+      "domain": [
+        "LegalEvent"
+      ],
+      "range": [
+        "<class 'datetime.date'>"
+      ]
+    },
+    {
+      "name": "outcome",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "relianceClauses",
+      "domain": [
+        "FirmOpinion"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "opinionConclusion",
+      "domain": [
+        "FirmOpinion"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "claimText",
+      "domain": [
+        "LegalProposition"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "defensibilityScore",
+      "domain": [
+        "RiskAssessment"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "codeDescription",
+      "domain": [
+        "HSNSACCode"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "isStaged",
+      "domain": [
+        "LegalProposition"
+      ],
+      "range": [
+        "<class 'bool'>"
+      ]
+    },
+    {
+      "name": "date",
+      "domain": [
+        "FirmOpinion",
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'datetime.date'>"
+      ]
+    },
+    {
+      "name": "bindingScope",
+      "domain": [
+        "AdvanceRuling",
+        "RulingAuthority"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "provisionURI",
+      "domain": [
+        "StatutoryProvision"
+      ],
+      "range": [
+        "<class 'owlready2.util.normstr'>"
+      ]
+    },
+    {
+      "name": "instrumentReference",
+      "domain": [
+        "LegalEvent"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "citation",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "propositionStatus",
+      "domain": [
+        "LegalProposition"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "opinionID",
+      "domain": [
+        "FirmOpinion"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "statuteRegime",
+      "domain": [
+        "StatutoryProvision",
+        "FirmOpinion",
+        "Issue",
+        "Transaction"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "bench",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "holding",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "stance",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'str'>"
+      ],
+      "comment": [
+        "2026-08-28: NEW. Controlled vocabulary: 'taxpayer_favorable' | 'revenue_favorable' | 'mixed' | 'unknown'. ",
+        "DERIVED DETERMINISTICALLY (not LLM-guessed) from the case's own issue_outcomes[].winner tally already ",
+        "produced by extract_case_law.py's extraction prompt - same 'derive from already-extracted structured ",
+        "fields, don't ask the model to self-report a second time' convention as forum_level/jurisdiction_scope ",
+        "in that file. 'mixed' when issues split between assessee/revenue; 'unknown' when no issue_outcomes were ",
+        "extracted - left unset rather than guessed, matching this project's existing convention of leaving a ",
+        "field unset over guessing wrong (see derive_jurisdiction_scope()). Scoped to the case's overall outcome ",
+        "across all its issues, not one one issue in isolation - see stanceBasis for the breakdown."
+      ]
+    },
+    {
+      "name": "stanceBasis",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'str'>"
+      ],
+      "comment": [
+        "Human-readable justification for `stance`, e.g. '2 issue(s) decided for assessee, 0 for revenue' - an audit trail so a retrieval/generation consumer (or a human reviewer) can see WHY a case was labeled a given stance, not just trust the label blindly."
+      ]
+    },
+    {
+      "name": "retrievalSummary",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'str'>"
+      ],
+      "comment": [
+        "2026-08-28: NEW. Composed DETERMINISTICALLY from each finding's issue+holding+winner (already extracted ",
+        "structured fields), NOT a fresh LLM-authored abstract - avoids the extraction-quality/recall risk flagged ",
+        "in Graph_First_Retrieval_Design.md Section evaluating a metadata-only retrieval design (a thin or generic ",
+        "LLM-written summary would degrade recall below what full chunk-text embedding gives today). This is the ",
+        "text embedded into the new CaseLaw-level 'case_law_retrieval_index' vector index (see ",
+        "framework/core/retrieve/case_law_entry_points.py) used to find ENTRY POINT nodes for graph traversal, ",
+        "distinct from the existing Chunk-level embedding index used for the general hybrid pipeline."
+      ]
+    },
+    {
+      "name": "retrievalKeywords",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'str'>"
+      ],
+      "comment": [
+        "Comma-separated. Union of the case's own extracted keywords/legal_concepts plus cited section numbers and legal-principle short phrases - deterministically composed, not a new LLM call. Lets a question surface this case even when its caption/title shares no words with the question."
+      ]
+    },
+    {
+      "name": "sourceMdPath",
+      "domain": [
+        "CaseLaw",
+        "StatutoryProvision",
+        "TaxTreaty",
+        "Circular"
+      ],
+      "range": [
+        "<class 'str'>"
+      ],
+      "comment": [
+        "2026-08-28: NEW. Absolute path to the converted .md file this entity was extracted from - see ",
+        "md_hydration.py / Semantic_Graph_Retrieval_Architecture.md. Lets the 'semantic_graph' retrieval mode ",
+        "read this entity's text LIVE from the source file at query time instead of only ever seeing whatever ",
+        "was captured in a Chunk node at ingestion time. Stamped by attach_pipeline_metadata() (Act path) and ",
+        "build_graph_from_extraction() (case-law path); Circular/TaxTreaty paths still need the same stamping ",
+        "added as a mechanical follow-up (see the architecture doc's open-items section)."
+      ]
+    },
+    {
+      "name": "overrideCondition",
+      "domain": [
+        "StatutoryProvision",
+        "TaxTreaty",
+        "Circular"
+      ],
+      "range": [
+        "<class 'str'>"
+      ],
+      "comment": [
+        "Mandatory companion to every OVERRIDES edge - states WHEN the override applies (e.g. 'only if treaty provisions are more beneficial to the assessee, per sec 90(2) of the Income-tax Act'). See OVERRIDES's own comment."
+      ]
+    },
+    {
+      "name": "partner",
+      "domain": [
+        "FirmOpinion"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "limitations",
+      "domain": [
+        "FirmOpinion"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "treatyCountry",
+      "domain": [
+        "TaxTreaty"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "taxQuestion",
+      "domain": [
+        "Issue"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "confidentialityClassification",
+      "domain": [
+        "FirmOpinion",
+        "ClientEngagementDocument",
+        "KnowledgeRepositoryItem"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "eventScope",
+      "domain": [
+        "LegalEvent"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "probability",
+      "domain": [
+        "RiskAssessment"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "facts",
+      "domain": [
+        "FirmOpinion"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "ratioDecidendi",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "effectiveFrom",
+      "domain": [
+        "StatutoryProvision",
+        "DelegatedLegislation",
+        "TaxTreaty",
+        "LegalProposition",
+        "GSTRateEntry"
+      ],
+      "range": [
+        "<class 'datetime.date'>"
+      ]
+    },
+    {
+      "name": "notificationNumber",
+      "domain": [
+        "DelegatedLegislation"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "dataProcessingPurpose",
+      "domain": [
+        "FirmOpinion",
+        "ClientEngagementDocument",
+        "KnowledgeRepositoryItem"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "stateName",
+      "domain": [
+        "StateJurisdiction"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "obiter",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "subIssue",
+      "domain": [
+        "Issue"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "instrument",
+      "domain": [
+        "Transaction"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "assumptions",
+      "domain": [
+        "FirmOpinion"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "confidence",
+      "domain": [
+        "LegalProposition"
+      ],
+      "range": [
+        "<class 'str'>"
+      ]
+    },
+    {
+      "name": "actName",
+      "domain": [
+        "Act"
+      ],
+      "range": [
+        "<class 'str'>"
+      ],
+      "comment": [
+        "Human-readable Act name, e.g. 'Income-tax Act, 2025'."
+      ]
+    },
+    {
+      "name": "actYear",
+      "domain": [
+        "Act"
+      ],
+      "range": [
+        "<class 'int'>"
+      ],
+      "comment": [
+        "Enactment year, e.g. 2025. Auto-detected from actName if not given explicitly - see extract_entities.py's --act-year."
+      ]
+    },
+    {
+      "name": "actNumber",
+      "domain": [
+        "Act"
+      ],
+      "range": [
+        "<class 'str'>"
+      ],
+      "comment": [
+        "e.g. '30' for '[30 OF 2025]'. Optional."
+      ]
+    },
+    {
+      "name": "actNamespace",
+      "domain": [
+        "Act"
+      ],
+      "range": [
+        "<class 'str'>"
+      ],
+      "comment": [
+        "The short id (e.g. 'ITA2025', 'ITA1961') this Act's node id equals, and that every Section/SubSection/Clause/SubClause id under it is prefixed with - see chunking.generate_entity_id()'s docstring (2026-08-27) for why a bare section NUMBER isn't a stable identity across more than one Act."
+      ]
+    },
+    {
+      "name": "precedential_value",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'str'>"
+      ],
+      "comment": [
+        "LLM-assessed importance/weight of this holding (e.g. 'landmark', 'leading case on X'). Already populated by extract_case_law.py from the extraction prompt's `importance` field; this entry formalizes it in the ontology - it was previously populated but undeclared."
+      ]
+    },
+    {
+      "name": "binding_scope",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'str'>"
+      ],
+      "comment": [
+        "LLM-assessed textual description of who/what this holding binds (e.g. 'binding on all Tribunals within the jurisdiction'). Already populated by extract_case_law.py; this entry formalizes it - it was previously populated but undeclared. Complements the deterministic jurisdiction_scope property below (LLM judgment vs. a structured territory lookup)."
+      ]
+    },
+    {
+      "name": "jurisdiction_scope",
+      "domain": [
+        "CaseLaw"
+      ],
+      "range": [
+        "<class 'str'>"
+      ],
+      "comment": [
+        "Deterministic (not LLM) territory a ruling binds within, derived from forum_level + court (e.g. Supreme Court -> 'All India'; Bombay High Court -> 'Maharashtra & Goa (Bombay High Court)') - see extract_case_law.derive_jurisdiction_scope(), added 2026-08-27. Previously the `jurisdiction` property was set to the raw court name verbatim, identical to `court` itself and carrying no extra information despite the name suggesting a distinct concept."
+      ]
+    },
+    {
+      "name": "residentialStatus",
+      "domain": [
+        "Party"
+      ],
+      "range": [
+        "<class 'str'>"
+      ],
+      "comment": [
+        "Controlled vocabulary: 'RESIDENT' | 'NON_RESIDENT' | 'NOT_ORDINARILY_RESIDENT'."
+      ]
+    },
+    {
+      "name": "ownershipPercentage",
+      "domain": [
+        "Company"
+      ],
+      "range": [
+        "<class 'float'>"
+      ],
+      "comment": [
+        "Percentage of shareholding held by parent entity (e.g. 100.0 for wholly owned subsidiary)."
+      ]
+    }
+  ]
+}

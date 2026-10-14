@@ -1,0 +1,94 @@
+{
+  "entities": [
+    {
+      "id": "CBDTCircular_Not_clearly_legible_in_header",
+      "type": "ExtensionCircular",
+      "properties": {
+        "hasText": "                                                                          Circular No.~-../2026\n\n                         F. No.: 275/10/2026-IT (8)\n                     Government of lndia/(irr«f-tf.....~..,.cp---l\"T>~)\n                     Ministry of Finance/(fcftt +l~ictll)\n                  Department of Revenue/(~ luifcl fcr1-fllT)\n            Central Board of Direct Taxes/l ch--s{lq mqecr cfR\" ~\n                                            ********                              ....\n                                                          New Delhi, dated .'?..?... March, 2026\n\nSubject: Order under section 119 of the Income-tax Act, 1961 for extension of\ntimeline for issuance of tax deducted at source (TDS) certificate under.section\n203 of the Act for the quarter ending 31st December 2025 - reg.\n\n      Section 203 of the Income-tax Act, 1961 (\"the Act\") provides for issuance of\nTDS certificate. The time limits for issuance of TDS certificate is prescribed under\nRule 31 of the Income-tax Rules, 1962 (\"the Rules\").\n\n2.      Representations have been received by the Central Board of Direct Taxes\n(\"the Board\") regarding delay in issuance of TDS certificates for the quarter ending\n31st December, 2025, due to technical glitches on the e-filing portal. On account of\nsuch glitches, deductors have faced difficulties in generating and issuing the\ncertificates within the prescribed time.\n\n3.      In view of the genuine hardship faced by the deductors, the Board, in exercise\nof its powers under section 119 of the Act, hereby extends the due date for issuance\nof TDS certificate under section 203 of the Act read with rule 31 of the Rules for the\nsaid quarter to 31st March, 2026. TDS certificate issued within the extended period\nshell be treated as having been issued within the prescribed time.              ~J\n                                                                                 (Ru~ngh)\n                                                                   Deputy Secretary, IT -Budget\n                                                                                          CBDT\n\nCopy to: -\nI.    The Chairman & Members, CBDT\n2.    All Pr.CCslT, CCslT/ DGslT.\n3.    All Joint Secretaries/CslT, CBDT.\n4.    Commissioner of Income-tax (Media & TP) and official Spokesperson, CBDT,\n      New Delhi.\n5.    ADG (PR, P&P) for necessary action.\n6.    JCIT, Database Cell, with a request to upload the order on the website\n      www.irsofficersonline.gov.in.\n7.    Web Manager, O/o DGIT(Systems) with request to upload on the\n      departmental website of www.incometaxindia.gov.in.\n8.    The Institute of Chartered Accountants of India, IP Estate, New Delhi\n9.    All Chambers of Commerce.\n10.   Hindi Cell for translation.\n\n                                                                               ~~\n11.   The Guard File.\n\n                                                                                (~ngh)\n                                                                  Deputy Secretary, IT -Budget\n                                                                                         CBDT\n\f",
+        "full_citation": "CBDT Circular No. Not clearly legible in header",
+        "circular_number": "Not clearly legible in header",
+        "circular_year": 2026,
+        "f_no": "275/10/2026-IT (8)",
+        "date_issued": "22nd March, 2026",
+        "subject": "Order under section 119 of the Income-tax Act, 1961 for extension of timeline for issuance of tax deducted at source (TDS) certificate under section 203 of the Act for the quarter ending 31st December 2025",
+        "issuing_authority": "Central Board of Direct Taxes, Department of Revenue, Ministry of Finance, Government of India",
+        "signatory": "Deputy Secretary, IT-Budget, CBDT",
+        "circular_subtype": "extension",
+        "notificationNumber": "275/10/2026-IT (8)",
+        "applicability_summary": "This order extends the deadline for issuance of TDS (Tax Deducted at Source) certificates under section 203 of the Income-tax Act, 1961 for the quarter ending 31st December 2025. Due to technical glitches on the e-filing portal that prevented timely certificate generation, the Board has extended the due date from the prescribed timeline under Rule 31 of the Income-tax Rules, 1962 to 31st March 2026. Certificates issued by this extended date shall be treated as issued within the prescribed time.",
+        "key_provisions": [
+          "Extension of due date for issuance of TDS certificate under section 203 read with Rule 31 of Income-tax Rules, 1962 to 31st March, 2026 for the quarter ending 31st December 2025",
+          "Extension granted in exercise of powers under section 119 of the Income-tax Act, 1961",
+          "Extension necessitated by technical glitches on the e-filing portal causing genuine hardship to deductors",
+          "TDS certificates issued within the extended period shall be treated as issued within the prescribed time"
+        ],
+        "keywords": [
+          "TDS certificate",
+          "section 203",
+          "section 119",
+          "deadline extension",
+          "e-filing portal",
+          "technical glitches",
+          "quarter ending 31st December 2025",
+          "Rule 31",
+          "Income-tax Rules 1962",
+          "deductors"
+        ],
+        "effective_from": "22nd March, 2026",
+        "confidence": 0.8,
+        "extraction_notes": "Extracted from 143de5b6_circular-2-2026-pdf.md via extract_circular.py",
+        "source_document": "143de5b6_circular-2-2026-pdf.md",
+        "ingestion_date": "2026-09-11T05:42:48.621932+00:00",
+        "node_id": "CBDTCircular_Not_clearly_legible_in_header",
+        "content_hash": "72bf12137600ec8b",
+        "document_id": "143de5b6_circular-2-2026-pdf",
+        "document_name": "143de5b6_circular-2-2026-pdf",
+        "source_type": "Circular",
+        "authority_level": "Delegated",
+        "jurisdiction": "India",
+        "file_type": "circular_pdf",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\143de5b6_circular-2-2026-pdf.md",
+        "source_chunk_ids": "circular_CBDTCircular_Not_clearly_legible_in_header_0,circular_CBDTCircular_Not_clearly_legible_in_header_1"
+      }
+    },
+    {
+      "id": "DataSource_143de5b6_circular-2-2026-pdf",
+      "type": "RegulatoryPublication",
+      "properties": {
+        "source_name": "143de5b6_circular-2-2026-pdf",
+        "document_count": 1,
+        "is_available": true,
+        "in_poc": true,
+        "ingestion_date": "2026-09-11T05:42:48.683923+00:00",
+        "jurisdiction": "India",
+        "file_type": "circular_pdf"
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "type": "IMPLEMENTS",
+      "source": "CBDTCircular_Not_clearly_legible_in_header",
+      "target": "ITA1961__Section_119",
+      "properties": {
+        "cited_as": "119",
+        "act": "Income-tax Act, 1961"
+      }
+    },
+    {
+      "type": "CLARIFIES",
+      "source": "CBDTCircular_Not_clearly_legible_in_header",
+      "target": "ITA1961__Section_203",
+      "properties": {
+        "cited_as": "203",
+        "act": "Income-tax Act, 1961"
+      }
+    },
+    {
+      "type": "INGESTED_FROM",
+      "source": "CBDTCircular_Not_clearly_legible_in_header",
+      "target": "DataSource_143de5b6_circular-2-2026-pdf",
+      "properties": {}
+    }
+  ]
+}

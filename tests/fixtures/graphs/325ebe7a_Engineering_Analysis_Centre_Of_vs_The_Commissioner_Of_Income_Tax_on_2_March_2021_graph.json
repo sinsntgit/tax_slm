@@ -1,0 +1,2452 @@
+{
+  "entities": [
+    {
+      "id": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "hasText": "Multiple categories of cases involved: (1) End-users purchasing shrink-wrapped software directly from foreign suppliers; (2) Indian distributors purchasing from foreign suppliers and reselling to Indian end-users; (3) Foreign distributors selling to Indian distributors/end-users; (4) Software embedded in hardware sold as integrated units. The key fact common to all categories is that under the EULAs and distribution agreements, no copyright or copyright rights were transferred to the distributors or end-users—only a limited right to use the software was granted, with no right to reproduce, sublicense, or transfer. The distributors had no right to use the software themselves and merely resold sealed copies to end-users for profit.",
+        "bench": "R.F. Nariman, B.R. Gavai, Hemant Gupta",
+        "judgment_date": "2 March 2021",
+        "effective_from": "2 March 2021",
+        "assessment_year": "2001-2002 to 2002-2003 (lead case); various assessment years covered",
+        "jurisdiction": "Supreme Court of India",
+        "court": "Supreme Court of India",
+        "precedential_value": "landmark",
+        "binding_scope": "supreme_court",
+        "holding": "Appeals of assessees allowed; judgments of High Court of Karnataka set aside; ruling of AAR in Citrix Systems case set aside; appeals from High Court of Delhi dismissed. Supreme Court held that payments for computer software are not royalty and TDS under section 195 was not required.",
+        "final_outcome": "Appeals of assessees allowed; judgments of High Court of Karnataka set aside; ruling of AAR in Citrix Systems case set aside; appeals from High Court of Delhi dismissed. Supreme Court held that payments for computer software are not royalty and TDS under section 195 was not required.",
+        "keywords": [
+          "royalty vs goods",
+          "copyright transfer",
+          "computer software",
+          "TDS section 195",
+          "DTAA interpretation",
+          "copyrighted article vs copyright",
+          "EULA and distribution agreements",
+          "first sale doctrine",
+          "shrink-wrapped software",
+          "non-exclusive licence"
+        ],
+        "questions_of_law": [
+          "Whether the amounts paid by resident Indian end-users/distributors to non-resident computer software manufacturers/suppliers constitute payment of royalty for use of copyright in computer software",
+          "Whether such payments give rise to income taxable in India under section 9(1)(vi) read with section 4 of the Income Tax Act",
+          "Whether persons resident in India are liable to deduct tax at source under section 195 of the Income Tax Act on such payments"
+        ],
+        "statutes_cited": [
+          {
+            "name": "Income-tax Act 1961",
+            "section": "2(7), 2(37A), 4, 5, 9(1)(vi), 90, 195, 201"
+          },
+          {
+            "name": "Copyright Act 1957",
+            "section": "2(a)(v), 2(o), 2(m), 2(ffc), 14, 16, 18, 19, 30, 30A, 51, 52, 58, 65A"
+          },
+          {
+            "name": "Customs Act 1962",
+            "section": "14"
+          },
+          {
+            "name": "Customs Valuation (Determination of Price of Imported Goods) Rules 1988",
+            "section": "9(1)(c)"
+          },
+          {
+            "name": "Easements Act 1882",
+            "section": "52"
+          },
+          {
+            "name": "Cable Television Networks (Regulation) Act 1995",
+            "section": "General reference"
+          },
+          {
+            "name": "Constitution of India",
+            "section": "288, Article 30, Article 31"
+          }
+        ],
+        "legal_concepts": [
+          "royalty vs goods",
+          "copyright transfer",
+          "computer software",
+          "TDS section 195",
+          "DTAA interpretation",
+          "copyrighted article vs copyright",
+          "EULA and distribution agreements",
+          "first sale doctrine",
+          "shrink-wrapped software",
+          "non-exclusive licence"
+        ],
+        "cases_cited": [
+          "Arjun Panditrao Khotkar v. Kailash Kushanrao Gorantyal, (2020) 7 SCC 1",
+          "CIT v. DCM Limited, ITA Nos. 87-89/1992 (Delhi High Court)",
+          "CIT v. E-Funds IT Solution Inc., (2018) 13 SCC 294",
+          "CIT v. Samsung Electronics Co. Ltd., (2012) 345 ITR 494",
+          "CIT v. Samsung Electronics Co. Ltd., (2012) 345 ITR 494 (overruled on substantive legal question of whether computer software payments constitute royalty)",
+          "CIT v. Synopsis International Old Ltd., ITA Nos. 11-15/2008 (Karnataka High Court)",
+          "CIT v. ZTE Corporation, (2017) 392 ITR 80",
+          "Carborandum & Co. v. CIT, (1977) 2 SCC 862",
+          "Citrix Systems Asia Pacific Ptyl. Ltd., In Re., (2012) 343 ITR 1 (AAR)",
+          "Commissioner of Customs v. G.M. Exports, (2016) 1 SCC 91",
+          "Dassault Systems, K.K., In Re., (2010) 322 ITR 125 (AAR)",
+          "Director of Income Tax v. A.P. Moller Maersk AS, (2017) 5 SCC 651",
+          "Director of Income Tax v. Ericsson A.B., (2012) 343 ITR 470",
+          "Director of Income Tax v. Infrasoft Ltd., (2014) 264 CTR 329",
+          "Director of Income Tax v. New Skies Satellite BV, (2016) 382 ITR 114",
+          "Director of Income Tax v. Nokia Networks OY, (2013) 358 ITR 259",
+          "Formula One World Championship Ltd. v. CIT, (2017) 15 SCC 602",
+          "GE India Technology Centre (P) Ltd. v. CIT, (2010) 10 SCC 29",
+          "Geoquest Systems B.V. Gevers Deynootweg, In Re., (2010) 327 ITR 1 (AAR)",
+          "John Wiley & Sons Inc. v. Prabhat Chander Kumar Jain, 2010 SCC OnLine Del 2000",
+          "Motorola Inc. v. Deputy CIT, Special Bench ITAT Delhi, 22.06.2005",
+          "PILCOM v. CIT, West Bengal-VII, 2020 SCC Online SC 426 (distinguished on ground that section 194E deals with TDS without reference to chargeability of tax, unlike section 195 which contains 'sum chargeable' language; PILCOM concerned different provision in different setting)",
+          "Ram Jethmalani v. Union of India, (2011) 8 SCC 1",
+          "State Bank of India v. Collector of Customs, (2000) 1 SCC 727",
+          "State of Madras v. Swastik Tobacco Factory, (1966) 3 SCR 79",
+          "Sundaram Finance Ltd. v. State of Kerala, (1966) 2 SCR 828",
+          "Tata Consultancy Services v. State of A.P., 2005 (1) SCC 308",
+          "Transmission Corporation of A.P. Ltd. v. CIT, (1999) 7 SCC 266",
+          "Union of India v. Azadi Bachao Andolan, (2004) 10 SCC 1",
+          "UsedSoft GmbH v. Oracle International Corp., Case C-128/11 (ECJ)",
+          "Vernor v. Autodesk, Inc., 621 F.3d 1102 (9th Cir. 2010)",
+          "Vijay Ship Breaking Corporation v. CIT, (2010) 10 SCC 39",
+          "Vodafone International Holdings BV v. Union of India, (2012) 6 SCC 613",
+          "Warner Bros. Entertainment Inc. v. Santosh V.G., 2009 SCC OnLine Del 835"
+        ],
+        "precedents_overruled": [
+          "CIT v. Samsung Electronics Co. Ltd., (2012) 345 ITR 494 (overruled on substantive legal question of whether computer software payments constitute royalty)"
+        ],
+        "other_act_references": [
+          "Copyright Act 1957 Section 14",
+          "Copyright Act 1957 Section 16",
+          "Copyright Act 1957 Section 18",
+          "Copyright Act 1957 Section 30",
+          "Copyright Act 1957 Section 51",
+          "Copyright Act 1957 Section 52",
+          "Copyright Act 1957 Section 65A"
+        ],
+        "treaty_references": [
+          "India-Australia DTAA Article 12 (royalties)",
+          "India-Canada DTAA Article 12 (royalties)",
+          "India-China DTAA Article 12 (royalties)",
+          "India-Cyprus DTAA Article 12 (royalties)",
+          "India-Finland DTAA Article 12 (royalties)",
+          "India-France DTAA Article 12 (royalties)",
+          "India-Germany DTAA Article 12 (royalties)",
+          "India-Hong Kong DTAA Article 12 (royalties)",
+          "India-Ireland DTAA Article 12 (royalties)",
+          "India-Italy DTAA Article 12 (royalties)",
+          "India-Japan DTAA Article 12 (royalties)",
+          "India-Korea DTAA Article 12 (royalties)",
+          "India-Mauritius DTAA Article General reference",
+          "India-Morocco DTAA Article 12 (royalties)",
+          "India-Netherlands DTAA Article 12 (royalties)",
+          "India-Singapore DTAA Article 12 (definition of royalties)",
+          "India-Sweden DTAA Article 12 (royalties)",
+          "India-Taiwan DTAA Article 12 (royalties)",
+          "India-UK DTAA Article 12 (royalties)",
+          "India-USA DTAA Article 12 (royalties), 30 (entry into force)",
+          "OECD Model Tax Convention Article 12 (royalties and fees for technical services)"
+        ],
+        "forum_level": "Supreme Court",
+        "jurisdiction_scope": "All India",
+        "stance": "taxpayer_favorable",
+        "stanceBasis": "5 issue(s) decided for assessee, 0 for revenue (of 5 issue(s) with a recognized winner).",
+        "retrievalSummary": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 (Supreme Court of India). Whether payments for sale and distribution of shrink-wrapped computer software constitute royalty under Article 12 of DTAA and section 9(1)(vi) of Income Tax Act: The payments do not constitute royalty. Royalty requires transfer of all or any rights in copyright (including granting of licence in which copyright interest passes). Under the EULAs/distribution agreements in these cases, only right to use software is granted; no copyright rights are transferred. Whether resident Indian persons (end-users and distributors) were obligated to deduct TDS under section 195 on payments to non-resident foreign software suppliers: No obligation to deduct TDS arose. Section 195(1) requires deduction only on 'sums chargeable under the provisions of this Act.' Since payments were not for royalty and did not give rise to income taxable in India under section 9, no deduction was required. Whether copyright is transferred when non-exclusive, non-transferable licence is granted to use computer software under EULA: No copyright is transferred. EULA licence is not licence under section 30 of Copyright Act. It imposes restrictive conditions for use but does not grant interest in any of the exclusive rights contained in section 14(a) and (b) of Copyright Act. Whether doctrine of first sale/principle of exhaustion applies to computer software distributed under distribution agreements and EULAs: Doctrine of first sale/principle of exhaustion applies to computer software under section 14(b)(ii) of Copyright Act as amended in 1999. After copyright owner's first sale of copy of software, owner's distribution right is exhausted in relation to that copy. Applicability of retrospective amendment (Explanation 4 to section 9(1)(vi)) to assessment years prior to 2012: Explanation 4 cannot apply to assessment years prior to 2012 when provision was not on statute book. Maxim lex non cogit ad impossibilia applies—law does not compel impossible acts. Person responsible for TDS deduction cannot be expected to apply definition that did not factually exist at time of payment/deduction. Final outcome: Appeals of assessees allowed; judgments of High Court of Karnataka set aside; ruling of AAR in Citrix Systems case set aside; appeals from High Court of Delhi dismissed. Supreme Court held that payments for computer software are not royalty and TDS under section 195 was not required..",
+        "retrievalKeywords": "royalty vs goods, copyright transfer, computer software, TDS section 195, DTAA interpretation, copyrighted article vs copyright, EULA and distribution agreements, first sale doctrine, shrink-wrapped software, non-exclusive licence, 2(7), 2(37A), 4, 5, 9(1)(vi), 90, 195, 201, 14, 16, 18, 30, 51, 52, 2(19AA), 40(a)(ia), 65A, 2(7), 2(37A), 4, 5, 9(1)(vi), 90, 195, 201, 2(a)(v), 2(o), 2(m), 2(ffc), 14, 16, 18, 19, 30, 30A, 51, 52, 58, 65A, 9(1)(c), General reference, 288, Article 30, Article 31, Copyright (as defined in section 14 of Copyright Act) is exclusive right to do certain acts with work; it is distinct from and separate from ownership of physical material in which copyrighted work is embodied. Purchaser of copyrighted article acquires ownership of physical object but not copyright itself., Royalty under DTAA and section 9(1)(vi) requires transfer of 'use of, or the right to use, any copyright' or transfer of 'all or any rights (including granting of licence) in respect of copyright.' Mere sale of copyrighted article/product does not constitute transfer of copyright or copyright rights., Distinction between 'copyright' (exclusive rights) and 'copyrighted article' (physical manifestation) is crucial in determining whether payment is for royalty or goods. This distinction must guide interpretation of tax provisions., Section 195 TDS obligation is inseparably linked with charging provision under section 9(1)(vi) read with section 4. TDS is deductible only if non-resident is liable to pay tax as assessee under charging provision. Mere remittance does not trigger TDS obligation., DTAA provisions (particularly Article 12's definition of 'royalties') are more specific and operate with greater precision than domestic law provisions on same subject. Where DTAA definition is narrower/different from domestic law, DTAA definition prevails under section 90(2) of Income Tax Act., OECD Commentary, while not binding, provides important interpretive guidance for DTAA provisions as most India DTAAs are based on OECD Model. Courts may refer to OECD Commentary as supplementary means of interpretation under Vienna Convention principles., Doctrine of first sale/principle of exhaustion is statutory under section 14(b)(ii) of Copyright Act as amended in 1999. Copyright owner's distribution right extends only to copies not already in circulation. Once first authorized sale, right exhausts for that copy., Maxim 'lex non cogit ad impossibilia' (law does not compel impossible acts) applies to tax law. Person cannot be held liable for not complying with statutory provision that did not exist at time of required action., Rights granted under EULA for use of computer software are specific to nature of computer programs (copying necessary for operation, back-up copies) and do not represent transfer of copyright rights mentioned in section 14 of Copyright Act., Technology considerations matter in copyright analysis. What constitutes infringement or authorized copying depends on nature of software product, restrictions in licence, and statutory protections like section 52(1)(aa) of Copyright Act.",
+        "confidence": 0.8,
+        "extraction_notes": "Extracted from 325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md via 11_extract_case_law.py",
+        "source_document": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "ingestion_date": "2026-08-29T10:52:33.499349+00:00",
+        "node_id": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+        "content_hash": "92d0761c180b0155",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__1"
+      }
+    },
+    {
+      "id": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "Issue",
+      "properties": {
+        "hasText": "Whether payments for sale and distribution of shrink-wrapped computer software constitute royalty under Article 12 of DTAA and section 9(1)(vi) of Income Tax Act",
+        "full_citation": "Issue 1 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "Issue",
+      "properties": {
+        "hasText": "Whether resident Indian persons (end-users and distributors) were obligated to deduct TDS under section 195 on payments to non-resident foreign software suppliers",
+        "full_citation": "Issue 2 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "Issue",
+      "properties": {
+        "hasText": "Whether copyright is transferred when non-exclusive, non-transferable licence is granted to use computer software under EULA",
+        "full_citation": "Issue 3 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "Issue",
+      "properties": {
+        "hasText": "Whether doctrine of first sale/principle of exhaustion applies to computer software distributed under distribution agreements and EULAs",
+        "full_citation": "Issue 4 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "Issue",
+      "properties": {
+        "hasText": "Applicability of retrospective amendment (Explanation 4 to section 9(1)(vi)) to assessment years prior to 2012",
+        "full_citation": "Issue 5 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "Conclusion_1_to_Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "Conclusion",
+      "properties": {
+        "hasText": "Article 12(3) of DTAA defines royalties as payments for 'use of, or the right to use, any copyright' of literary work. Section 9(1)(vi) Explanation 2(v) defines royalty as consideration for 'transfer of all or any rights (including granting of licence) in respect of any copyright.' Copyright is exclusive right under section 14 of Copyright Act to do acts such as reproduce, issue copies, translate, adapt. Ownership of copyright is distinct from ownership of physical material (copyrighted article). Purchaser of book/CD becomes owner of physical article but not copyright. Here, distributors received no rights to reproduce, sublicense, or transfer software—only right to use shrink-wrapped sealed copies. No parting with copyright occurred. Courts must distinguish between copyright (exclusive right to reproduce, adapt, etc.) and copyrighted article (physical manifestation). EULA restrictions and non-exclusive, non-transferable character confirm no copyright transfer. Mere copying necessary for operation under section 52(1)(aa) of Copyright Act does not constitute infringement and thus does not represent transfer of copyright. Therefore, transaction amounts to sale of goods (copyrighted article), not royalty.",
+        "holding": "The payments do not constitute royalty. Royalty requires transfer of all or any rights in copyright (including granting of licence in which copyright interest passes). Under the EULAs/distribution agreements in these cases, only right to use software is granted; no copyright rights are transferred.",
+        "winner": "assessee",
+        "full_citation": "Finding on 'Whether payments for sale and distribution of shrink-wrapped computer software constitute royalty under Article 12 of DTAA and section 9(1)(vi) of Income Tax Act' in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__2"
+      }
+    },
+    {
+      "id": "Conclusion_2_to_Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "Conclusion",
+      "properties": {
+        "hasText": "Section 195(1) is inextricably linked with charging provision in section 9(1)(vi) read with section 4. TDS obligation exists only if non-resident is liable to pay tax under charging provision. Words 'chargeable under the provisions of [the] Act' in section 195(1) are critical—tax deductible only from income actually chargeable under sections 4, 5, and 9. GE Technology case correctly held that moment remittance occurs does not automatically create TDS obligation; income must be chargeable. Since payments here were for goods (copyrighted articles) and not royalty, no income chargeable in India arose under section 9(1)(vi). Consequence: no TDS deduction obligation. This interpretation accords with principle of proportionality in section 195(2)—deduction limited to 'appropriate proportion' of chargeable sum. Charging and machinery provisions must work in tandem.",
+        "holding": "No obligation to deduct TDS arose. Section 195(1) requires deduction only on 'sums chargeable under the provisions of this Act.' Since payments were not for royalty and did not give rise to income taxable in India under section 9, no deduction was required.",
+        "winner": "assessee",
+        "full_citation": "Finding on 'Whether resident Indian persons (end-users and distributors) were obligated to deduct TDS under section 195 on payments to non-resident foreign software suppliers' in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__3"
+      }
+    },
+    {
+      "id": "Conclusion_3_to_Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "Conclusion",
+      "properties": {
+        "hasText": "Section 30 of Copyright Act permits owner to grant interest in rights by licence. Such licence transfers interest in exclusive rights (reproduce, issue copies, adapt, etc.). EULA licence differs fundamentally—it merely permits use of product with restrictions. Parties to EULA expressly state copyright remains with owner; licensee gets no right to reproduce beyond what necessary for operation. Section 52(1)(aa) of Copyright Act recognizes that copying/adaptation necessary for utilization is not infringement. This indicates such copying does not represent transfer of copyright right. Difference between 'right to use' copyrighted product and 'right to use copyright' in product is crucial. Former does not transfer copyright; latter does. Under EULAs here, only former transfer occurs. Non-exclusive, non-transferable character shows licensee never divests licensor of copyright rights—licensor retains full control. Therefore, EULA is not licence in terms of Copyright Act section 30.",
+        "holding": "No copyright is transferred. EULA licence is not licence under section 30 of Copyright Act. It imposes restrictive conditions for use but does not grant interest in any of the exclusive rights contained in section 14(a) and (b) of Copyright Act.",
+        "winner": "assessee",
+        "full_citation": "Finding on 'Whether copyright is transferred when non-exclusive, non-transferable licence is granted to use computer software under EULA' in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__4"
+      }
+    },
+    {
+      "id": "Conclusion_4_to_Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "Conclusion",
+      "properties": {
+        "hasText": "Prior to 1999 Amendment, section 14(b)(ii) read: 'to sell or give on hire...any copy of computer programme, regardless of whether such copy has been sold or given on hire on earlier occasions.' 1999 Amendment deleted phrase 'regardless of whether such copy has been sold on earlier occasions.' This deletion is statutory recognition of doctrine of exhaustion. Explanation to section 14 states: 'a copy which has been sold once shall be deemed to be a copy already in circulation.' Copyright owner's distribution right extends only to copies not already in circulation. Once first sale by owner or with owner's consent, that right is exhausted for subsequent sales of same copy. In these cases, shrink-wrapped copies were put in circulation by foreign suppliers, then distributed by Indian distributors to end-users. These were copies 'already in circulation.' Therefore, distributor's sale/resale did not violate copyright owner's distribution right under section 14(b)(ii). This supports conclusion that distribution is of goods, not transfer of copyright.",
+        "holding": "Doctrine of first sale/principle of exhaustion applies to computer software under section 14(b)(ii) of Copyright Act as amended in 1999. After copyright owner's first sale of copy of software, owner's distribution right is exhausted in relation to that copy.",
+        "winner": "assessee",
+        "full_citation": "Finding on 'Whether doctrine of first sale/principle of exhaustion applies to computer software distributed under distribution agreements and EULAs' in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__5"
+      }
+    },
+    {
+      "id": "Conclusion_5_to_Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "Conclusion",
+      "properties": {
+        "hasText": "Finance Act 2012 inserted Explanation 4 with retrospective effect from 1.6.1976, clarifying that transfer of rights for 'use or right to use' computer software constitutes royalty. However, before Explanation 4 was enacted, this expanded definition did not exist. Similarly, Explanation 3 (defining 'computer software') was first introduced in 1991, much after 1976. Moreover, technology referenced (satellite transmission, optic fibre) was not regulated by Parliament until Cable TV Regulation Act, 1995. For assessment years in question (prior to 2012), expanded definition did not exist. Courts have recognized that person cannot be held liable for non-compliance with provision not in force at relevant time. High Court of Bombay applied maxim in CIT v. NGC Networks, holding parties cannot perform impossible act of complying with provision introduced later by retrospective amendment. Therefore, assessees cannot be held in default for not deducting tax on definition of royalty that did not exist at time of payment.",
+        "holding": "Explanation 4 cannot apply to assessment years prior to 2012 when provision was not on statute book. Maxim lex non cogit ad impossibilia applies—law does not compel impossible acts. Person responsible for TDS deduction cannot be expected to apply definition that did not factually exist at time of payment/deduction.",
+        "winner": "assessee",
+        "full_citation": "Finding on 'Applicability of retrospective amendment (Explanation 4 to section 9(1)(vi)) to assessment years prior to 2012' in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__6"
+      }
+    },
+    {
+      "id": "Argument_assessee_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "TaxpayerArgument",
+      "properties": {
+        "hasText": "Payment is for purchase of computer software as goods/copyrighted articles, not for copyright itself",
+        "full_citation": "Assessee argument 1 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__7"
+      }
+    },
+    {
+      "id": "Argument_assessee_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "TaxpayerArgument",
+      "properties": {
+        "hasText": "Definition of royalty under Article 12 of DTAA is narrower than domestic law; it requires transfer of 'use of or right to use' copyright, not mere sale of copyrighted product",
+        "full_citation": "Assessee argument 2 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__8"
+      }
+    },
+    {
+      "id": "Argument_assessee_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "TaxpayerArgument",
+      "properties": {
+        "hasText": "No copyright rights are transferred under EULAs/distribution agreements; only limited licence to use is granted, which is not a licence under section 30 of Copyright Act",
+        "full_citation": "Assessee argument 3 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__9"
+      }
+    },
+    {
+      "id": "Argument_assessee_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "TaxpayerArgument",
+      "properties": {
+        "hasText": "Doctrine of first sale/principle of exhaustion applies; copyright distribution right is exhausted after first sale as per section 14(b)(ii) of Copyright Act post 1999 Amendment",
+        "full_citation": "Assessee argument 4 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__10"
+      }
+    },
+    {
+      "id": "Argument_assessee_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "TaxpayerArgument",
+      "properties": {
+        "hasText": "Copying software to hard disk is incidental to use and does not constitute transfer of reproduction right; such copying is permitted under section 52(1)(aa) of Copyright Act",
+        "full_citation": "Assessee argument 5 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__11"
+      }
+    },
+    {
+      "id": "Argument_assessee_6_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "TaxpayerArgument",
+      "properties": {
+        "hasText": "Explanation 4 to section 9(1)(vi) cannot apply retrospectively to assessment years prior to 2012 when definition did not factually exist; law does not compel impossible acts",
+        "full_citation": "Assessee argument 6 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__12"
+      }
+    },
+    {
+      "id": "Argument_assessee_7_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "TaxpayerArgument",
+      "properties": {
+        "hasText": "DTAAs prevail over domestic law to extent more beneficial to assessee under section 90(2) of Income Tax Act",
+        "full_citation": "Assessee argument 7 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__13"
+      }
+    },
+    {
+      "id": "Argument_assessee_8_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "TaxpayerArgument",
+      "properties": {
+        "hasText": "OECD Commentary and established distinction between copyright and copyrighted article supports assessee's position",
+        "full_citation": "Assessee argument 8 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__14"
+      }
+    },
+    {
+      "id": "Argument_revenue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "RevenueArgument",
+      "properties": {
+        "hasText": "Payment for use of computer software by granting licence constitutes royalty under both section 9(1)(vi) and Article 12 of DTAA",
+        "full_citation": "Revenue argument 1 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__15"
+      }
+    },
+    {
+      "id": "Argument_revenue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "RevenueArgument",
+      "properties": {
+        "hasText": "Copying software to hard disk and making back-up copies amounts to transfer of copyright reproduction right",
+        "full_citation": "Revenue argument 2 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__16"
+      }
+    },
+    {
+      "id": "Argument_revenue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "RevenueArgument",
+      "properties": {
+        "hasText": "Explanation 4 to section 9(1)(vi) is clarificatory of position that always existed from 1.6.1976; CBDT Circular 152/1974 and Finance Minister's statement (1990) support this",
+        "full_citation": "Revenue argument 3 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__17"
+      }
+    },
+    {
+      "id": "Argument_revenue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "RevenueArgument",
+      "properties": {
+        "hasText": "Section 195 TDS obligation arises on mere remittance without reference to chargeability of tax by non-resident; DTAA does not apply to TDS provisions",
+        "full_citation": "Revenue argument 4 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__18"
+      }
+    },
+    {
+      "id": "Argument_revenue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "RevenueArgument",
+      "properties": {
+        "hasText": "Distinction between copyright and copyrighted article is illusory; software cannot be divorced from embedded copyright",
+        "full_citation": "Revenue argument 5 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__19"
+      }
+    },
+    {
+      "id": "Argument_revenue_6_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "RevenueArgument",
+      "properties": {
+        "hasText": "Storage of program in computer constitutes copyright infringement unless licensed; licence therefore transfers copyright rights",
+        "full_citation": "Revenue argument 6 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__20"
+      }
+    },
+    {
+      "id": "Argument_revenue_7_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "RevenueArgument",
+      "properties": {
+        "hasText": "Section 14(b)(ii) of Copyright Act gives copyright owner right to sell any copy regardless of previous sales; this supports transfer of copyright rights",
+        "full_citation": "Revenue argument 7 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__21"
+      }
+    },
+    {
+      "id": "Argument_revenue_8_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "RevenueArgument",
+      "properties": {
+        "hasText": "PILCOM and Section 194E precedents show TDS obligation exists irrespective of ultimate tax chargeability",
+        "full_citation": "Revenue argument 8 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.8,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__22"
+      }
+    },
+    {
+      "id": "CaseLaw_GE_India_Technology_Centre_P_Ltd_v_CIT_2010_10_SCC_29",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "GE India Technology Centre (P) Ltd. v. CIT, (2010) 10 SCC 29",
+        "full_citation": "GE India Technology Centre (P) Ltd. v. CIT, (2010) 10 SCC 29",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Union_of_India_v_Azadi_Bachao_Andolan_2004_10_SCC_1",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Union of India v. Azadi Bachao Andolan, (2004) 10 SCC 1",
+        "full_citation": "Union of India v. Azadi Bachao Andolan, (2004) 10 SCC 1",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Transmission_Corporation_of_A_P_Ltd_v_CIT_1999_7_SCC_266",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Transmission Corporation of A.P. Ltd. v. CIT, (1999) 7 SCC 266",
+        "full_citation": "Transmission Corporation of A.P. Ltd. v. CIT, (1999) 7 SCC 266",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Tata_Consultancy_Services_v_State_of_A_P_2005_1_SCC_308",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Tata Consultancy Services v. State of A.P., 2005 (1) SCC 308",
+        "full_citation": "Tata Consultancy Services v. State of A.P., 2005 (1) SCC 308",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_State_Bank_of_India_v_Collector_of_Customs_2000_1_SCC_727",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "State Bank of India v. Collector of Customs, (2000) 1 SCC 727",
+        "full_citation": "State Bank of India v. Collector of Customs, (2000) 1 SCC 727",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Sundaram_Finance_Ltd_v_State_of_Kerala_1966_2_SCR_828",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Sundaram Finance Ltd. v. State of Kerala, (1966) 2 SCR 828",
+        "full_citation": "Sundaram Finance Ltd. v. State of Kerala, (1966) 2 SCR 828",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_State_of_Madras_v_Swastik_Tobacco_Factory_1966_3_SCR_79",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "State of Madras v. Swastik Tobacco Factory, (1966) 3 SCR 79",
+        "full_citation": "State of Madras v. Swastik Tobacco Factory, (1966) 3 SCR 79",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Vodafone_International_Holdings_BV_v_Union_of_India_2012_6_S",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Vodafone International Holdings BV v. Union of India, (2012) 6 SCC 613",
+        "full_citation": "Vodafone International Holdings BV v. Union of India, (2012) 6 SCC 613",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Vijay_Ship_Breaking_Corporation_v_CIT_2010_10_SCC_39",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Vijay Ship Breaking Corporation v. CIT, (2010) 10 SCC 39",
+        "full_citation": "Vijay Ship Breaking Corporation v. CIT, (2010) 10 SCC 39",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Director_of_Income_Tax_v_A_P_Moller_Maersk_AS_2017_5_SCC_651",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Director of Income Tax v. A.P. Moller Maersk AS, (2017) 5 SCC 651",
+        "full_citation": "Director of Income Tax v. A.P. Moller Maersk AS, (2017) 5 SCC 651",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Formula_One_World_Championship_Ltd_v_CIT_2017_15_SCC_602",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Formula One World Championship Ltd. v. CIT, (2017) 15 SCC 602",
+        "full_citation": "Formula One World Championship Ltd. v. CIT, (2017) 15 SCC 602",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_CIT_v_E_Funds_IT_Solution_Inc_2018_13_SCC_294",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "CIT v. E-Funds IT Solution Inc., (2018) 13 SCC 294",
+        "full_citation": "CIT v. E-Funds IT Solution Inc., (2018) 13 SCC 294",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Arjun_Panditrao_Khotkar_v_Kailash_Kushanrao_Gorantyal_2020_7",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Arjun Panditrao Khotkar v. Kailash Kushanrao Gorantyal, (2020) 7 SCC 1",
+        "full_citation": "Arjun Panditrao Khotkar v. Kailash Kushanrao Gorantyal, (2020) 7 SCC 1",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Ram_Jethmalani_v_Union_of_India_2011_8_SCC_1",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Ram Jethmalani v. Union of India, (2011) 8 SCC 1",
+        "full_citation": "Ram Jethmalani v. Union of India, (2011) 8 SCC 1",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Director_of_Income_Tax_v_New_Skies_Satellite_BV_2016_382_ITR",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Director of Income Tax v. New Skies Satellite BV, (2016) 382 ITR 114",
+        "full_citation": "Director of Income Tax v. New Skies Satellite BV, (2016) 382 ITR 114",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Commissioner_of_Customs_v_G_M_Exports_2016_1_SCC_91",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Commissioner of Customs v. G.M. Exports, (2016) 1 SCC 91",
+        "full_citation": "Commissioner of Customs v. G.M. Exports, (2016) 1 SCC 91",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_PILCOM_v_CIT_West_Bengal_VII_2020_SCC_Online_SC_426_distingu",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "PILCOM v. CIT, West Bengal-VII, 2020 SCC Online SC 426 (distinguished on ground that section 194E deals with TDS without reference to chargeability of tax, unlike section 195 which contains 'sum chargeable' language; PILCOM concerned different provision in different setting)",
+        "full_citation": "PILCOM v. CIT, West Bengal-VII, 2020 SCC Online SC 426 (distinguished on ground that section 194E deals with TDS without reference to chargeability of tax, unlike section 195 which contains 'sum chargeable' language; PILCOM concerned different provision in different setting)",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Dassault_Systems_K_K_In_Re_2010_322_ITR_125_AAR",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Dassault Systems, K.K., In Re., (2010) 322 ITR 125 (AAR)",
+        "full_citation": "Dassault Systems, K.K., In Re., (2010) 322 ITR 125 (AAR)",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Geoquest_Systems_B_V_Gevers_Deynootweg_In_Re_2010_327_ITR_1_",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Geoquest Systems B.V. Gevers Deynootweg, In Re., (2010) 327 ITR 1 (AAR)",
+        "full_citation": "Geoquest Systems B.V. Gevers Deynootweg, In Re., (2010) 327 ITR 1 (AAR)",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Citrix_Systems_Asia_Pacific_Ptyl_Ltd_In_Re_2012_343_ITR_1_AA",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Citrix Systems Asia Pacific Ptyl. Ltd., In Re., (2012) 343 ITR 1 (AAR)",
+        "full_citation": "Citrix Systems Asia Pacific Ptyl. Ltd., In Re., (2012) 343 ITR 1 (AAR)",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_CIT_v_Samsung_Electronics_Co_Ltd_2012_345_ITR_494",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "CIT v. Samsung Electronics Co. Ltd., (2012) 345 ITR 494",
+        "full_citation": "CIT v. Samsung Electronics Co. Ltd., (2012) 345 ITR 494",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_CIT_v_Synopsis_International_Old_Ltd_ITA_Nos_11_15_2008_Karn",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "CIT v. Synopsis International Old Ltd., ITA Nos. 11-15/2008 (Karnataka High Court)",
+        "full_citation": "CIT v. Synopsis International Old Ltd., ITA Nos. 11-15/2008 (Karnataka High Court)",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Director_of_Income_Tax_v_Ericsson_A_B_2012_343_ITR_470",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Director of Income Tax v. Ericsson A.B., (2012) 343 ITR 470",
+        "full_citation": "Director of Income Tax v. Ericsson A.B., (2012) 343 ITR 470",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Director_of_Income_Tax_v_Nokia_Networks_OY_2013_358_ITR_259",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Director of Income Tax v. Nokia Networks OY, (2013) 358 ITR 259",
+        "full_citation": "Director of Income Tax v. Nokia Networks OY, (2013) 358 ITR 259",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Director_of_Income_Tax_v_Infrasoft_Ltd_2014_264_CTR_329",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Director of Income Tax v. Infrasoft Ltd., (2014) 264 CTR 329",
+        "full_citation": "Director of Income Tax v. Infrasoft Ltd., (2014) 264 CTR 329",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Motorola_Inc_v_Deputy_CIT_Special_Bench_ITAT_Delhi_22_06_200",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Motorola Inc. v. Deputy CIT, Special Bench ITAT Delhi, 22.06.2005",
+        "full_citation": "Motorola Inc. v. Deputy CIT, Special Bench ITAT Delhi, 22.06.2005",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_CIT_v_ZTE_Corporation_2017_392_ITR_80",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "CIT v. ZTE Corporation, (2017) 392 ITR 80",
+        "full_citation": "CIT v. ZTE Corporation, (2017) 392 ITR 80",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_CIT_v_DCM_Limited_ITA_Nos_87_89_1992_Delhi_High_Court",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "CIT v. DCM Limited, ITA Nos. 87-89/1992 (Delhi High Court)",
+        "full_citation": "CIT v. DCM Limited, ITA Nos. 87-89/1992 (Delhi High Court)",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Carborandum_Co_v_CIT_1977_2_SCC_862",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Carborandum & Co. v. CIT, (1977) 2 SCC 862",
+        "full_citation": "Carborandum & Co. v. CIT, (1977) 2 SCC 862",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Warner_Bros_Entertainment_Inc_v_Santosh_V_G_2009_SCC_OnLine_",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Warner Bros. Entertainment Inc. v. Santosh V.G., 2009 SCC OnLine Del 835",
+        "full_citation": "Warner Bros. Entertainment Inc. v. Santosh V.G., 2009 SCC OnLine Del 835",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_John_Wiley_Sons_Inc_v_Prabhat_Chander_Kumar_Jain_2010_SCC_On",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "John Wiley & Sons Inc. v. Prabhat Chander Kumar Jain, 2010 SCC OnLine Del 2000",
+        "full_citation": "John Wiley & Sons Inc. v. Prabhat Chander Kumar Jain, 2010 SCC OnLine Del 2000",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_UsedSoft_GmbH_v_Oracle_International_Corp_Case_C_128_11_ECJ",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "UsedSoft GmbH v. Oracle International Corp., Case C-128/11 (ECJ)",
+        "full_citation": "UsedSoft GmbH v. Oracle International Corp., Case C-128/11 (ECJ)",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_Vernor_v_Autodesk_Inc_621_F_3d_1102_9th_Cir_2010",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "Vernor v. Autodesk, Inc., 621 F.3d 1102 (9th Cir. 2010)",
+        "full_citation": "Vernor v. Autodesk, Inc., 621 F.3d 1102 (9th Cir. 2010)",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "CaseLaw_CIT_v_Samsung_Electronics_Co_Ltd_2012_345_ITR_494_overruled_",
+      "type": "CaseLaw",
+      "properties": {
+        "case_name": "CIT v. Samsung Electronics Co. Ltd., (2012) 345 ITR 494 (overruled on substantive legal question of whether computer software payments constitute royalty)",
+        "full_citation": "CIT v. Samsung Electronics Co. Ltd., (2012) 345 ITR 494 (overruled on substantive legal question of whether computer software payments constitute royalty)",
+        "confidence": 0.3,
+        "extraction_notes": "Stub created from a precedent reference in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1; will be filled in properly if/when this case is itself ingested.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    },
+    {
+      "id": "LegalConcept_1_Copyright_as_defined_in_section_14_of_Copyright_Act_is_exclu",
+      "type": "LegalConcept",
+      "properties": {
+        "hasText": "Copyright (as defined in section 14 of Copyright Act) is exclusive right to do certain acts with work; it is distinct from and separate from ownership of physical material in which copyrighted work is embodied. Purchaser of copyrighted article acquires ownership of physical object but not copyright itself.",
+        "full_citation": "Copyright (as defined in section 14 of Copyright Act) is exclusive right to do c",
+        "confidence": 0.7,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__23"
+      }
+    },
+    {
+      "id": "LegalConcept_2_Royalty_under_DTAA_and_section_9_1_vi_requires_transfer_of_u",
+      "type": "LegalConcept",
+      "properties": {
+        "hasText": "Royalty under DTAA and section 9(1)(vi) requires transfer of 'use of, or the right to use, any copyright' or transfer of 'all or any rights (including granting of licence) in respect of copyright.' Mere sale of copyrighted article/product does not constitute transfer of copyright or copyright rights.",
+        "full_citation": "Royalty under DTAA and section 9(1)(vi) requires transfer of 'use of, or the rig",
+        "confidence": 0.7,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__24"
+      }
+    },
+    {
+      "id": "LegalConcept_3_Distinction_between_copyright_exclusive_rights_and_copyright",
+      "type": "LegalConcept",
+      "properties": {
+        "hasText": "Distinction between 'copyright' (exclusive rights) and 'copyrighted article' (physical manifestation) is crucial in determining whether payment is for royalty or goods. This distinction must guide interpretation of tax provisions.",
+        "full_citation": "Distinction between 'copyright' (exclusive rights) and 'copyrighted article' (ph",
+        "confidence": 0.7,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__25"
+      }
+    },
+    {
+      "id": "LegalConcept_4_Section_195_TDS_obligation_is_inseparably_linked_with_chargi",
+      "type": "LegalConcept",
+      "properties": {
+        "hasText": "Section 195 TDS obligation is inseparably linked with charging provision under section 9(1)(vi) read with section 4. TDS is deductible only if non-resident is liable to pay tax as assessee under charging provision. Mere remittance does not trigger TDS obligation.",
+        "full_citation": "Section 195 TDS obligation is inseparably linked with charging provision under s",
+        "confidence": 0.7,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__26"
+      }
+    },
+    {
+      "id": "LegalConcept_5_DTAA_provisions_particularly_Article_12_s_definition_of_roya",
+      "type": "LegalConcept",
+      "properties": {
+        "hasText": "DTAA provisions (particularly Article 12's definition of 'royalties') are more specific and operate with greater precision than domestic law provisions on same subject. Where DTAA definition is narrower/different from domestic law, DTAA definition prevails under section 90(2) of Income Tax Act.",
+        "full_citation": "DTAA provisions (particularly Article 12's definition of 'royalties') are more s",
+        "confidence": 0.7,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__27"
+      }
+    },
+    {
+      "id": "LegalConcept_6_OECD_Commentary_while_not_binding_provides_important_interpr",
+      "type": "LegalConcept",
+      "properties": {
+        "hasText": "OECD Commentary, while not binding, provides important interpretive guidance for DTAA provisions as most India DTAAs are based on OECD Model. Courts may refer to OECD Commentary as supplementary means of interpretation under Vienna Convention principles.",
+        "full_citation": "OECD Commentary, while not binding, provides important interpretive guidance for",
+        "confidence": 0.7,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__28"
+      }
+    },
+    {
+      "id": "LegalConcept_7_Doctrine_of_first_sale_principle_of_exhaustion_is_statutory_",
+      "type": "LegalConcept",
+      "properties": {
+        "hasText": "Doctrine of first sale/principle of exhaustion is statutory under section 14(b)(ii) of Copyright Act as amended in 1999. Copyright owner's distribution right extends only to copies not already in circulation. Once first authorized sale, right exhausts for that copy.",
+        "full_citation": "Doctrine of first sale/principle of exhaustion is statutory under section 14(b)(",
+        "confidence": 0.7,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__29"
+      }
+    },
+    {
+      "id": "LegalConcept_8_Maxim_lex_non_cogit_ad_impossibilia_law_does_not_compel_impo",
+      "type": "LegalConcept",
+      "properties": {
+        "hasText": "Maxim 'lex non cogit ad impossibilia' (law does not compel impossible acts) applies to tax law. Person cannot be held liable for not complying with statutory provision that did not exist at time of required action.",
+        "full_citation": "Maxim 'lex non cogit ad impossibilia' (law does not compel impossible acts) appl",
+        "confidence": 0.7,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__30"
+      }
+    },
+    {
+      "id": "LegalConcept_9_Rights_granted_under_EULA_for_use_of_computer_software_are_s",
+      "type": "LegalConcept",
+      "properties": {
+        "hasText": "Rights granted under EULA for use of computer software are specific to nature of computer programs (copying necessary for operation, back-up copies) and do not represent transfer of copyright rights mentioned in section 14 of Copyright Act.",
+        "full_citation": "Rights granted under EULA for use of computer software are specific to nature of",
+        "confidence": 0.7,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__31"
+      }
+    },
+    {
+      "id": "LegalConcept_10_Technology_considerations_matter_in_copyright_analysis_What_",
+      "type": "LegalConcept",
+      "properties": {
+        "hasText": "Technology considerations matter in copyright analysis. What constitutes infringement or authorized copying depends on nature of software product, restrictions in licence, and statutory protections like section 52(1)(aa) of Copyright Act.",
+        "full_citation": "Technology considerations matter in copyright analysis. What constitutes infring",
+        "confidence": 0.7,
+        "extraction_notes": "",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md",
+        "source_chunk_ids": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__32"
+      }
+    },
+    {
+      "id": "CaseCitation_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "type": "CaseCitation",
+      "properties": {
+        "reporter_name": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+        "confidence": 0.6,
+        "extraction_notes": "Stored verbatim - see script docstring.",
+        "file_type": "caselaw_pdf",
+        "document_id": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "document_name": "325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021",
+        "source_type": "CaseLaw",
+        "authority_level": "Judicial",
+        "jurisdiction": "India",
+        "sourceMdPath": "D:\\tax_kg_poc\\tax_kg_poc_revised\\data\\converted_md\\325ebe7a_Engineering_Analysis_Centre_Of_vs_The_Commissioner_Of_Income_Tax_on_2_March_2021.md"
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__SubSection_2_7",
+      "properties": {
+        "relation_type": "interpreted",
+        "act": "Income-tax Act 1961",
+        "cited_as": "2(7)"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__SubSection_2_37A",
+      "properties": {
+        "relation_type": "interpreted",
+        "act": "Income-tax Act 1961",
+        "cited_as": "2(37A)"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__Section_4",
+      "properties": {
+        "relation_type": "interpreted",
+        "act": "Income-tax Act 1961",
+        "cited_as": "4"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__Section_5",
+      "properties": {
+        "relation_type": "interpreted",
+        "act": "Income-tax Act 1961",
+        "cited_as": "5"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__Clause_9_1_vi",
+      "properties": {
+        "relation_type": "interpreted",
+        "act": "Income-tax Act 1961",
+        "cited_as": "9(1)(vi)"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__Section_90",
+      "properties": {
+        "relation_type": "interpreted",
+        "act": "Income-tax Act 1961",
+        "cited_as": "90"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__Section_195",
+      "properties": {
+        "relation_type": "interpreted",
+        "act": "Income-tax Act 1961",
+        "cited_as": "195"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__Section_201",
+      "properties": {
+        "relation_type": "interpreted",
+        "act": "Income-tax Act 1961",
+        "cited_as": "201"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__Section_14",
+      "properties": {
+        "relation_type": "interpreted",
+        "act": "Copyright Act 1957",
+        "cited_as": "14"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__Section_16",
+      "properties": {
+        "relation_type": "interpreted",
+        "act": "Copyright Act 1957",
+        "cited_as": "16"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__Section_18",
+      "properties": {
+        "relation_type": "interpreted",
+        "act": "Copyright Act 1957",
+        "cited_as": "18"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__Section_30",
+      "properties": {
+        "relation_type": "interpreted",
+        "act": "Copyright Act 1957",
+        "cited_as": "30"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__Section_51",
+      "properties": {
+        "relation_type": "interpreted",
+        "act": "Copyright Act 1957",
+        "cited_as": "51"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__Section_52",
+      "properties": {
+        "relation_type": "interpreted",
+        "act": "Copyright Act 1957",
+        "cited_as": "52"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__Clause_9_1_vi",
+      "properties": {
+        "relation_type": "applied",
+        "act": "Income-tax Act 1961",
+        "cited_as": "9(1)(vi)"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__Section_195",
+      "properties": {
+        "relation_type": "applied",
+        "act": "Income-tax Act 1961",
+        "cited_as": "195"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__Section_201",
+      "properties": {
+        "relation_type": "applied",
+        "act": "Income-tax Act 1961",
+        "cited_as": "201"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__Section_90",
+      "properties": {
+        "relation_type": "applied",
+        "act": "Income-tax Act 1961",
+        "cited_as": "90"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__SubSection_2_19AA",
+      "properties": {
+        "relation_type": "referred",
+        "act": "Income-tax Act 1961",
+        "cited_as": "2(19AA)"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__Clause_40_a_ia",
+      "properties": {
+        "relation_type": "referred",
+        "act": "Income-tax Act 1961",
+        "cited_as": "40(a)(ia)"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "ITA1961__Section_65A",
+      "properties": {
+        "relation_type": "referred",
+        "act": "Copyright Act 1957",
+        "cited_as": "65A"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {
+        "relation_type": "raises_issue"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {
+        "relation_type": "raises_issue"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {
+        "relation_type": "raises_issue"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {
+        "relation_type": "raises_issue"
+      }
+    },
+    {
+      "type": "INTERPRETS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {
+        "relation_type": "raises_issue"
+      }
+    },
+    {
+      "type": "HAS_CONCLUSION",
+      "source": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Conclusion_1_to_Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_CONCLUSION",
+      "source": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Conclusion_2_to_Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_CONCLUSION",
+      "source": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Conclusion_3_to_Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_CONCLUSION",
+      "source": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Conclusion_4_to_Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_CONCLUSION",
+      "source": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Conclusion_5_to_Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_6_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_6_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_6_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_6_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_6_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_7_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_7_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_7_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_7_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_7_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_8_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_8_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_8_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_8_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_assessee_8_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_6_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_6_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_6_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_6_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_6_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_7_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_7_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_7_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_7_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_7_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_8_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_8_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_8_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_8_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_ARGUMENT",
+      "source": "Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "Argument_revenue_8_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    },
+    {
+      "type": "FOLLOWS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_GE_India_Technology_Centre_P_Ltd_v_CIT_2010_10_SCC_29",
+      "properties": {}
+    },
+    {
+      "type": "FOLLOWS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Union_of_India_v_Azadi_Bachao_Andolan_2004_10_SCC_1",
+      "properties": {}
+    },
+    {
+      "type": "FOLLOWS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Transmission_Corporation_of_A_P_Ltd_v_CIT_1999_7_SCC_266",
+      "properties": {}
+    },
+    {
+      "type": "FOLLOWS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Tata_Consultancy_Services_v_State_of_A_P_2005_1_SCC_308",
+      "properties": {}
+    },
+    {
+      "type": "FOLLOWS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_State_Bank_of_India_v_Collector_of_Customs_2000_1_SCC_727",
+      "properties": {}
+    },
+    {
+      "type": "FOLLOWS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Sundaram_Finance_Ltd_v_State_of_Kerala_1966_2_SCR_828",
+      "properties": {}
+    },
+    {
+      "type": "FOLLOWS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_State_of_Madras_v_Swastik_Tobacco_Factory_1966_3_SCR_79",
+      "properties": {}
+    },
+    {
+      "type": "FOLLOWS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Vodafone_International_Holdings_BV_v_Union_of_India_2012_6_S",
+      "properties": {}
+    },
+    {
+      "type": "FOLLOWS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Vijay_Ship_Breaking_Corporation_v_CIT_2010_10_SCC_39",
+      "properties": {}
+    },
+    {
+      "type": "FOLLOWS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Director_of_Income_Tax_v_A_P_Moller_Maersk_AS_2017_5_SCC_651",
+      "properties": {}
+    },
+    {
+      "type": "FOLLOWS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Formula_One_World_Championship_Ltd_v_CIT_2017_15_SCC_602",
+      "properties": {}
+    },
+    {
+      "type": "FOLLOWS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_CIT_v_E_Funds_IT_Solution_Inc_2018_13_SCC_294",
+      "properties": {}
+    },
+    {
+      "type": "FOLLOWS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Arjun_Panditrao_Khotkar_v_Kailash_Kushanrao_Gorantyal_2020_7",
+      "properties": {}
+    },
+    {
+      "type": "FOLLOWS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Ram_Jethmalani_v_Union_of_India_2011_8_SCC_1",
+      "properties": {}
+    },
+    {
+      "type": "FOLLOWS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Director_of_Income_Tax_v_New_Skies_Satellite_BV_2016_382_ITR",
+      "properties": {}
+    },
+    {
+      "type": "FOLLOWS",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Commissioner_of_Customs_v_G_M_Exports_2016_1_SCC_91",
+      "properties": {}
+    },
+    {
+      "type": "DISTINGUISHES_CASE",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_PILCOM_v_CIT_West_Bengal_VII_2020_SCC_Online_SC_426_distingu",
+      "properties": {}
+    },
+    {
+      "type": "RELIES_ON_CASE",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Dassault_Systems_K_K_In_Re_2010_322_ITR_125_AAR",
+      "properties": {}
+    },
+    {
+      "type": "RELIES_ON_CASE",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Geoquest_Systems_B_V_Gevers_Deynootweg_In_Re_2010_327_ITR_1_",
+      "properties": {}
+    },
+    {
+      "type": "RELIES_ON_CASE",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Citrix_Systems_Asia_Pacific_Ptyl_Ltd_In_Re_2012_343_ITR_1_AA",
+      "properties": {}
+    },
+    {
+      "type": "RELIES_ON_CASE",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_CIT_v_Samsung_Electronics_Co_Ltd_2012_345_ITR_494",
+      "properties": {}
+    },
+    {
+      "type": "RELIES_ON_CASE",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_CIT_v_Synopsis_International_Old_Ltd_ITA_Nos_11_15_2008_Karn",
+      "properties": {}
+    },
+    {
+      "type": "RELIES_ON_CASE",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Director_of_Income_Tax_v_Ericsson_A_B_2012_343_ITR_470",
+      "properties": {}
+    },
+    {
+      "type": "RELIES_ON_CASE",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Director_of_Income_Tax_v_Nokia_Networks_OY_2013_358_ITR_259",
+      "properties": {}
+    },
+    {
+      "type": "RELIES_ON_CASE",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Director_of_Income_Tax_v_Infrasoft_Ltd_2014_264_CTR_329",
+      "properties": {}
+    },
+    {
+      "type": "RELIES_ON_CASE",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Motorola_Inc_v_Deputy_CIT_Special_Bench_ITAT_Delhi_22_06_200",
+      "properties": {}
+    },
+    {
+      "type": "RELIES_ON_CASE",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_CIT_v_ZTE_Corporation_2017_392_ITR_80",
+      "properties": {}
+    },
+    {
+      "type": "RELIES_ON_CASE",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_CIT_v_DCM_Limited_ITA_Nos_87_89_1992_Delhi_High_Court",
+      "properties": {}
+    },
+    {
+      "type": "RELIES_ON_CASE",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Carborandum_Co_v_CIT_1977_2_SCC_862",
+      "properties": {}
+    },
+    {
+      "type": "RELIES_ON_CASE",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Warner_Bros_Entertainment_Inc_v_Santosh_V_G_2009_SCC_OnLine_",
+      "properties": {}
+    },
+    {
+      "type": "RELIES_ON_CASE",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_John_Wiley_Sons_Inc_v_Prabhat_Chander_Kumar_Jain_2010_SCC_On",
+      "properties": {}
+    },
+    {
+      "type": "RELIES_ON_CASE",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_UsedSoft_GmbH_v_Oracle_International_Corp_Case_C_128_11_ECJ",
+      "properties": {}
+    },
+    {
+      "type": "RELIES_ON_CASE",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_Vernor_v_Autodesk_Inc_621_F_3d_1102_9th_Cir_2010",
+      "properties": {}
+    },
+    {
+      "type": "OVERRULES",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseLaw_CIT_v_Samsung_Electronics_Co_Ltd_2012_345_ITR_494_overruled_",
+      "properties": {}
+    },
+    {
+      "type": "INSTANTIATES_CONCEPT",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "LegalConcept_1_Copyright_as_defined_in_section_14_of_Copyright_Act_is_exclu",
+      "properties": {}
+    },
+    {
+      "type": "INSTANTIATES_CONCEPT",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "LegalConcept_2_Royalty_under_DTAA_and_section_9_1_vi_requires_transfer_of_u",
+      "properties": {}
+    },
+    {
+      "type": "INSTANTIATES_CONCEPT",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "LegalConcept_3_Distinction_between_copyright_exclusive_rights_and_copyright",
+      "properties": {}
+    },
+    {
+      "type": "INSTANTIATES_CONCEPT",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "LegalConcept_4_Section_195_TDS_obligation_is_inseparably_linked_with_chargi",
+      "properties": {}
+    },
+    {
+      "type": "INSTANTIATES_CONCEPT",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "LegalConcept_5_DTAA_provisions_particularly_Article_12_s_definition_of_roya",
+      "properties": {}
+    },
+    {
+      "type": "INSTANTIATES_CONCEPT",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "LegalConcept_6_OECD_Commentary_while_not_binding_provides_important_interpr",
+      "properties": {}
+    },
+    {
+      "type": "INSTANTIATES_CONCEPT",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "LegalConcept_7_Doctrine_of_first_sale_principle_of_exhaustion_is_statutory_",
+      "properties": {}
+    },
+    {
+      "type": "INSTANTIATES_CONCEPT",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "LegalConcept_8_Maxim_lex_non_cogit_ad_impossibilia_law_does_not_compel_impo",
+      "properties": {}
+    },
+    {
+      "type": "INSTANTIATES_CONCEPT",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "LegalConcept_9_Rights_granted_under_EULA_for_use_of_computer_software_are_s",
+      "properties": {}
+    },
+    {
+      "type": "INSTANTIATES_CONCEPT",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "LegalConcept_10_Technology_considerations_matter_in_copyright_analysis_What_",
+      "properties": {}
+    },
+    {
+      "type": "HAS_CITATION",
+      "source": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "target": "CaseCitation_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+      "properties": {}
+    }
+  ]
+}

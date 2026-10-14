@@ -1,0 +1,322 @@
+[
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__1",
+    "text": "Multiple categories of cases involved: (1) End-users purchasing shrink-wrapped software directly from foreign suppliers; (2) Indian distributors purchasing from foreign suppliers and reselling to Indian end-users; (3) Foreign distributors selling to Indian distributors/end-users; (4) Software embedded in hardware sold as integrated units. The key fact common to all categories is that under the EULAs and distribution agreements, no copyright or copyright rights were transferred to the distributors or end-users—only a limited right to use the software was granted, with no right to reproduce, sublicense, or transfer. The distributors had no right to use the software themselves and merely resold sealed copies to end-users for profit.",
+    "short_title": "Facts",
+    "chunk_type": "case_facts",
+    "element_type": "case_facts",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Facts",
+    "entity_id": "CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__2",
+    "text": "The payments do not constitute royalty. Royalty requires transfer of all or any rights in copyright (including granting of licence in which copyright interest passes). Under the EULAs/distribution agreements in these cases, only right to use software is granted; no copyright rights are transferred.. Article 12(3) of DTAA defines royalties as payments for 'use of, or the right to use, any copyright' of literary work. Section 9(1)(vi) Explanation 2(v) defines royalty as consideration for 'transfer of all or any rights (including granting of licence) in respect of any copyright.' Copyright is exclusive right under section 14 of Copyright Act to do acts such as reproduce, issue copies, translate, adapt. Ownership of copyright is distinct from ownership of physical material (copyrighted article). Purchaser of book/CD becomes owner of physical article but not copyright. Here, distributors received no rights to reproduce, sublicense, or transfer software—only right to use shrink-wrapped sealed copies. No parting with copyright occurred. Courts must distinguish between copyright (exclusive right to reproduce, adapt, etc.) and copyrighted article (physical manifestation). EULA restrictions and non-exclusive, non-transferable character confirm no copyright transfer. Mere copying necessary for operation under section 52(1)(aa) of Copyright Act does not constitute infringement and thus does not represent transfer of copyright. Therefore, transaction amounts to sale of goods (copyrighted article), not royalty.",
+    "short_title": "Finding on 'Whether payments for sale and distribution of shrink-wrapped computer software constitute royalty under Article 12 of DTAA and section 9(1)(vi) of Income Tax Act' in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_finding",
+    "element_type": "case_finding",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Finding on 'Whether payments for sale and distribution of shrink-wrapped computer software constitute royalty under Article 12 of DTAA and section 9(1)(vi) of Income Tax Act' in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Conclusion_1_to_Issue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__3",
+    "text": "No obligation to deduct TDS arose. Section 195(1) requires deduction only on 'sums chargeable under the provisions of this Act.' Since payments were not for royalty and did not give rise to income taxable in India under section 9, no deduction was required.. Section 195(1) is inextricably linked with charging provision in section 9(1)(vi) read with section 4. TDS obligation exists only if non-resident is liable to pay tax under charging provision. Words 'chargeable under the provisions of [the] Act' in section 195(1) are critical—tax deductible only from income actually chargeable under sections 4, 5, and 9. GE Technology case correctly held that moment remittance occurs does not automatically create TDS obligation; income must be chargeable. Since payments here were for goods (copyrighted articles) and not royalty, no income chargeable in India arose under section 9(1)(vi). Consequence: no TDS deduction obligation. This interpretation accords with principle of proportionality in section 195(2)—deduction limited to 'appropriate proportion' of chargeable sum. Charging and machinery provisions must work in tandem.",
+    "short_title": "Finding on 'Whether resident Indian persons (end-users and distributors) were obligated to deduct TDS under section 195 on payments to non-resident foreign software suppliers' in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_finding",
+    "element_type": "case_finding",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Finding on 'Whether resident Indian persons (end-users and distributors) were obligated to deduct TDS under section 195 on payments to non-resident foreign software suppliers' in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Conclusion_2_to_Issue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__4",
+    "text": "No copyright is transferred. EULA licence is not licence under section 30 of Copyright Act. It imposes restrictive conditions for use but does not grant interest in any of the exclusive rights contained in section 14(a) and (b) of Copyright Act.. Section 30 of Copyright Act permits owner to grant interest in rights by licence. Such licence transfers interest in exclusive rights (reproduce, issue copies, adapt, etc.). EULA licence differs fundamentally—it merely permits use of product with restrictions. Parties to EULA expressly state copyright remains with owner; licensee gets no right to reproduce beyond what necessary for operation. Section 52(1)(aa) of Copyright Act recognizes that copying/adaptation necessary for utilization is not infringement. This indicates such copying does not represent transfer of copyright right. Difference between 'right to use' copyrighted product and 'right to use copyright' in product is crucial. Former does not transfer copyright; latter does. Under EULAs here, only former transfer occurs. Non-exclusive, non-transferable character shows licensee never divests licensor of copyright rights—licensor retains full control. Therefore, EULA is not licence in terms of Copyright Act section 30.",
+    "short_title": "Finding on 'Whether copyright is transferred when non-exclusive, non-transferable licence is granted to use computer software under EULA' in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_finding",
+    "element_type": "case_finding",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Finding on 'Whether copyright is transferred when non-exclusive, non-transferable licence is granted to use computer software under EULA' in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Conclusion_3_to_Issue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__5",
+    "text": "Doctrine of first sale/principle of exhaustion applies to computer software under section 14(b)(ii) of Copyright Act as amended in 1999. After copyright owner's first sale of copy of software, owner's distribution right is exhausted in relation to that copy.. Prior to 1999 Amendment, section 14(b)(ii) read: 'to sell or give on hire...any copy of computer programme, regardless of whether such copy has been sold or given on hire on earlier occasions.' 1999 Amendment deleted phrase 'regardless of whether such copy has been sold on earlier occasions.' This deletion is statutory recognition of doctrine of exhaustion. Explanation to section 14 states: 'a copy which has been sold once shall be deemed to be a copy already in circulation.' Copyright owner's distribution right extends only to copies not already in circulation. Once first sale by owner or with owner's consent, that right is exhausted for subsequent sales of same copy. In these cases, shrink-wrapped copies were put in circulation by foreign suppliers, then distributed by Indian distributors to end-users. These were copies 'already in circulation.' Therefore, distributor's sale/resale did not violate copyright owner's distribution right under section 14(b)(ii). This supports conclusion that distribution is of goods, not transfer of copyright.",
+    "short_title": "Finding on 'Whether doctrine of first sale/principle of exhaustion applies to computer software distributed under distribution agreements and EULAs' in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_finding",
+    "element_type": "case_finding",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Finding on 'Whether doctrine of first sale/principle of exhaustion applies to computer software distributed under distribution agreements and EULAs' in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Conclusion_4_to_Issue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__6",
+    "text": "Explanation 4 cannot apply to assessment years prior to 2012 when provision was not on statute book. Maxim lex non cogit ad impossibilia applies—law does not compel impossible acts. Person responsible for TDS deduction cannot be expected to apply definition that did not factually exist at time of payment/deduction.. Finance Act 2012 inserted Explanation 4 with retrospective effect from 1.6.1976, clarifying that transfer of rights for 'use or right to use' computer software constitutes royalty. However, before Explanation 4 was enacted, this expanded definition did not exist. Similarly, Explanation 3 (defining 'computer software') was first introduced in 1991, much after 1976. Moreover, technology referenced (satellite transmission, optic fibre) was not regulated by Parliament until Cable TV Regulation Act, 1995. For assessment years in question (prior to 2012), expanded definition did not exist. Courts have recognized that person cannot be held liable for non-compliance with provision not in force at relevant time. High Court of Bombay applied maxim in CIT v. NGC Networks, holding parties cannot perform impossible act of complying with provision introduced later by retrospective amendment. Therefore, assessees cannot be held in default for not deducting tax on definition of royalty that did not exist at time of payment.",
+    "short_title": "Finding on 'Applicability of retrospective amendment (Explanation 4 to section 9(1)(vi)) to assessment years prior to 2012' in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_finding",
+    "element_type": "case_finding",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Finding on 'Applicability of retrospective amendment (Explanation 4 to section 9(1)(vi)) to assessment years prior to 2012' in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Conclusion_5_to_Issue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__7",
+    "text": "Payment is for purchase of computer software as goods/copyrighted articles, not for copyright itself",
+    "short_title": "Assessee argument 1 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_argument",
+    "element_type": "case_argument",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Assessee argument 1 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Argument_assessee_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__8",
+    "text": "Definition of royalty under Article 12 of DTAA is narrower than domestic law; it requires transfer of 'use of or right to use' copyright, not mere sale of copyrighted product",
+    "short_title": "Assessee argument 2 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_argument",
+    "element_type": "case_argument",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Assessee argument 2 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Argument_assessee_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__9",
+    "text": "No copyright rights are transferred under EULAs/distribution agreements; only limited licence to use is granted, which is not a licence under section 30 of Copyright Act",
+    "short_title": "Assessee argument 3 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_argument",
+    "element_type": "case_argument",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Assessee argument 3 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Argument_assessee_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__10",
+    "text": "Doctrine of first sale/principle of exhaustion applies; copyright distribution right is exhausted after first sale as per section 14(b)(ii) of Copyright Act post 1999 Amendment",
+    "short_title": "Assessee argument 4 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_argument",
+    "element_type": "case_argument",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Assessee argument 4 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Argument_assessee_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__11",
+    "text": "Copying software to hard disk is incidental to use and does not constitute transfer of reproduction right; such copying is permitted under section 52(1)(aa) of Copyright Act",
+    "short_title": "Assessee argument 5 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_argument",
+    "element_type": "case_argument",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Assessee argument 5 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Argument_assessee_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__12",
+    "text": "Explanation 4 to section 9(1)(vi) cannot apply retrospectively to assessment years prior to 2012 when definition did not factually exist; law does not compel impossible acts",
+    "short_title": "Assessee argument 6 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_argument",
+    "element_type": "case_argument",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Assessee argument 6 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Argument_assessee_6_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__13",
+    "text": "DTAAs prevail over domestic law to extent more beneficial to assessee under section 90(2) of Income Tax Act",
+    "short_title": "Assessee argument 7 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_argument",
+    "element_type": "case_argument",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Assessee argument 7 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Argument_assessee_7_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__14",
+    "text": "OECD Commentary and established distinction between copyright and copyrighted article supports assessee's position",
+    "short_title": "Assessee argument 8 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_argument",
+    "element_type": "case_argument",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Assessee argument 8 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Argument_assessee_8_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__15",
+    "text": "Payment for use of computer software by granting licence constitutes royalty under both section 9(1)(vi) and Article 12 of DTAA",
+    "short_title": "Revenue argument 1 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_argument",
+    "element_type": "case_argument",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Revenue argument 1 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Argument_revenue_1_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__16",
+    "text": "Copying software to hard disk and making back-up copies amounts to transfer of copyright reproduction right",
+    "short_title": "Revenue argument 2 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_argument",
+    "element_type": "case_argument",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Revenue argument 2 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Argument_revenue_2_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__17",
+    "text": "Explanation 4 to section 9(1)(vi) is clarificatory of position that always existed from 1.6.1976; CBDT Circular 152/1974 and Finance Minister's statement (1990) support this",
+    "short_title": "Revenue argument 3 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_argument",
+    "element_type": "case_argument",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Revenue argument 3 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Argument_revenue_3_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__18",
+    "text": "Section 195 TDS obligation arises on mere remittance without reference to chargeability of tax by non-resident; DTAA does not apply to TDS provisions",
+    "short_title": "Revenue argument 4 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_argument",
+    "element_type": "case_argument",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Revenue argument 4 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Argument_revenue_4_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__19",
+    "text": "Distinction between copyright and copyrighted article is illusory; software cannot be divorced from embedded copyright",
+    "short_title": "Revenue argument 5 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_argument",
+    "element_type": "case_argument",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Revenue argument 5 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Argument_revenue_5_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__20",
+    "text": "Storage of program in computer constitutes copyright infringement unless licensed; licence therefore transfers copyright rights",
+    "short_title": "Revenue argument 6 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_argument",
+    "element_type": "case_argument",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Revenue argument 6 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Argument_revenue_6_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__21",
+    "text": "Section 14(b)(ii) of Copyright Act gives copyright owner right to sell any copy regardless of previous sales; this supports transfer of copyright rights",
+    "short_title": "Revenue argument 7 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_argument",
+    "element_type": "case_argument",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Revenue argument 7 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Argument_revenue_7_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__22",
+    "text": "PILCOM and Section 194E precedents show TDS obligation exists irrespective of ultimate tax chargeability",
+    "short_title": "Revenue argument 8 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "chunk_type": "case_argument",
+    "element_type": "case_argument",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Revenue argument 8 in Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1",
+    "entity_id": "Argument_revenue_8_to_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__23",
+    "text": "Copyright (as defined in section 14 of Copyright Act) is exclusive right to do certain acts with work; it is distinct from and separate from ownership of physical material in which copyrighted work is embodied. Purchaser of copyrighted article acquires ownership of physical object but not copyright itself.",
+    "short_title": "Legal principle",
+    "chunk_type": "legal_principle",
+    "element_type": "legal_principle",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Legal principle",
+    "entity_id": "LegalConcept_1_Copyright_as_defined_in_section_14_of_Copyright_Act_is_exclu",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__24",
+    "text": "Royalty under DTAA and section 9(1)(vi) requires transfer of 'use of, or the right to use, any copyright' or transfer of 'all or any rights (including granting of licence) in respect of copyright.' Mere sale of copyrighted article/product does not constitute transfer of copyright or copyright rights.",
+    "short_title": "Legal principle",
+    "chunk_type": "legal_principle",
+    "element_type": "legal_principle",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Legal principle",
+    "entity_id": "LegalConcept_2_Royalty_under_DTAA_and_section_9_1_vi_requires_transfer_of_u",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__25",
+    "text": "Distinction between 'copyright' (exclusive rights) and 'copyrighted article' (physical manifestation) is crucial in determining whether payment is for royalty or goods. This distinction must guide interpretation of tax provisions.",
+    "short_title": "Legal principle",
+    "chunk_type": "legal_principle",
+    "element_type": "legal_principle",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Legal principle",
+    "entity_id": "LegalConcept_3_Distinction_between_copyright_exclusive_rights_and_copyright",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__26",
+    "text": "Section 195 TDS obligation is inseparably linked with charging provision under section 9(1)(vi) read with section 4. TDS is deductible only if non-resident is liable to pay tax as assessee under charging provision. Mere remittance does not trigger TDS obligation.",
+    "short_title": "Legal principle",
+    "chunk_type": "legal_principle",
+    "element_type": "legal_principle",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Legal principle",
+    "entity_id": "LegalConcept_4_Section_195_TDS_obligation_is_inseparably_linked_with_chargi",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__27",
+    "text": "DTAA provisions (particularly Article 12's definition of 'royalties') are more specific and operate with greater precision than domestic law provisions on same subject. Where DTAA definition is narrower/different from domestic law, DTAA definition prevails under section 90(2) of Income Tax Act.",
+    "short_title": "Legal principle",
+    "chunk_type": "legal_principle",
+    "element_type": "legal_principle",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Legal principle",
+    "entity_id": "LegalConcept_5_DTAA_provisions_particularly_Article_12_s_definition_of_roya",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__28",
+    "text": "OECD Commentary, while not binding, provides important interpretive guidance for DTAA provisions as most India DTAAs are based on OECD Model. Courts may refer to OECD Commentary as supplementary means of interpretation under Vienna Convention principles.",
+    "short_title": "Legal principle",
+    "chunk_type": "legal_principle",
+    "element_type": "legal_principle",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Legal principle",
+    "entity_id": "LegalConcept_6_OECD_Commentary_while_not_binding_provides_important_interpr",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__29",
+    "text": "Doctrine of first sale/principle of exhaustion is statutory under section 14(b)(ii) of Copyright Act as amended in 1999. Copyright owner's distribution right extends only to copies not already in circulation. Once first authorized sale, right exhausts for that copy.",
+    "short_title": "Legal principle",
+    "chunk_type": "legal_principle",
+    "element_type": "legal_principle",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Legal principle",
+    "entity_id": "LegalConcept_7_Doctrine_of_first_sale_principle_of_exhaustion_is_statutory_",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__30",
+    "text": "Maxim 'lex non cogit ad impossibilia' (law does not compel impossible acts) applies to tax law. Person cannot be held liable for not complying with statutory provision that did not exist at time of required action.",
+    "short_title": "Legal principle",
+    "chunk_type": "legal_principle",
+    "element_type": "legal_principle",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Legal principle",
+    "entity_id": "LegalConcept_8_Maxim_lex_non_cogit_ad_impossibilia_law_does_not_compel_impo",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__31",
+    "text": "Rights granted under EULA for use of computer software are specific to nature of computer programs (copying necessary for operation, back-up copies) and do not represent transfer of copyright rights mentioned in section 14 of Copyright Act.",
+    "short_title": "Legal principle",
+    "chunk_type": "legal_principle",
+    "element_type": "legal_principle",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Legal principle",
+    "entity_id": "LegalConcept_9_Rights_granted_under_EULA_for_use_of_computer_software_are_s",
+    "file_type": "caselaw_pdf"
+  },
+  {
+    "chunk_id": "caselaw_CaseLaw_Engineering_Analysis_Centre_of_Excellence_Private_Limited_v__32",
+    "text": "Technology considerations matter in copyright analysis. What constitutes infringement or authorized copying depends on nature of software product, restrictions in licence, and statutory protections like section 52(1)(aa) of Copyright Act.",
+    "short_title": "Legal principle",
+    "chunk_type": "legal_principle",
+    "element_type": "legal_principle",
+    "full_citation": "Engineering Analysis Centre of Excellence Private Limited v. The Commissioner of Income Tax, (2021) 2 SCC 1 — Legal principle",
+    "entity_id": "LegalConcept_10_Technology_considerations_matter_in_copyright_analysis_What_",
+    "file_type": "caselaw_pdf"
+  }
+]

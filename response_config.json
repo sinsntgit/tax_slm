@@ -1,0 +1,12 @@
+{
+  "sections": [
+    "Intent of question, cite topic",
+    "Response to question",
+    "Provide citations to the response",
+    "Show response score",
+    "Show nodes referred in KG",
+    "Summarize"
+  ],
+  "instructions": "use legal tone",
+  "tone": "concise, legal-language"
+}

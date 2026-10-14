@@ -1,0 +1,19 @@
+# secrets / local config
+.env
+*.env.local
+# python
+__pycache__/
+*.pyc
+venv/
+.venv/
+.pytest_cache/
+# runtime data (never committed - corpus, uploads, graphs, vector stores, client files)
+data/
+!tests/fixtures/**
+# client deliverables
+kpmg_tax_slm_documents_artifacts/
+# editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

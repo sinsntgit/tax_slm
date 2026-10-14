@@ -1,0 +1,313 @@
+/* Tax Research KG — component stylesheet, matched to the approved design
+   reference (the KPMG-styled prototype screenshots: white rounded cards
+   with soft shadows, colored card-top-border accents, filled rounded-pill
+   buttons/chips/nav, Cambria/Georgia serif display headings over a
+   Segoe-UI-style body face). This intentionally does NOT use the
+   "Industry" design system's square/hairline/blueprint treatment - that
+   was superseded by explicit user instruction to match these screenshots
+   exactly. Kept the same CSS custom-property names (--color-*, --space-*,
+   --radius-*) as before so index.html/app.css's class usage didn't need
+   to change - only what those tokens/classes resolve to visually. */
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700&family=Barlow+Condensed:wght@400;600&display=swap');
+/* 2026-09-05: NEW - Open Sans, per explicit request to move the whole UI
+   (including headings and popups/modals) onto Open Sans/Aptos. Aptos itself
+   is a Microsoft-proprietary font (ships with Office/Windows 11, not
+   distributable via Google Fonts or any CDN) - it's listed FIRST in
+   --font-body/--font-heading below so a machine that already has it
+   installed (most current Windows/Office installs) renders with the real
+   Aptos, while everyone else falls back to this hosted Open Sans, which is
+   Aptos's closest freely-hostable equivalent (similar humanist-sans
+   proportions/weight). Weights 400/500/600/700 cover every font-weight this
+   stylesheet/app.css actually uses (checked: 400/500/600/700/800 appear -
+   800 falls back to the nearest loaded weight, 700, which browsers do
+   automatically via font-weight matching).*/
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --color-bg: #F7F9FC;
+  --color-surface: #FFFFFF;
+  --color-text: #1A1A2E;
+  --color-accent: #0091DA;
+  --color-accent-2: #00338D;
+  --color-divider: #D8DEE9;
+
+  /* Tonal ramps — hand-tuned steps between KPMG's light backgrounds and its
+     two brand blues, so the same step number reads as similar "weight"
+     across the accent/accent-2/neutral ramps (matches how the rest of this
+     file consumes -100 as a tint and -900 as a deep/pressed step). */
+  --color-neutral-100: #FAFBFD;
+  --color-neutral-200: #EEF1F7;
+  --color-neutral-300: #E3E7EF;
+  --color-neutral-400: #D8DEE9;
+  --color-neutral-500: #B9C2D6;
+  --color-neutral-600: #8A97B0;
+  --color-neutral-700: #556080;
+  --color-neutral-800: #33395A;
+  --color-neutral-900: #1A1A2E;
+
+  --color-accent-100: #EEF4FF;
+  --color-accent-200: #E8F4FC;
+  --color-accent-300: #B3D9EF;
+  --color-accent-400: #6DBBE8;
+  --color-accent-500: #2CA3E0;
+  --color-accent-600: #0091DA;
+  --color-accent-700: #0074B0;
+  --color-accent-800: #005886;
+  --color-accent-900: #003C5C;
+
+  --color-accent-2-100: #E8EDFA;
+  --color-accent-2-200: #C8D4F0;
+  --color-accent-2-300: #A3B4E3;
+  --color-accent-2-400: #6E85C7;
+  --color-accent-2-500: #3D5AA8;
+  --color-accent-2-600: #00338D;
+  --color-accent-2-700: #002A72;
+  --color-accent-2-800: #002057;
+  --color-accent-2-900: #00163C;
+
+  /* Semantic (danger/warning/success) tokens are defined in app.css (which
+     also carries the -border variants) - not duplicated here to avoid two
+     sources of truth for the same names. */
+
+  /* 2026-09-05: CHANGED - per explicit request, the whole UI (headings, body
+     text, buttons, popups/modals) now uses Open Sans/Aptos instead of the
+     prior Cambria/Georgia-serif-headings + Segoe-UI-body split described
+     below. Aptos listed first (real Aptos renders on machines that have it -
+     see the @import comment above for why it can't be hosted); Open Sans
+     second as the actual loaded web font; System sans stack after that as a
+     last-resort fallback if even the Google Fonts request fails (offline,
+     blocked, etc). --font-heading and --font-body are now IDENTICAL - kept
+     as two separate variables (rather than collapsing to one) purely so
+     every existing `var(--font-heading)`/`var(--font-body)` reference across
+     app.css/industry.css/index.html keeps working with no call-site changes,
+     not because they still differ.
+     ORIGINAL rationale (superseded): "Headings: Cambria/Georgia serif per
+     the reference screenshots (the H1 'Dashboard'/'Ask a tax question' etc.
+     are a serif display face, not the sans Barlow Condensed the Industry
+     system specified). Body/UI text stays a clean system sans (Segoe
+     UI-style), matching the screenshots' nav/labels/body copy." */
+  --font-heading: Aptos, "Open Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-heading-weight: 700;
+  --font-body: Aptos, "Open Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  --space-1: 3.4px;
+  --space-2: 6.8px;
+  --space-3: 10.2px;
+  --space-4: 13.6px;
+  --space-6: 20.4px;
+  --space-8: 27.2px;
+
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-pill: 999px;
+
+  /* Elevation — soft, subtle card shadows per the screenshots (white cards
+     lifted gently off the light-blue-grey page background). */
+  --shadow-sm: 0 1px 2px rgba(26,26,46,0.06);
+  --shadow-md: 0 2px 10px rgba(26,26,46,0.08);
+  --shadow-lg: 0 12px 32px rgba(26,26,46,0.16);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: var(--font-heading-weight); }
+
+/* .blueprint / .corner / .duotone are kept as harmless no-op stubs (some
+   index.html markup still carries these classes) - the square/hairline/
+   registration-mark treatment they implemented is intentionally NOT used
+   in this theme; cards get their look from the .card rules further down. */
+.blueprint { position: relative; }
+.blueprint > .corner { display: none; }
+.duotone { position: relative; overflow: hidden; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Components — built with the tokens above. Plain CSS
+   on plain HTML: no JavaScript, no build step. Each class is documented in
+   readme.md and demonstrated in foundations/ and components/.
+   ══════════════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; font-size: 15px; line-height: 1.55; font-weight: 400; }
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  line-height: 1.12; letter-spacing: -0.015em; margin: 0 0 var(--space-2);
+}
+h1 { font-size: 42px; }
+h2 { font-size: 32px; }
+h3 { font-size: 25px; }
+h4 { font-size: 20px; }
+h5 { font-size: 16px; }
+h6 { font-size: 13px; }
+h6 { letter-spacing: 0.08em; text-transform: uppercase; }
+p { margin: 0 0 var(--space-3); }
+a { color: var(--color-accent); text-underline-offset: 3px; }
+img { display: block; max-width: 100%; }
+figure { margin: 0; }
+figcaption {
+  font-size: 11px; margin-top: var(--space-1);
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+}
+.text-muted { color: color-mix(in srgb, var(--color-text) 55%, transparent); }
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+::selection { background: color-mix(in srgb, var(--color-accent) 30%, transparent); }
+
+/* — rules — */
+.hr {
+  height: 1px; border: 0; margin: var(--space-4) 0;
+  background: var(--color-divider);
+}
+
+/* — buttons — */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  cursor: pointer; text-decoration: none;
+  font-family: var(--font-body); font-weight: 600;
+  font-size: 13px; line-height: 1.2; color: var(--color-text);
+  background: var(--color-surface); border: 1px solid var(--color-divider);
+  padding: 9px 16px;
+  border-radius: var(--radius-md);
+  transition: background 0.12s, border-color 0.12s, box-shadow 0.12s;
+}
+.btn svg { display: block; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary {
+  background: var(--color-accent-2); color: #fff; border-color: var(--color-accent-2);
+  box-shadow: 0 1px 3px rgba(0,51,141,0.25);
+}
+.btn-primary:hover { background: var(--color-accent-2-700); border-color: var(--color-accent-2-700); }
+.btn-primary:active { background: var(--color-accent-2-800); }
+.btn-secondary { background: var(--color-surface); border-color: var(--color-divider); color: var(--color-text); }
+.btn-secondary:hover { background: var(--color-neutral-100); border-color: var(--color-neutral-500); }
+.btn-secondary:active { background: var(--color-neutral-200); }
+.btn-ghost { color: var(--color-accent-2); background: transparent; border-color: transparent; padding-inline: var(--space-2); }
+.btn-ghost:hover { background: var(--color-accent-100); }
+.btn-ghost:active { background: var(--color-accent-200); }
+.btn-icon { width: 34px; height: 34px; padding: 0; border-radius: var(--radius-md); }
+.btn-block { width: 100%; margin-top: var(--space-2); }
+
+/* — forms — */
+.field > label {
+  display: block; font-size: 12px; margin-bottom: 5px; font-weight: 600;
+  color: var(--color-neutral-700);
+}
+.input {
+  width: 100%; min-height: 40px; padding: 8px 12px; font: inherit;
+  font-size: 14px; color: var(--color-text); caret-color: var(--color-accent-2);
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider); border-radius: var(--radius-md);
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+.input:hover { border-color: var(--color-neutral-500); }
+.input:focus-visible { border-color: var(--color-accent); outline-offset: 0; box-shadow: 0 0 0 3px var(--color-accent-100); }
+textarea.input { min-height: 90px; resize: vertical; }
+.radio { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
+.radio input, .seg-opt input {
+  position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;
+}
+.radio .dot {
+  width: 16px; height: 16px; flex: none; border-radius: 50%;
+  border: 1.5px solid var(--color-divider);
+}
+.radio:hover .dot { border-color: var(--color-accent); }
+.radio input:checked + .dot {
+  border-color: var(--color-accent); background: var(--color-accent);
+  box-shadow: inset 0 0 0 4px var(--color-bg);
+}
+.radio input:focus-visible + .dot { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.seg {
+  display: inline-flex; overflow: hidden;
+  border: 1px solid var(--color-divider); border-radius: var(--radius-pill);
+  background: var(--color-surface);
+}
+.seg-opt {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px; font-size: 12.5px; font-weight: 600; cursor: pointer;
+}
+.seg-opt + .seg-opt { border-left: 1px solid var(--color-divider); }
+.seg-opt:has(input:checked) { background: var(--color-accent-2); color: #fff; }
+.seg-opt:not(:has(input:checked)):hover { background: var(--color-neutral-100); }
+.seg-opt:has(input:focus-visible) { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+
+/* — cards — */
+.card {
+  display: flex; flex-direction: column; gap: var(--space-2);
+  padding: var(--space-4); border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  box-shadow: var(--shadow-sm);
+}
+.card-kicker { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); }
+.card-title {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 17px; line-height: 1.2; color: var(--color-accent-2);
+}
+.card-body { margin: 0; font-size: 13px; opacity: 0.85; flex: 1; }
+.card-meta {
+  display: flex; align-items: center; gap: 6px; font-size: 11px;
+  color: var(--color-neutral-600);
+}
+.elev-sm { box-shadow: var(--shadow-sm); }
+.elev-md { box-shadow: var(--shadow-md); }
+.elev-lg { box-shadow: var(--shadow-lg); }
+
+/* — tags — */
+.tag {
+  display: inline-flex; align-items: center; font-size: 11px; font-weight: 600;
+  letter-spacing: 0.02em; padding: 4px 11px;
+  border-radius: var(--radius-pill);
+}
+.tag-accent { background: var(--color-accent-100); color: var(--color-accent-800); }
+.tag-accent-2 { background: var(--color-accent-2-100); color: var(--color-accent-2-800); }
+.tag-neutral { background: var(--color-neutral-100); color: var(--color-neutral-800); }
+.tag-outline { border: 1px solid var(--color-accent); color: var(--color-accent); background: var(--color-accent-100); }
+
+/* — navigation — */
+.nav {
+  display: flex; align-items: center; gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: none;
+}
+.nav-brand {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 18px; margin-right: auto;
+}
+.nav a { color: inherit; text-decoration: none; font-size: 14px; }
+.nav a:hover, .nav a[aria-current='page'] { color: var(--color-accent); }
+
+/* — tables — */
+.table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.table th {
+  text-align: left; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--color-neutral-600);
+  padding: var(--space-2) var(--space-2); border-bottom: 1px solid var(--color-divider);
+}
+.table td {
+  padding: 10px var(--space-2);
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+.table tbody tr:hover { background: var(--color-neutral-100); }
+
+/* — dialog — */
+.dialog-backdrop {
+  position: fixed; inset: 0; display: grid; place-items: center;
+  padding: var(--space-4);
+  background: rgba(26,26,46,0.5);
+}
+.dialog {
+  width: min(440px, 100%); display: flex; flex-direction: column; gap: var(--space-3);
+  padding: var(--space-4); border-radius: var(--radius-lg);
+  background: var(--color-surface); box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-divider);
+}
+.dialog-title {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 20px; color: var(--color-accent-2);
+}
+.dialog-body { font-size: 14px; opacity: 0.85; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: var(--space-2); margin-top: var(--space-2); }
+

@@ -1,0 +1,582 @@
+/* ============================================================================
+   Tax Research KG — app-specific layer on top of industry.css (the Industry
+   design system, unmodified). Everything here either (a) composes the DS's
+   own classes into the app shell (sidebar/routes/panels), or (b) covers a
+   handful of components the DS has no equivalent for (progress bars, the
+   Settings toggle switch, the node-hover popup, the graph toolbar) - built
+   from the DS's own tokens (var(--color-*), var(--space-*), var(--radius-*))
+   so they read as part of the same system, per the design system's own
+   "reach for a ramp step" guidance. Danger/warning/success colors are the
+   two documented functional exceptions to the mono-accent rule (delete
+   flow, pipeline/validation status) - never used decoratively.
+   ============================================================================ */
+
+:root {
+  --color-danger: #b42318;
+  --color-danger-bg: #fdf0ee;
+  --color-danger-border: #f3c4bb;
+  --color-warning: #b7791f;
+  --color-warning-bg: #fdf3e7;
+  --color-warning-border: #eeddc0;
+  --color-success: #0f7a4a;
+  --color-success-bg: #eaf6ee;
+  --color-success-border: #bfe3cc;
+  /* "Principle" node type (judgment call - see summary): folded into the
+     accent ramp's deep step rather than adding a decorative 6th hue, since
+     Industry is explicitly mono-accent and the other 4 legend colors below
+     already use the 3 functional exceptions + 2 accent steps. */
+  /* Soft/pastel node fills per the reference screenshots (light circles,
+     not saturated full-strength color) - legend dots below use the same
+     tokens so the legend key matches what's drawn on the canvas. */
+  --node-issue: #A9C4EA;
+  --node-statute: #A8E0BB;
+  --node-caselaw: #F5C99B;
+  --node-principle: #D4C7FF;
+  --node-firmposition: var(--color-accent-300);
+  --node-default: var(--color-neutral-400);
+  /* Added alongside the case-law reasoning-graph work (Conclusion/
+     LegalConcept/CaseCitation/Argument nodes previously fell through to the
+     round-robin PALETTE fallback in index.html's colorFor() - giving them
+     real tokens here keeps the legend/canvas colors stable across reloads
+     instead of depending on label-encounter order). */
+  --node-conclusion: #F1A9A0;
+  --node-legalconcept: #C7B8F0;
+  --node-citation: var(--color-neutral-500);
+  --node-argument: var(--color-accent-400);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  overflow: hidden;
+  font-size: 13.5px;
+}
+.hidden { display: none !important; }
+.mono { font-family: ui-monospace, "SF Mono", Consolas, monospace; }
+.text-danger { color: var(--color-danger); }
+.text-success { color: var(--color-success); }
+.text-warning { color: var(--color-warning); }
+
+/* ── App shell ─────────────────────────────────────────────────────────── */
+#app-shell { display: flex; height: 100vh; width: 100%; overflow: hidden; }
+
+#sidebar {
+  width: 236px; flex-shrink: 0; height: 100%;
+  background: var(--color-bg);
+  border-right: 1px solid var(--color-divider);
+  display: flex; flex-direction: column;
+}
+#sidebar-brand {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  border-bottom: 1px solid var(--color-divider);
+}
+#sidebar-brand .mark {
+  width: 34px; height: 34px; flex-shrink: 0; border-radius: 8px;
+  background: var(--color-accent-2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-body); font-weight: 800; font-size: 13px;
+  color: #fff;
+}
+#sidebar-brand .titles { line-height: 1.3; }
+#sidebar-brand .t1 { font-family: var(--font-body); font-weight: 700; font-size: 13.5px; color: var(--color-text); }
+#sidebar-brand .t2 { font-size: 10px; color: var(--color-neutral-600); }
+
+#sidebar-nav { flex: 1; overflow-y: auto; padding: var(--space-3) var(--space-2) 0; display: flex; flex-direction: column; gap: 2px; }
+.nav-item {
+  display: flex; align-items: center; gap: var(--space-2);
+  padding: 9px 12px; border-radius: var(--radius-md);
+  font-family: var(--font-body); font-size: 13.5px; font-weight: 500; color: var(--color-text);
+  background: transparent; border: 1px solid transparent; cursor: pointer;
+  text-align: left; width: 100%;
+}
+.nav-item svg { flex-shrink: 0; opacity: 0.75; }
+.nav-item:hover { background: var(--color-neutral-100); }
+.nav-item.active {
+  background: var(--color-accent-100); color: var(--color-accent-2); font-weight: 700;
+}
+.nav-item.active svg { opacity: 1; color: var(--color-accent-2); }
+.nav-divider { height: 1px; background: var(--color-divider); margin: var(--space-2) var(--space-2); }
+.nav-item.danger { color: var(--color-danger); }
+.nav-item.danger:hover { background: var(--color-danger-bg); }
+.nav-item.danger.active { background: var(--color-danger-bg); color: var(--color-danger); font-weight: 700; }
+
+#sidebar-status {
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  border-top: 1px solid var(--color-divider);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.status-row { display: flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 600; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.status-dot.on { background: var(--color-success); }
+.status-dot.off { background: var(--color-neutral-400); }
+.status-row.on { color: var(--color-success); }
+.status-row.off { color: var(--color-neutral-600); }
+
+#main { flex: 1; min-width: 0; height: 100%; overflow-y: auto; background: var(--color-bg); }
+.route-view { display: none; }
+.route-view.active { display: block; }
+.page-wrap { max-width: 1180px; margin: 0 auto; padding: var(--space-6) var(--space-6) 60px; }
+.page-wrap.narrow { max-width: 900px; }
+.page-kicker { font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 5px; }
+.page-kicker.danger { color: var(--color-danger); }
+.page-title { margin: 0 0 3px; color: var(--color-accent-2); font-size: 26px; }
+.page-title.danger { color: var(--color-danger); }
+.page-desc { color: var(--color-neutral-700); margin: 0 0 var(--space-6); font-size: 13px; }
+
+/* ── Grids ─────────────────────────────────────────────────────────────── */
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+.grid-13 { display: grid; grid-template-columns: 1.3fr 1fr; gap: var(--space-4); }
+@media (max-width: 980px) {
+  .grid-4, .grid-3, .grid-2, .grid-13 { grid-template-columns: 1fr; }
+}
+
+/* ── Cards (compose the DS .card, not replace it) ─────────────────────── */
+.card-head {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-2);
+  padding-bottom: var(--space-2); margin-bottom: var(--space-2);
+  border-bottom: 1px solid var(--color-divider);
+}
+.card-head-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-accent-2); }
+/* 2026-09-05: NEW - the Ask screen's Answer card header outgrew a single
+   .card-head flex row (label + 3 status badges + score badge + 3 action
+   buttons + maximize toggle, 9 elements total) - with no flex-wrap, once
+   enough buttons accumulated they visibly clipped/overlapped instead of
+   wrapping (reported via screenshot after the "Download chunks" button was
+   added). .card-head-stacked lays out two child rows top-to-bottom instead
+   of relying on one unbounded row; .card-head-badges (status badges, left-
+   aligned, its own wrap) and .card-head-actions (score badge + action
+   buttons, right-aligned, its own wrap) each independently wrap their own
+   contents onto a new line if the card is narrow, rather than the two
+   groups fighting over one shared row and clipping each other. */
+.card-head-stacked { flex-direction: column; align-items: stretch; gap: var(--space-2); }
+.card-head-badges, .card-head-actions {
+  display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2);
+}
+.card-head-actions { justify-content: flex-end; }
+/* .btn-icon (industry.css) is a FIXED 34x34px square meant for a single
+   icon glyph (like the lone "⛶" maximize button below) - it was never
+   designed for a labeled button like "📊 Scores"/"⬇ Chunks"/"🔎 Evaluate",
+   which is exactly why those clipped/overlapped illegibly once several
+   accumulated in this header (reported via screenshot). Every labeled
+   action button here gets its own class instead of relying on .btn-icon's
+   fixed square box - auto width, compact padding, no forced height. The
+   lone "⛶" toggle keeps plain .btn-icon (it has no label, the square box is
+   correct for it). */
+.card-head-actions .btn-labeled {
+  width: auto; height: auto; padding: 5px 10px; font-size: 12px;
+  white-space: nowrap; border-radius: var(--radius-md);
+}
+.kpi-value { font-family: var(--font-heading); font-weight: 700; font-size: 27px; line-height: 1.1; color: var(--color-text); }
+.kpi-value.unavailable { font-size: 15px; color: var(--color-neutral-500); font-family: var(--font-body); font-weight: 400; font-style: italic; }
+.kpi-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-600); margin-bottom: var(--space-2); }
+/* 4 KPI cards each get a distinct colored top-border accent, per the
+   reference screenshots (navy/blue/green/purple order on the Dashboard
+   row) - applied via nth-child on the .grid-4 KPI row's own .card. */
+.kpi-card {
+  resize: vertical; overflow: auto; min-height: 100px;
+  border-top: 3px solid var(--color-accent-2); border-radius: var(--radius-lg);
+}
+.grid-4 > .kpi-card:nth-child(1) { border-top-color: var(--color-accent-2); }
+.grid-4 > .kpi-card:nth-child(2) { border-top-color: var(--color-accent); }
+.grid-4 > .kpi-card:nth-child(3) { border-top-color: var(--color-success); }
+.grid-4 > .kpi-card:nth-child(4) { border-top-color: #6D28D9; }
+.kpi-trend { font-size: 11px; font-weight: 700; margin-top: 5px; }
+.kv-row { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--color-neutral-700); padding: 3px 0; }
+.kv-row strong { color: var(--color-text); font-weight: 600; }
+
+/* ── Progress bars (pipeline health) — no DS equivalent, built from tokens ─ */
+.pbar-row { display: flex; align-items: center; gap: var(--space-3); margin-bottom: 11px; }
+.pbar-label {
+  width: 150px; font-size: 11.5px; color: var(--color-neutral-700); flex-shrink: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default;
+}
+.pbar-track { flex: 1; height: 8px; border-radius: var(--radius-pill); background: var(--color-neutral-200); overflow: hidden; }
+.pbar-fill { height: 100%; background: var(--color-accent); }
+.pbar-fill.warning { background: var(--color-warning); }
+.pbar-fill.danger { background: var(--color-danger); }
+.pbar-status { width: 74px; text-align: right; font-size: 11px; font-weight: 600; flex-shrink: 0; }
+
+/* ── Activity feed ─────────────────────────────────────────────────────── */
+.activity-list { max-height: 280px; overflow-y: auto; resize: vertical; }
+.activity-row { display: flex; gap: var(--space-2); padding: var(--space-2) 0; border-bottom: 1px solid color-mix(in srgb, var(--color-text) 6%, transparent); }
+.activity-row:last-child { border-bottom: none; }
+.activity-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+.activity-text { font-size: 12px; }
+.activity-time { font-size: 10.5px; color: var(--color-neutral-600); margin-top: 2px; }
+
+/* ── Tags reused as status pills ──────────────────────────────────────── */
+.tag-danger { background: var(--color-danger-bg); color: var(--color-danger); border: 1px solid var(--color-danger-border); }
+.tag-warning { background: var(--color-warning-bg); color: var(--color-warning); border: 1px solid var(--color-warning-border); }
+.tag-success { background: var(--color-success-bg); color: var(--color-success); border: 1px solid var(--color-success-border); }
+
+/* ── Ingestion: method selector + panels ──────────────────────────────── */
+.method-row { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-4); }
+.method-btn {
+  font-family: var(--font-body); font-weight: 600; font-size: 12.5px;
+  padding: 9px 18px; border: 1px solid var(--color-divider);
+  background: var(--color-surface); color: var(--color-text); cursor: pointer;
+  border-radius: var(--radius-pill);
+}
+.method-btn:hover { background: var(--color-neutral-100); }
+.method-btn.active { background: var(--color-accent-2); color: #fff; border-color: var(--color-accent-2); }
+.method-btn .unavail-badge { font-size: 9px; opacity: 0.75; margin-left: 4px; }
+
+.dropzone { border: 2px dashed var(--color-accent-300); border-radius: var(--radius-lg); padding: var(--space-8) var(--space-4); text-align: center; }
+.dropzone p { margin: 0 0 6px; font-size: 13px; color: var(--color-neutral-700); }
+.dropzone .hint { font-size: 10.5px; color: var(--color-neutral-600); }
+.not-implemented-note { font-size: 11px; color: var(--color-warning); margin-top: var(--space-2); }
+
+.log-box { background: var(--color-neutral-100); border: 1px solid var(--color-divider); border-radius: var(--radius-md); padding: 10px; font-size: 11px; max-height: 240px; overflow-y: auto; white-space: pre-wrap; margin: var(--space-2) 0 0; font-family: ui-monospace, Consolas, monospace; }
+
+/* ── Ask Question: split layout ───────────────────────────────────────── */
+.ask-split {
+  display: flex; align-items: stretch;
+  min-height: 480px;
+}
+.ask-split-left {
+  display: flex; flex-direction: column; gap: var(--space-3);
+  padding-right: var(--space-3); min-width: 280px;
+}
+.ask-split-right { flex: 1; min-width: 320px; padding-left: var(--space-3); display: flex; flex-direction: column; }
+.ask-split-divider { width: 6px; cursor: col-resize; background: var(--color-neutral-200); flex-shrink: 0; border-radius: var(--radius-sm); }
+.ask-split-divider:hover, .ask-split-divider.dragging { background: var(--color-accent-300); }
+
+.answer-body { font-size: 13.5px; line-height: 1.75; max-height: 420px; overflow-y: auto; }
+.answer-body b, .answer-body strong { color: var(--color-accent-2); font-weight: 700; }
+.answer-body p { margin: 0 0 10px; }
+.answer-body p:last-child { margin-bottom: 0; }
+.answer-body .md-heading {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  color: var(--color-accent-2); margin: 16px 0 8px; line-height: 1.3;
+}
+.answer-body .md-heading:first-child { margin-top: 0; }
+.answer-body .md-h1 { font-size: 18px; }
+.answer-body .md-h2 { font-size: 16px; }
+.answer-body .md-h3 { font-size: 14.5px; }
+.answer-body .md-h4 { font-size: 13.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-neutral-700); }
+.answer-body ul, .answer-body ol { margin: 0 0 10px; padding-left: 22px; }
+.answer-body li { margin-bottom: 4px; }
+.answer-body code { font-family: ui-monospace, Consolas, monospace; font-size: 0.92em; background: var(--color-neutral-100); border: 1px solid var(--color-divider); border-radius: 3px; padding: 1px 5px; color: var(--color-accent-700); }
+.followup-item { font-size: 12.5px; padding: 9px 12px; border: 1px solid var(--color-divider); border-radius: var(--radius-md); margin-bottom: 5px; cursor: pointer; background: var(--color-surface); }
+.followup-item:hover { background: var(--color-accent-100); border-color: var(--color-accent-300); }
+.disclaimer { font-size: 10.5px; color: var(--color-neutral-600); font-style: italic; line-height: 1.6; margin-top: var(--space-2); }
+
+.evidence-panel-body { padding: var(--space-3); }
+.ev-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.ev-table th { text-align: left; padding: 6px 8px; font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-neutral-600); border-bottom: 1px solid var(--color-divider); }
+.ev-table td { padding: 6px 8px; border-bottom: 1px solid var(--color-neutral-200); vertical-align: top; font-size: 11.5px; }
+.ev-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 7px; background: currentColor; }
+
+.chunk-card { margin-top: 8px; padding: 9px 12px; border: 1px solid var(--color-divider); border-radius: var(--radius-md); border-left: 3px solid var(--color-success); background: var(--color-surface); }
+.chunk-card .chunk-head { font-weight: 600; font-size: 11px; margin-bottom: 2px; }
+.chunk-card .chunk-doc { color: var(--color-accent-2); font-size: 10.5px; margin-bottom: 3px; }
+.chunk-card .chunk-text { color: var(--color-neutral-700); font-size: 11.5px; }
+
+.cypher-box { margin-top: 10px; font-family: ui-monospace, Consolas, monospace; font-size: 11px; background: var(--color-neutral-100); border: 1px solid var(--color-divider); border-radius: var(--radius-md); padding: 9px 11px; white-space: pre-wrap; overflow-x: auto; }
+
+.chain-body { padding: var(--space-3) var(--space-4); }
+.c-step { display: flex; align-items: flex-start; }
+.c-left { display: flex; flex-direction: column; align-items: center; width: 26px; flex-shrink: 0; }
+.c-dot { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; flex-shrink: 0; background: var(--color-accent-100); color: var(--color-accent-800); border: 1.5px solid var(--color-divider); }
+.c-line { width: 2px; flex: 1; min-height: 12px; background: var(--color-divider); margin: 2px 0; }
+.c-content { flex: 1; padding: 1px 0 12px 10px; }
+.c-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-neutral-600); margin-bottom: 2px; }
+.c-val { font-size: 12px; font-weight: 600; line-height: 1.5; }
+.c-detail { font-size: 10.5px; color: var(--color-neutral-600); margin-top: 2px; line-height: 1.5; }
+
+/* ── Sample-question chips ────────────────────────────────────────────── */
+.chip-row { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-top: var(--space-3); }
+.chip {
+  font-size: 12px; font-weight: 500; color: var(--color-accent-2);
+  background: var(--color-accent-100); border: 1px solid var(--color-accent-200);
+  padding: 7px 14px; border-radius: var(--radius-pill); cursor: pointer;
+}
+.chip:hover { background: var(--color-accent-200); }
+
+/* ── Graph panels (Ask + Explorer) ────────────────────────────────────── */
+.graph-card-body { flex: 1; overflow: auto; background: var(--color-neutral-100); display: flex; align-items: center; justify-content: center; padding: var(--space-2); position: relative; min-height: 360px; }
+.graph-toolbar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); flex-wrap: wrap; }
+.graph-toolbar-controls { display: flex; align-items: center; gap: 6px; }
+.zoom-label { font-size: 11px; color: var(--color-neutral-600); width: 40px; text-align: center; }
+.graph-legend { display: flex; flex-direction: column; gap: 6px; }
+.legend-item { display: flex; align-items: center; gap: 7px; font-size: 10.5px; color: var(--color-neutral-700); }
+/* Unused by current markup (renderLabelControls() uses .legend-shape for
+   both the Legend and the "Filter labels" checkbox list now, so they render
+   identically) - kept in case any older cached page still references it. */
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+#network-ask, #network-explorer { width: 100%; height: 100%; min-height: 340px; }
+.vis-graph-wrap { flex: 1; min-height: 380px; position: relative; }
+.vis-graph-wrap.resizable { resize: vertical; overflow: hidden; }
+
+/* ── Canvas + side panel (legend / stats / node detail) ───────────────────
+   Same layout as the "Reckitt case KG" reference view: the vis-network
+   canvas on the left, a fixed-width scrollable panel on the right. Shared
+   by both graph panes (KG Explorer's #network-explorer, Ask's
+   #network-ask) via the *-legend/*-stats/*-detail-title/*-detail-body id
+   prefixes ("exp-"/"ask-") their JS already uses elsewhere. */
+.graph-canvas-layout { display: flex; gap: var(--space-3); align-items: stretch; }
+.graph-canvas-layout > .vis-graph-wrap { min-width: 0; }
+.graph-side-panel {
+  width: 250px; flex-shrink: 0; display: flex; flex-direction: column; gap: var(--space-4);
+  overflow-y: auto; padding: var(--space-3); background: var(--color-neutral-100);
+  border: 1px solid var(--color-divider); border-radius: var(--radius-md);
+}
+.graph-side-title { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-600); margin-bottom: 6px; }
+.graph-stats-row { display: flex; justify-content: space-between; font-size: 11.5px; padding: 2px 0; color: var(--color-neutral-700); }
+.graph-stats-row b { color: var(--color-text); }
+.graph-detail-title { font-weight: 600; font-size: 12px; margin-bottom: 6px; color: var(--color-accent-800); }
+.graph-detail-box { background: var(--color-surface); border: 1px solid var(--color-divider); border-radius: var(--radius-sm); padding: var(--space-2); font-size: 11.5px; line-height: 1.55; max-height: 280px; overflow-y: auto; word-break: break-word; }
+.graph-detail-box b { color: var(--color-accent-800); }
+.graph-detail-empty { color: var(--color-neutral-600); font-style: italic; }
+
+/* Shape-aware legend swatches - distinct from .legend-dot (plain circle,
+   still used by the "Filter labels" checkbox list, which isn't shape-aware
+   and shouldn't become so). vis-network's own native shape names double as
+   the modifier classes here so shapeFor()'s output can be used directly. */
+.legend-shape { width: 10px; height: 10px; flex-shrink: 0; display: inline-block; }
+.legend-shape.dot { border-radius: 50%; }
+.legend-shape.square { border-radius: 2px; }
+.legend-shape.star {
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+.legend-shape.triangle {
+  width: 0; height: 0; background: none !important;
+  border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 9px solid;
+}
+
+@media (max-width: 900px) {
+  .graph-canvas-layout { flex-direction: column; }
+  .graph-side-panel { width: 100%; max-height: 260px; }
+}
+
+/* ── Full-screen graph (maximize button) ──────────────────────────────────
+   Targets the whole graph card (toolbar + canvas + side panel) so the
+   canvas gets the full viewport while the legend/stats/detail panel and
+   zoom/fullscreen controls stay reachable. Written for both the standard
+   and -webkit- prefixed pseudo-class since :fullscreen alone is dropped by
+   older WebKit if combined in one selector list. */
+#ask-graph-card:fullscreen, #exp-graph-card:fullscreen,
+#ask-graph-card:-webkit-full-screen, #exp-graph-card:-webkit-full-screen {
+  width: 100vw; height: 100vh; max-height: none;
+  background: var(--color-surface); padding: var(--space-3);
+  display: flex; flex-direction: column;
+}
+#ask-graph-card:fullscreen .graph-canvas-layout, #exp-graph-card:fullscreen .graph-canvas-layout,
+#ask-graph-card:-webkit-full-screen .graph-canvas-layout, #exp-graph-card:-webkit-full-screen .graph-canvas-layout {
+  flex: 1; min-height: 0;
+}
+#ask-graph-card:fullscreen .vis-graph-wrap, #exp-graph-card:fullscreen .vis-graph-wrap,
+#ask-graph-card:-webkit-full-screen .vis-graph-wrap, #exp-graph-card:-webkit-full-screen .vis-graph-wrap {
+  flex: 1; min-height: 0; height: 100%; resize: none;
+}
+#ask-graph-card:fullscreen .graph-side-panel, #exp-graph-card:fullscreen .graph-side-panel,
+#ask-graph-card:-webkit-full-screen .graph-side-panel, #exp-graph-card:-webkit-full-screen .graph-side-panel {
+  max-height: 100%;
+}
+
+/* ── Maximize overlay for the Ask response panel (maximize button, Ask
+   page left column) ───────────────────────────────────────────────────────
+   2026-08-26: REPLACED the native browser Fullscreen API approach (element.
+   requestFullscreen() + :fullscreen CSS) that was here previously - per
+   explicit bug report, maximizing the Answer/response panel left the answer
+   text not visible. Root cause: this app can be rendered inside an embedded
+   webview (e.g. Cowork's desktop shell) where the Fullscreen API is
+   restricted/inconsistent, so requestFullscreen() could leave the element in
+   a half-applied state where our #ask-split-left:fullscreen CSS override
+   never actually matched, but the element's normal in-flow layout (with its
+   max-height: 420px .answer-body) was still in effect - the answer was
+   there, just clipped/scrolled out of a broken-sized box.
+   Fix: don't depend on the Fullscreen API at all. setupPanelMaximizeToggle()
+   in the script below just toggles this .panel-maximized class (a plain
+   position:fixed overlay we fully control) plus a .maximize-backdrop
+   element - works identically regardless of what environment renders the
+   page. See setupPanelMaximizeToggle() for the JS half. */
+.panel-maximized {
+  position: fixed !important; inset: 16px; z-index: 260;
+  width: auto !important; height: auto !important; max-height: none !important;
+  background: var(--color-surface); border-radius: var(--radius-lg);
+  /* 2026-09-03: `!important` added - #ask-answer-card (the element this
+     class now targets, see setupPanelMaximizeToggle() call site) carries an
+     inline style="overflow:hidden" for its normal, non-maximized layout
+     (clips the decorative corner elements/shadow cleanly). Inline styles
+     beat a plain class rule regardless of source order, so without
+     `!important` here that inline overflow:hidden was still clipping the
+     answer text even after max-height was lifted - the actual root cause
+     of "does not show the response fully" surviving the earlier fix. */
+  box-shadow: var(--shadow-lg); overflow: auto !important; padding: var(--space-4);
+}
+.panel-maximized .answer-body { max-height: none; }
+.maximize-backdrop { position: fixed; inset: 0; z-index: 255; background: rgba(20, 20, 20, 0.45); }
+body.has-maximized-panel { overflow: hidden; }
+
+/* ── Independent evaluation overlay/modal ─────────────────────────────────
+   2026-08-26: NEW - the "Independent evaluation" card (#ask-eval-card) now
+   renders as a centered modal instead of an inline card in the answer
+   column, so opening it (via the Evaluate button, or automatically after a
+   quality-checked run) is always clearly visible on top of everything -
+   including on top of a maximized answer panel (.panel-maximized, z-index
+   260 above) - rather than something the user has to scroll down to find.
+   z-index sits above .panel-maximized/.maximize-backdrop for that reason.
+   See openEvalModal()/closeEvalModal() in index.html for the JS half. */
+.eval-modal-backdrop { position: fixed; inset: 0; z-index: 275; background: rgba(20, 20, 20, 0.45); }
+#ask-eval-card.eval-modal {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(760px, 92vw); max-height: 85vh; overflow-y: auto;
+  z-index: 280; box-shadow: var(--shadow-lg);
+}
+/* 2026-09-03: NEW - auto-evaluate popup (#ask-auto-eval-card). The
+   .eval-modal positioning rule above is scoped to #ask-eval-card
+   specifically (not a bare .eval-modal selector), so the new card needs its
+   own identical rule rather than inheriting one - same fixed-centered
+   overlay, same z-index (never shown at the same time as #ask-eval-card in
+   practice, so no stacking conflict either way). See
+   openAutoEvalModal()/closeAutoEvalModal() in index.html for the JS half. */
+#ask-auto-eval-card.eval-modal {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(760px, 92vw); max-height: 85vh; overflow-y: auto;
+  z-index: 280; box-shadow: var(--shadow-lg);
+}
+
+/* 2026-08-29: NEW - Data Explorer "view full data" row-detail modal. Same
+   overlay pattern as .eval-modal above (own backdrop + fixed-centered
+   card), kept as its own class rather than reusing #ask-eval-card's id-
+   scoped rules since this modal is opened from a completely different
+   screen (Data Explorer, not Ask). */
+.dx-modal-backdrop { position: fixed; inset: 0; z-index: 275; background: rgba(20, 20, 20, 0.45); }
+.dx-modal {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(760px, 92vw); max-height: 85vh; overflow-y: auto;
+  z-index: 280; box-shadow: var(--shadow-lg);
+}
+.dx-kv-row { display: flex; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--color-neutral-200); font-size: 12px; }
+.dx-kv-row:last-child { border-bottom: none; }
+.dx-kv-key { flex: 0 0 220px; font-weight: 600; color: var(--color-neutral-700); word-break: break-word; }
+.dx-kv-val { flex: 1; word-break: break-word; white-space: pre-wrap; color: var(--color-neutral-900); }
+.dx-row-clickable { cursor: pointer; }
+.dx-row-clickable:hover { background: var(--color-neutral-100); }
+.dx-pager { display: flex; align-items: center; gap: 10px; margin-top: 10px; font-size: 11.5px; color: var(--color-neutral-600); }
+.dx-summary-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--color-neutral-100); border: 1px solid var(--color-divider); font-size: 11px; margin: 0 6px 6px 0; cursor: pointer; }
+.dx-summary-pill.active { background: var(--color-accent-2); color: #fff; border-color: var(--color-accent-2); }
+.dx-summary-pill .dx-pill-count { font-weight: 700; }
+
+#node-tooltip {
+  position: absolute; z-index: 20; display: none; width: 320px; max-height: 260px;
+  background: var(--color-surface); border: 1px solid var(--color-divider); border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  font-size: 11px; line-height: 1.5;
+}
+#node-tooltip-header { display: flex; align-items: center; justify-content: space-between; padding: 6px 8px; border-bottom: 1px solid var(--color-divider); font-size: 11px; font-weight: 600; color: var(--color-neutral-700); }
+#node-tooltip-close { background: none; border: none; color: var(--color-neutral-600); cursor: pointer; font-size: 14px; line-height: 1; padding: 2px 4px; }
+#node-tooltip-body { padding: 8px; max-height: 210px; overflow-y: auto; word-break: break-word; }
+#node-tooltip-body b { color: var(--color-accent-800); }
+
+#node-context-menu {
+  position: absolute; z-index: 25; display: none;
+  background: var(--color-surface); border: 1px solid var(--color-divider); border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md); min-width: 140px; padding: 4px; font-size: 11px;
+}
+.node-context-menu-item { padding: 6px 10px; border-radius: var(--radius-sm); cursor: pointer; color: var(--color-neutral-800); }
+.node-context-menu-item:hover { background: var(--color-accent-100); color: var(--color-accent-800); }
+
+/* ── Ingestion / Monitoring tables (compose .table) ───────────────────── */
+.table-resizable { max-height: 420px; overflow-y: auto; resize: vertical; }
+.table-scroll { overflow-x: auto; }
+
+/* ── Settings: toggle switch — no DS equivalent, minimal native-feeling
+     control built from accent-ramp tokens ── */
+.ds-row { display: flex; align-items: center; justify-content: space-between; padding: var(--space-3) 0; border-bottom: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent); }
+.ds-row:last-child { border-bottom: none; }
+.ds-row-name { font-size: 12.5px; font-weight: 600; }
+.ds-row-desc { font-size: 10.5px; color: var(--color-neutral-600); margin-top: 2px; }
+.toggle-switch {
+  width: 38px; height: 22px; border-radius: var(--radius-pill);
+  border: 1px solid var(--color-divider); background: var(--color-neutral-300);
+  cursor: pointer; position: relative; flex-shrink: 0; padding: 2px;
+}
+.toggle-switch.on { background: var(--color-success); border-color: var(--color-success); }
+.toggle-switch.disabled-look { opacity: 0.55; }
+.toggle-thumb { width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.25); transition: transform 0.12s; }
+.toggle-switch.on .toggle-thumb { transform: translateX(16px); }
+
+/* ── Delete flow ───────────────────────────────────────────────────────── */
+.delete-step-card { padding: var(--space-4); border-radius: var(--radius-lg); }
+.delete-step-card.danger { background: var(--color-danger-bg); border-color: var(--color-danger-border); }
+.delete-step-card.success { background: var(--color-success-bg); border-color: var(--color-success-border); }
+.delete-count-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--color-neutral-200); font-size: 12.5px; }
+.delete-count-row:last-child { border-bottom: none; }
+.delete-count-row .count { color: var(--color-danger); font-weight: 700; }
+.delete-mode-btn { opacity: 0.6; }
+.delete-mode-btn.active { opacity: 1; background: var(--color-danger); border-color: var(--color-danger); color: #fff; }
+.delete-doc-list { max-height: 320px; overflow-y: auto; border: 1px solid var(--color-danger-border); border-radius: var(--radius-md); padding: 4px 10px; background: var(--color-surface); }
+.delete-doc-row { display: flex; align-items: flex-start; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--color-neutral-200); font-size: 12.5px; }
+.delete-doc-row:last-child { border-bottom: none; }
+.delete-doc-row input[type="checkbox"] { margin-top: 2px; }
+.delete-doc-row .delete-doc-meta { color: var(--color-neutral-500); font-size: 11.5px; margin-top: 2px; }
+.delete-doc-row .delete-doc-name { font-weight: 600; }
+.link-btn { background: none; border: none; padding: 0; color: var(--color-primary, #2563eb); text-decoration: underline; cursor: pointer; font: inherit; font-size: inherit; }
+.link-btn:disabled { opacity: 0.5; cursor: default; text-decoration: none; }
+
+/* ── Independent answer evaluation (Ask screen) ───────────────────────── */
+.eval-overall-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+.eval-overall-score { font-size: 26px; font-weight: 800; line-height: 1; }
+.eval-overall-score.score-good { color: var(--color-success); }
+.eval-overall-score.score-mid { color: var(--color-warning); }
+.eval-overall-score.score-poor { color: var(--color-danger); }
+.eval-verdict { font-size: 12.5px; color: var(--color-neutral-700); flex: 1; }
+.eval-score-cell { font-weight: 700; white-space: nowrap; }
+.eval-score-cell.score-good { color: var(--color-success); }
+.eval-score-cell.score-mid { color: var(--color-warning); }
+.eval-score-cell.score-poor { color: var(--color-danger); }
+.eval-list { margin: 6px 0 0; padding-left: 18px; font-size: 11.5px; }
+.eval-list li { margin-bottom: 3px; }
+.eval-list.strengths li::marker { color: var(--color-success); }
+.eval-list.issues li::marker { color: var(--color-danger); }
+.eval-subhead { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-neutral-600); margin-top: 12px; }
+
+/* ── Retrieval-mode selector + quality-checked-ask (Ask screen) ─────────── */
+.ask-mode-row { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; margin-top: 10px; }
+.seg-control { display: inline-flex; border: 1px solid var(--color-neutral-300); border-radius: 999px; padding: 2px; gap: 2px; }
+.seg-btn { border: none; background: none; padding: 5px 13px; font-size: 11.5px; font-weight: 600; border-radius: 999px; cursor: pointer; color: var(--color-neutral-600); }
+.seg-btn.active { background: var(--color-primary, #2563eb); color: #fff; }
+.ask-qc-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--color-neutral-700); cursor: pointer; margin: 0; }
+.ask-qc-toggle input { margin: 0; }
+
+.qc-progress-row { display: flex; align-items: baseline; justify-content: space-between; font-size: 12px; font-weight: 600; }
+.qc-progress-bar { height: 6px; border-radius: 999px; background: var(--color-neutral-200); margin: 8px 0 10px; overflow: hidden; }
+.qc-progress-bar-fill { height: 100%; width: 8%; background: var(--color-primary, #2563eb); border-radius: 999px; transition: width 0.4s ease; }
+.qc-progress-log { max-height: 140px; overflow-y: auto; font-size: 11px; color: var(--color-neutral-600); display: flex; flex-direction: column; gap: 4px; }
+.qc-progress-log .qc-log-line { padding-left: 14px; position: relative; }
+.qc-progress-log .qc-log-line::before { content: "›"; position: absolute; left: 0; color: var(--color-primary, #2563eb); }
+
+/* ── Iteration history (quality-checked ask review) ──────────────────────── */
+.qc-attempt { border: 1px solid var(--color-neutral-200); border-radius: 8px; padding: 8px 10px; margin-top: 8px; }
+.qc-attempt summary { cursor: pointer; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px; list-style: none; }
+.qc-attempt summary::-webkit-details-marker { display: none; }
+.qc-attempt summary::before { content: "▸"; color: var(--color-neutral-500); }
+.qc-attempt[open] summary::before { content: "▾"; }
+.qc-attempt-body { margin-top: 8px; padding-left: 4px; }
+.qc-attempt-answer { max-height: 260px; overflow-y: auto; font-size: 11.5px; color: var(--color-neutral-700); border: 1px solid var(--color-neutral-100); border-radius: 6px; padding: 8px; margin-top: 4px; background: var(--color-neutral-050, var(--color-neutral-100)); }
+.progress-track { height: 10px; border-radius: var(--radius-pill); background: var(--color-neutral-200); overflow: hidden; margin: var(--space-3) 0; }
+.progress-fill { height: 100%; background: var(--color-danger); transition: width 0.3s; }
+.check-row { display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; margin-top: var(--space-3); }
+
+/* ── Toast ─────────────────────────────────────────────────────────────── */
+#toast {
+  position: fixed; bottom: 20px; right: 20px; z-index: 200;
+  background: var(--color-neutral-900); color: #fff;
+  border-radius: var(--radius-md);
+  padding: 10px 16px; font-size: 12.5px; opacity: 0; pointer-events: none;
+  transition: opacity 0.2s; max-width: 340px; box-shadow: var(--shadow-lg);
+}
+#toast.show { opacity: 1; }
+
+/* ── Misc ──────────────────────────────────────────────────────────────── */
+.field-row { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-bottom: var(--space-3); }
+.field-row .field { flex: 1; min-width: 180px; }
+.inline-form { display: flex; gap: var(--space-2); }
+.inline-form .input { flex: 1; }
+.unavailable-note { font-size: 11.5px; color: var(--color-neutral-600); font-style: italic; padding: var(--space-3) 0; }

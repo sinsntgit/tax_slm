@@ -1,0 +1,681 @@
+<title>GraphRAG Retrieval Pipeline</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #EBEEF2;
+    --surface: #FFFFFF;
+    --surface-2: #E3E7EC;
+    --surface-3: #DAE0E7;
+    --ink: #12151C;
+    --ink-soft: #4C5566;
+    --ink-faint: #808A9A;
+    --line: #C7CFD8;
+    --line-strong: #A6B0BD;
+
+    --accent: #2A4BD1;
+    --accent-ink: #1E3699;
+    --accent-soft: #E4E9FB;
+
+    --vector: #0E7C7B;
+    --vector-ink: #0B615F;
+    --vector-soft: #DFF1F0;
+
+    --llm: #9C3B55;
+    --llm-soft: #F6E3E9;
+
+    --warn: #A8681A;
+    --warn-ink: #8A5514;
+    --warn-soft: #F5E7D2;
+
+    --store-bg: #3B4457;
+    --store-text: #EEF1F6;
+
+    --font-display: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14171D;
+      --surface: #1B1F27;
+      --surface-2: #232833;
+      --surface-3: #2A3140;
+      --ink: #EDEFF3;
+      --ink-soft: #ABB3C2;
+      --ink-faint: #737C8C;
+      --line: #333B49;
+      --line-strong: #4A5567;
+
+      --accent: #8CA2FF;
+      --accent-ink: #C4D0FF;
+      --accent-soft: #23294A;
+
+      --vector: #52D2C9;
+      --vector-ink: #9CEAE3;
+      --vector-soft: #133433;
+
+      --llm: #E8A2B4;
+      --llm-soft: #3A2129;
+
+      --warn: #E4B266;
+      --warn-ink: #F2D3A0;
+      --warn-soft: #3A2E17;
+
+      --store-bg: #4A5468;
+      --store-text: #EEF1F6;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #14171D;
+    --surface: #1B1F27;
+    --surface-2: #232833;
+    --surface-3: #2A3140;
+    --ink: #EDEFF3;
+    --ink-soft: #ABB3C2;
+    --ink-faint: #737C8C;
+    --line: #333B49;
+    --line-strong: #4A5567;
+
+    --accent: #8CA2FF;
+    --accent-ink: #C4D0FF;
+    --accent-soft: #23294A;
+
+    --vector: #52D2C9;
+    --vector-ink: #9CEAE3;
+    --vector-soft: #133433;
+
+    --llm: #E8A2B4;
+    --llm-soft: #3A2129;
+
+    --warn: #E4B266;
+    --warn-ink: #F2D3A0;
+    --warn-soft: #3A2E17;
+
+    --store-bg: #4A5468;
+    --store-text: #EEF1F6;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    line-height: 1.55;
+  }
+
+  a { color: var(--accent-ink); }
+
+  .wrap {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 56px 32px 80px;
+  }
+
+  header.page-head {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 40px;
+    max-width: 780px;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(30px, 4vw, 42px);
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+    margin: 0;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+
+  .lede {
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 0;
+    max-width: 68ch;
+  }
+
+  .lede strong { color: var(--ink); font-weight: 600; }
+
+  code.inline {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 0.05em 0.42em;
+    color: var(--ink);
+  }
+
+  /* ---------- legend ---------- */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    padding: 18px 22px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    margin-bottom: 28px;
+    font-family: var(--font-display);
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+  .swatch { width: 13px; height: 13px; border-radius: 4px; flex: none; border: 1.5px solid transparent; }
+  .swatch.graph { background: var(--accent-soft); border-color: var(--accent); }
+  .swatch.vector { background: var(--vector-soft); border-color: var(--vector); }
+  .swatch.retry { background: var(--warn-soft); border-color: var(--warn); }
+  .swatch.terminal { background: transparent; border: 1.5px dashed var(--line-strong); }
+  .swatch.llm { background: var(--llm); border-color: var(--llm); }
+  .swatch.store { background: var(--store-bg); border-color: var(--store-bg); }
+
+  /* ---------- diagram card ---------- */
+  .diagram-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 8px;
+    margin-bottom: 40px;
+  }
+  .diagram-scroll {
+    overflow-x: auto;
+    border-radius: 10px;
+  }
+  svg.flow {
+    display: block;
+    width: 1200px;
+    max-width: none;
+    height: auto;
+    margin: 0 auto;
+    font-family: var(--font-display);
+  }
+  figcaption.diagram-caption {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 13.5px;
+    color: var(--ink-faint);
+    text-align: center;
+    padding: 14px 20px 6px;
+  }
+  figure { margin: 0; }
+
+  /* SVG node styling */
+  .box-fill { fill: var(--surface); }
+  .box-stroke { stroke: var(--line-strong); stroke-width: 1.4; }
+
+  .box-fill-graph { fill: var(--accent-soft); }
+  .box-stroke-graph { stroke: var(--accent); stroke-width: 1.4; }
+
+  .box-fill-vector { fill: var(--vector-soft); }
+  .box-stroke-vector { stroke: var(--vector); stroke-width: 1.4; }
+
+  .box-fill-merge { fill: var(--surface-3); }
+  .box-stroke-merge { stroke: var(--line-strong); stroke-width: 1.6; }
+
+  .box-fill-retry { fill: var(--warn-soft); }
+  .box-stroke-retry { stroke: var(--warn); stroke-width: 1.4; }
+
+  .box-fill-terminal { fill: var(--surface); }
+  .box-stroke-terminal { stroke: var(--line-strong); stroke-width: 1.3; stroke-dasharray: 5 4; }
+
+  .diamond-fill { fill: var(--surface-3); }
+  .diamond-stroke { stroke: var(--line-strong); stroke-width: 1.5; }
+  .diamond-text { font-family: var(--font-display); font-weight: 600; font-size: 12.5px; fill: var(--ink); }
+
+  .node-title { font-family: var(--font-display); font-weight: 700; font-size: 14px; fill: var(--ink); }
+  .node-title-sm { font-family: var(--font-display); font-weight: 700; font-size: 12.5px; fill: var(--ink-soft); }
+  .node-body { font-family: var(--font-display); font-weight: 400; font-size: 12px; fill: var(--ink-soft); }
+  .node-tag { font-family: var(--font-mono); font-weight: 500; font-size: 10.5px; fill: var(--ink-faint); }
+
+  .badge-llm { fill: var(--llm); }
+  .badge-store { fill: var(--store-bg); }
+  .badge-text { font-family: var(--font-mono); font-weight: 600; font-size: 9px; fill: #FFFFFF; letter-spacing: 0.02em; }
+
+  .flow-line { stroke: var(--line-strong); stroke-width: 1.8; }
+  .flow-line-graph { stroke: var(--accent); stroke-width: 1.8; }
+  .flow-line-vector { stroke: var(--vector); stroke-width: 1.8; }
+  .flow-line-dashed { stroke: var(--ink-faint); stroke-width: 1.6; }
+  .flow-label { font-family: var(--font-mono); font-size: 10.5px; fill: var(--ink-faint); }
+
+  .section-header { font-family: var(--font-display); font-weight: 800; font-size: 15px; fill: var(--ink); }
+  .section-sub { font-family: var(--font-mono); font-weight: 500; font-size: 10.5px; fill: var(--ink-faint); }
+
+  .lane-label { font-family: var(--font-mono); font-weight: 600; font-size: 11px; letter-spacing: 0.11em; }
+  .lane-graph { fill: var(--accent-ink); }
+  .lane-vector { fill: var(--vector-ink); }
+
+  .zone-rect { fill: var(--surface-2); stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 4; }
+  .zone-label { font-family: var(--font-mono); font-size: 10px; fill: var(--ink-faint); }
+
+  .trace-bar { fill: var(--surface-2); stroke: var(--line); stroke-width: 1; stroke-dasharray: 2 3; }
+
+  /* ---------- source map ---------- */
+  .sourcemap {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 28px 30px 30px;
+    margin-bottom: 32px;
+  }
+  .sourcemap h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 16px;
+    margin: 0 0 6px;
+    color: var(--ink);
+  }
+  .sourcemap p.hint {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--ink-faint);
+    margin: 0 0 18px;
+  }
+  .map-table-scroll { overflow-x: auto; }
+  table.map-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-display);
+    font-size: 13.5px;
+    min-width: 560px;
+  }
+  table.map-table th {
+    text-align: left;
+    font-weight: 600;
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    border-bottom: 1px solid var(--line);
+    padding: 0 12px 10px 0;
+  }
+  table.map-table td {
+    padding: 10px 12px 10px 0;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink-soft);
+    vertical-align: top;
+  }
+  table.map-table tr:last-child td { border-bottom: none; }
+  table.map-table td.stage { color: var(--ink); font-weight: 600; }
+  table.map-table td.path code { font-family: var(--font-mono); font-size: 12.5px; color: var(--accent-ink); background: none; border: none; padding: 0; }
+
+  footer.page-foot {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-faint);
+    text-align: center;
+    padding-top: 8px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  @media (max-width: 720px) {
+    .wrap { padding: 40px 18px 60px; }
+    .legend { font-size: 12px; padding: 14px 16px; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="page-head">
+    <div class="eyebrow">tax_kg_poc_revised · framework/core/retrieve</div>
+    <h1>How a question becomes an answer</h1>
+    <p class="lede">
+      Every call to <code class="inline">/api/ask</code> runs the same pipeline: a cache check, an intent
+      classification, <strong>two retrieval paths run side by side</strong> — one walking the Neo4j graph via
+      an LLM-written Cypher query, the other doing vector similarity search over chunk embeddings — merged,
+      reranked, grounded, and handed to an LLM to write the answer. A second, independent LLM then grades that
+      answer and can trigger one bounded retry with a wider pool of chunks before anything is cached and returned.
+    </p>
+  </header>
+
+  <div class="legend">
+    <span class="legend-item"><span class="swatch graph"></span>Graph path</span>
+    <span class="legend-item"><span class="swatch vector"></span>Vector path</span>
+    <span class="legend-item"><span class="swatch retry"></span>Quality-gate retry</span>
+    <span class="legend-item"><span class="swatch terminal"></span>Short-circuit exit</span>
+    <span class="legend-item"><span class="swatch llm"></span>LLM call</span>
+    <span class="legend-item"><span class="swatch store"></span>Neo4j / Redis touch</span>
+  </div>
+
+  <div class="diagram-card">
+    <div class="diagram-scroll">
+      <figure>
+        <svg class="flow" viewBox="0 0 1200 2892" role="img" aria-label="Flowchart of the GraphRAG retrieval pipeline behind /api/ask: cache check, intent detection, parallel graph and vector search merged into one candidate pool, PII masking, reranking, grounding, an answer-generation and independent quality-judge loop with one bounded retry, citation verification, and response caching.">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--line-strong)"></path>
+            </marker>
+          </defs>
+<rect x="310.0" y="544.5" width="580" height="1115.5" rx="16" class="zone-rect" />
+<rect x="350.0" y="314.0" width="500" height="46" rx="8" class="trace-bar" />
+<text x="368.0" y="333.0" class="node-title-sm">Trace opened · observability.start_trace()</text>
+<text x="368.0" y="350.0" class="node-tag">core/infra + core/retrieve/observability.py — every step and LLM call below nests under one Langfuse trace</text>
+<text x="350.0" y="568.5" class="section-header">GraphRAGRetriever.retrieve()</text>
+<text x="350.0" y="584.5" class="section-sub">core/retrieve/graphrag.py — runs two retrieval paths and merges them</text>
+<text x="270" y="746.5" text-anchor="middle" class="lane-label lane-graph">GRAPH PATH</text>
+<text x="930" y="746.5" text-anchor="middle" class="lane-label lane-vector">VECTOR PATH</text>
+<line x1="600" y1="145.0" x2="600" y2="179.0" class="flow-line" marker-end="url(#arrow)" />
+<path d="M 850.0 231.5 L 850.0 229.4 L 970.0 229.4 L 970.0 227.2" fill="none" class="flow-line-dashed" marker-end="url(#arrow)" stroke-dasharray="6 5" />
+<text x="905.0" y="221.5" text-anchor="middle" class="flow-label">hit</text>
+<line x1="600" y1="284.0" x2="600" y2="314.0" class="flow-line" marker-end="url(#arrow)" />
+<text x="610.0" y="303.0" text-anchor="start" class="flow-label">miss</text>
+<line x1="600" y1="360.0" x2="600" y2="390.0" class="flow-line" marker-end="url(#arrow)" />
+<path d="M 350.0 450.2 L 350.0 448.1 L 250.0 448.1 L 250.0 446.0" fill="none" class="flow-line-dashed" marker-end="url(#arrow)" stroke-dasharray="6 5" />
+<text x="255.0" y="440.2" text-anchor="middle" class="flow-label">OUT_OF_SCOPE</text>
+<line x1="600" y1="510.5" x2="600" y2="544.5" class="flow-line" marker-end="url(#arrow)" />
+<text x="610.0" y="531.5" text-anchor="start" class="flow-label">EXACT_LOOKUP / RELATIONAL / CONCEPTUAL</text>
+<line x1="600" y1="712.5" x2="600" y2="742.5" class="flow-line" marker-end="url(#arrow)" />
+<line x1="270" y1="742.5" x2="270" y2="760.5" class="flow-line-graph" marker-end="url(#arrow)" />
+<line x1="930" y1="742.5" x2="930" y2="760.5" class="flow-line-vector" marker-end="url(#arrow)" />
+<line x1="270" y1="861.0" x2="270" y2="887.0" class="flow-line-graph" marker-end="url(#arrow)" />
+<line x1="270" y1="999.0" x2="270" y2="1025.0" class="flow-line-graph" marker-end="url(#arrow)" />
+<line x1="270" y1="1137.0" x2="270" y2="1163.0" class="flow-line-graph" marker-end="url(#arrow)" />
+<line x1="270" y1="1259.5" x2="270" y2="1285.5" class="flow-line-graph" marker-end="url(#arrow)" />
+<line x1="930" y1="861.0" x2="930" y2="887.0" class="flow-line-vector" marker-end="url(#arrow)" />
+<line x1="930" y1="983.5" x2="930" y2="1009.5" class="flow-line-vector" marker-end="url(#arrow)" />
+<line x1="930" y1="1106.0" x2="930" y2="1132.0" class="flow-line-vector" marker-end="url(#arrow)" />
+<path d="M 270.0 1366.5 L 270.0 1386.5 L 600.0 1386.5 L 600.0 1406.5" fill="none" class="flow-line-graph" marker-end="url(#arrow)" />
+<path d="M 930.0 1213.0 L 930.0 1309.8 L 600.0 1309.8 L 600.0 1406.5" fill="none" class="flow-line-vector" marker-end="url(#arrow)" />
+<line x1="600" y1="1487.5" x2="600" y2="1515.5" class="flow-line" marker-end="url(#arrow)" />
+<line x1="600" y1="1660.0" x2="600" y2="1694.0" class="flow-line" marker-end="url(#arrow)" />
+<path d="M 600.0 1830.0 L 600.0 1847.0 L 260.0 1847.0 L 260.0 1864.0" fill="none" class="flow-line" marker-end="url(#arrow)" />
+<line x1="600" y1="1830.0" x2="600" y2="1864.0" class="flow-line" marker-end="url(#arrow)" />
+<path d="M 600.0 1830.0 L 600.0 1847.0 L 940.0 1847.0 L 940.0 1864.0" fill="none" class="flow-line" marker-end="url(#arrow)" />
+<path d="M 260.0 2000.0 L 260.0 2015.0 L 600.0 2015.0 L 600.0 2030.0" fill="none" class="flow-line" marker-end="url(#arrow)" />
+<line x1="600" y1="2000.0" x2="600" y2="2030.0" class="flow-line" marker-end="url(#arrow)" />
+<path d="M 940.0 2000.0 L 940.0 2015.0 L 600.0 2015.0 L 600.0 2030.0" fill="none" class="flow-line" marker-end="url(#arrow)" />
+<path d="M 790.0 2075.0 L 790.0 2076.6 L 920.0 2076.6 L 920.0 2078.2" fill="none" class="flow-line-dashed" marker-end="url(#arrow)" stroke-dasharray="6 5" />
+<text x="830.0" y="2065.0" text-anchor="middle" class="flow-label">no</text>
+<line x1="600" y1="2120.0" x2="600" y2="2150.0" class="flow-line" marker-end="url(#arrow)" />
+<text x="610.0" y="2139.0" text-anchor="start" class="flow-label">yes</text>
+<line x1="600" y1="2246.5" x2="600" y2="2274.5" class="flow-line" marker-end="url(#arrow)" />
+<line x1="600" y1="2379.5" x2="600" y2="2409.5" class="flow-line" marker-end="url(#arrow)" />
+<path d="M 830.0 2457.5 L 830.0 2462.4 L 850.0 2462.4 L 850.0 2467.2" fill="none" class="flow-line-dashed" marker-end="url(#arrow)" stroke-dasharray="6 5" />
+<text x="868.0" y="2447.5" text-anchor="middle" class="flow-label">yes</text>
+<path d="M 1010.0 2531.0 L 1010.0 2539.5 L 600 2539.5" fill="none" class="flow-line-dashed" marker-end="url(#arrow)" stroke-dasharray="6 5" />
+<line x1="600" y1="2505.5" x2="600" y2="2539.5" class="flow-line" marker-end="url(#arrow)" />
+<text x="590.0" y="2526.5" text-anchor="end" class="flow-label">no</text>
+<line x1="600" y1="2620.5" x2="600" y2="2648.5" class="flow-line" marker-end="url(#arrow)" />
+<line x1="600" y1="2745.0" x2="600" y2="2771.0" class="flow-line" marker-end="url(#arrow)" />
+<g class="node">
+<rect x="350.0" y="40.0" width="500.0" height="105.0" rx="10" class="box-fill box-stroke" />
+<text x="368.0" y="64.0" class="node-title">POST /api/ask</text>
+<text x="368.0" y="88.5" class="node-body">Question text, plus optional metadata filters — jurisdiction,</text>
+<text x="368.0" y="104.0" class="node-body">authority level, effective-date, legal-concept tags.</text>
+<text x="368.0" y="119.0" class="node-tag">framework/webapp/app.py</text>
+</g>
+<g class="node">
+<rect x="350.0" y="179.0" width="500.0" height="105.0" rx="10" class="box-fill box-stroke" />
+<text x="368.0" y="203.0" class="node-title">cache.get_cached_answer()</text>
+<text x="368.0" y="227.5" class="node-body">Hashes the question + filters (SHA-256) and looks it up in</text>
+<text x="368.0" y="243.0" class="node-body">Redis. A hit returns instantly — nothing below runs.</text>
+<text x="368.0" y="258.0" class="node-tag">core/retrieve/cache.py</text>
+<rect x="799.5" y="191.0" width="38.5" height="17" rx="8.5" class="badge-store" />
+<text x="818.8" y="203.0" class="badge-text" text-anchor="middle">REDIS</text>
+</g>
+<g class="node">
+<rect x="970.0" y="179.0" width="220.0" height="96.5" rx="10" class="box-fill-terminal box-stroke-terminal" />
+<text x="988.0" y="203.0" class="node-title">Cache hit</text>
+<text x="988.0" y="227.5" class="node-body">Cached JSON is returned</text>
+<text x="988.0" y="243.0" class="node-body">as-is, flagged from_cache:</text>
+<text x="988.0" y="258.5" class="node-body">true.</text>
+</g>
+<g class="node">
+<rect x="350.0" y="390.0" width="500.0" height="120.5" rx="10" class="box-fill box-stroke" />
+<text x="368.0" y="414.0" class="node-title">detect_intent()</text>
+<text x="368.0" y="438.5" class="node-body">One LLM call sorts the question into EXACT_LOOKUP, RELATIONAL,</text>
+<text x="368.0" y="454.0" class="node-body">CONCEPTUAL, or OUT_OF_SCOPE — this label decides how hard the</text>
+<text x="368.0" y="469.5" class="node-body">vector path works below.</text>
+<text x="368.0" y="484.5" class="node-tag">core/retrieve/intent.py</text>
+<rect x="781.2" y="402.0" width="56.8" height="17" rx="8.5" class="badge-llm" />
+<text x="809.6" y="414.0" class="badge-text" text-anchor="middle">LLM CALL</text>
+</g>
+<g class="node">
+<rect x="10.0" y="390.0" width="240.0" height="112.0" rx="10" class="box-fill-terminal box-stroke-terminal" />
+<text x="28.0" y="414.0" class="node-title">Out of scope</text>
+<text x="28.0" y="438.5" class="node-body">A short refusal is returned</text>
+<text x="28.0" y="454.0" class="node-body">immediately — the retriever,</text>
+<text x="28.0" y="469.5" class="node-body">reranker, and answer LLM never</text>
+<text x="28.0" y="485.0" class="node-body">run.</text>
+</g>
+<g class="node">
+<rect x="350.0" y="600.5" width="500.0" height="112.0" rx="10" class="box-fill box-stroke" />
+<text x="368.0" y="624.5" class="node-title">extract_citation() → retrieve_by_citation()</text>
+<text x="368.0" y="649.0" class="node-body">Regex-matches an exact citation like “Section 80C(2)(a)” in</text>
+<text x="368.0" y="664.5" class="node-body">the question and fetches that chunk directly — a shortcut that</text>
+<text x="368.0" y="680.0" class="node-body">feeds straight into the merge below, alongside whatever the</text>
+<text x="368.0" y="695.5" class="node-body">two paths find.</text>
+</g>
+<g class="node">
+<rect x="105.0" y="764.5" width="330.0" height="96.5" rx="10" class="box-fill-graph box-stroke-graph" />
+<text x="123.0" y="788.5" class="node-title">nl_to_cypher()</text>
+<text x="123.0" y="813.0" class="node-body">LLM writes a Cypher query from the</text>
+<text x="123.0" y="828.5" class="node-body">question, given the graph's live label</text>
+<text x="123.0" y="844.0" class="node-body">and relationship-type schema.</text>
+<rect x="366.2" y="776.5" width="56.8" height="17" rx="8.5" class="badge-llm" />
+<text x="394.6" y="788.5" class="badge-text" text-anchor="middle">LLM CALL</text>
+</g>
+<g class="node">
+<rect x="105.0" y="887.0" width="330.0" height="112.0" rx="10" class="box-fill-graph box-stroke-graph" />
+<text x="123.0" y="911.0" class="node-title">run_graph_retrieval()</text>
+<text x="123.0" y="935.5" class="node-body">Executes the Cypher against Neo4j (20s</text>
+<text x="123.0" y="951.0" class="node-body">timeout). A failing query degrades to</text>
+<text x="123.0" y="966.5" class="node-body">vector-only instead of crashing the</text>
+<text x="123.0" y="982.0" class="node-body">request.</text>
+<rect x="384.5" y="899.0" width="38.5" height="17" rx="8.5" class="badge-store" />
+<text x="403.8" y="911.0" class="badge-text" text-anchor="middle">NEO4J</text>
+</g>
+<g class="node">
+<rect x="105.0" y="1025.0" width="330.0" height="112.0" rx="10" class="box-fill-graph box-stroke-graph" />
+<text x="123.0" y="1049.0" class="node-title">apply_metadata_filters()</text>
+<text x="123.0" y="1073.5" class="node-body">Drops matched nodes that fail the</text>
+<text x="123.0" y="1089.0" class="node-body">caller's status, jurisdiction,</text>
+<text x="123.0" y="1104.5" class="node-body">authority-level, date, or concept-tag</text>
+<text x="123.0" y="1120.0" class="node-body">filters.</text>
+</g>
+<g class="node">
+<rect x="105.0" y="1163.0" width="330.0" height="96.5" rx="10" class="box-fill-graph box-stroke-graph" />
+<text x="123.0" y="1187.0" class="node-title">get_chunk_ids_via_graph_traversal()</text>
+<text x="123.0" y="1211.5" class="node-body">Walks hasSourceChunk plus up to 6 levels</text>
+<text x="123.0" y="1227.0" class="node-body">of PART_OF descendants from each matched</text>
+<text x="123.0" y="1242.5" class="node-body">node — capped at 40 chunks.</text>
+</g>
+<g class="node">
+<rect x="105.0" y="1285.5" width="330.0" height="81.0" rx="10" class="box-fill-graph box-stroke-graph" />
+<text x="123.0" y="1309.5" class="node-title">get_chunks_by_ids()</text>
+<text x="123.0" y="1334.0" class="node-body">Fetches the actual chunk text for every</text>
+<text x="123.0" y="1349.5" class="node-body">id the traversal above found.</text>
+</g>
+<g class="node">
+<rect x="765.0" y="764.5" width="330.0" height="96.5" rx="10" class="box-fill-vector box-stroke-vector" />
+<text x="783.0" y="788.5" class="node-title">vector_mode gate</text>
+<text x="783.0" y="813.0" class="node-body">Per-intent config decides: search always</text>
+<text x="783.0" y="828.5" class="node-body">(RELATIONAL / CONCEPTUAL) or only if the</text>
+<text x="783.0" y="844.0" class="node-body">graph path found nothing (EXACT_LOOKUP).</text>
+</g>
+<g class="node">
+<rect x="765.0" y="887.0" width="330.0" height="96.5" rx="10" class="box-fill-vector box-stroke-vector" />
+<text x="783.0" y="911.0" class="node-title">embed question</text>
+<text x="783.0" y="935.5" class="node-body">SentenceTransformer (all-MiniLM-L6-v2)</text>
+<text x="783.0" y="951.0" class="node-body">encodes the question into the same</text>
+<text x="783.0" y="966.5" class="node-body">vector space as every stored chunk.</text>
+</g>
+<g class="node">
+<rect x="765.0" y="1009.5" width="330.0" height="96.5" rx="10" class="box-fill-vector box-stroke-vector" />
+<text x="783.0" y="1033.5" class="node-title">Neo4j vector index</text>
+<text x="783.0" y="1058.0" class="node-body">db.index.vector.queryNodes() over</text>
+<text x="783.0" y="1073.5" class="node-body">chunk_embedding_index returns the top-k</text>
+<text x="783.0" y="1089.0" class="node-body">chunks by cosine similarity.</text>
+<rect x="1044.5" y="1021.5" width="38.5" height="17" rx="8.5" class="badge-store" />
+<text x="1063.8" y="1033.5" class="badge-text" text-anchor="middle">NEO4J</text>
+</g>
+<g class="node">
+<rect x="765.0" y="1132.0" width="330.0" height="81.0" rx="10" class="box-fill-vector box-stroke-vector" />
+<text x="783.0" y="1156.0" class="node-title">Similar chunks</text>
+<text x="783.0" y="1180.5" class="node-body">chunk_id, text, and similarity score for</text>
+<text x="783.0" y="1196.0" class="node-body">each match.</text>
+</g>
+<g class="node">
+<rect x="350.0" y="1406.5" width="500.0" height="81.0" rx="10" class="box-fill-merge box-stroke-merge" />
+<text x="368.0" y="1430.5" class="node-title">Merge candidate_chunks</text>
+<text x="368.0" y="1455.0" class="node-body">Deduped by chunk_id — citation match first, then graph hits,</text>
+<text x="368.0" y="1470.5" class="node-body">then vector hits — into one candidate pool for the reranker.</text>
+</g>
+<g class="node">
+<rect x="350.0" y="1515.5" width="500.0" height="120.5" rx="10" class="box-fill box-stroke" />
+<text x="368.0" y="1539.5" class="node-title">PiiMasker.mask_*()</text>
+<text x="368.0" y="1564.0" class="node-body">HMAC-pseudonymizes PAN, Aadhaar, email, phone, and any</text>
+<text x="368.0" y="1579.5" class="node-body">always-masked field on every node, row, and chunk — the single</text>
+<text x="368.0" y="1595.0" class="node-body">point PII is enforced before data leaves retrieval.</text>
+<text x="368.0" y="1610.0" class="node-tag">core/retrieve/pii.py</text>
+</g>
+<g class="node">
+<rect x="350.0" y="1694.0" width="500.0" height="136.0" rx="10" class="box-fill box-stroke" />
+<text x="368.0" y="1718.0" class="node-title">reranker.rerank()</text>
+<text x="368.0" y="1742.5" class="node-body">BAAI/bge-reranker-base cross-encoder scores each (question,</text>
+<text x="368.0" y="1758.0" class="node-body">chunk) pair, sigmoid-normalizes to 0–1, and keeps the top 25</text>
+<text x="368.0" y="1773.5" class="node-body">clearing a 0.55 relevance bar — or a lower 0.35 “fallback tier”</text>
+<text x="368.0" y="1789.0" class="node-body">if nothing clears 0.55.</text>
+<text x="368.0" y="1804.0" class="node-tag">core/retrieve/reranker.py</text>
+</g>
+<g class="node">
+<rect x="95.0" y="1864.0" width="330.0" height="136.0" rx="10" class="box-fill box-stroke" />
+<text x="113.0" y="1888.0" class="node-title">ground_answer()</text>
+<text x="113.0" y="1912.5" class="node-body">Turns the top rerank score, whether</text>
+<text x="113.0" y="1928.0" class="node-body">graph rows were found, and the</text>
+<text x="113.0" y="1943.5" class="node-body">fallback-tier penalty into one 0–1</text>
+<text x="113.0" y="1959.0" class="node-body">confidence number.</text>
+<text x="113.0" y="1974.0" class="node-tag">grounding.py</text>
+</g>
+<g class="node">
+<rect x="435.0" y="1864.0" width="330.0" height="112.0" rx="10" class="box-fill box-stroke" />
+<text x="453.0" y="1888.0" class="node-title">get_document_details()</text>
+<text x="453.0" y="1912.5" class="node-body">Attaches each cited chunk's source</text>
+<text x="453.0" y="1928.0" class="node-body">document — name, authority level,</text>
+<text x="453.0" y="1943.5" class="node-body">jurisdiction, page — for the citation</text>
+<text x="453.0" y="1959.0" class="node-body">panel.</text>
+</g>
+<g class="node">
+<rect x="775.0" y="1864.0" width="330.0" height="127.5" rx="10" class="box-fill box-stroke" />
+<text x="793.0" y="1888.0" class="node-title">get_parent_section_context()</text>
+<text x="793.0" y="1912.5" class="node-body">Walks PART_OF up to 6 levels to the</text>
+<text x="793.0" y="1928.0" class="node-body">nearest whole Section or</text>
+<text x="793.0" y="1943.5" class="node-body">GenericDocument, so generation sees</text>
+<text x="793.0" y="1959.0" class="node-body">full context beyond one isolated</text>
+<text x="793.0" y="1974.5" class="node-body">chunk.</text>
+</g>
+<g class="node">
+<polygon points="600,2030.0 790.0,2075.0 600,2120.0 410.0,2075.0" class="diamond-fill diamond-stroke" />
+<text x="600" y="2072.2" text-anchor="middle" class="diamond-text">Any graph rows</text>
+<text x="600" y="2085.8" text-anchor="middle" class="diamond-text">or reranked chunks?</text>
+</g>
+<g class="node">
+<rect x="920.0" y="2030.0" width="260.0" height="96.5" rx="10" class="box-fill-terminal box-stroke-terminal" />
+<text x="938.0" y="2054.0" class="node-title">Nothing found</text>
+<text x="938.0" y="2078.5" class="node-body">An honest “I couldn't find</text>
+<text x="938.0" y="2094.0" class="node-body">anything” is returned rather</text>
+<text x="938.0" y="2109.5" class="node-body">than a guess.</text>
+</g>
+<g class="node">
+<rect x="350.0" y="2150.0" width="500.0" height="96.5" rx="10" class="box-fill box-stroke" />
+<text x="368.0" y="2174.0" class="node-title">_generate() · answer_generation prompt</text>
+<text x="368.0" y="2198.5" class="node-body">LLM writes the answer from question + intent + graph rows</text>
+<text x="368.0" y="2214.0" class="node-body">(JSON) + reranked chunk text (1.5k chars each) +</text>
+<text x="368.0" y="2229.5" class="node-body">parent-section context (3k chars each).</text>
+<rect x="781.2" y="2162.0" width="56.8" height="17" rx="8.5" class="badge-llm" />
+<text x="809.6" y="2174.0" class="badge-text" text-anchor="middle">LLM CALL</text>
+</g>
+<g class="node">
+<rect x="350.0" y="2274.5" width="500.0" height="105.0" rx="10" class="box-fill box-stroke" />
+<text x="368.0" y="2298.5" class="node-title">answer_quality.judge_answer()</text>
+<text x="368.0" y="2323.0" class="node-body">A second, independent LLM grades the answer on groundedness,</text>
+<text x="368.0" y="2338.5" class="node-body">completeness, and specificity — it never grades its own work.</text>
+<text x="368.0" y="2353.5" class="node-tag">core/retrieve/answer_quality.py</text>
+<rect x="781.2" y="2286.5" width="56.8" height="17" rx="8.5" class="badge-llm" />
+<text x="809.6" y="2298.5" class="badge-text" text-anchor="middle">LLM CALL</text>
+</g>
+<g class="node">
+<polygon points="600,2409.5 830.0,2457.5 600,2505.5 370.0,2457.5" class="diamond-fill diamond-stroke" />
+<text x="600" y="2454.8" text-anchor="middle" class="diamond-text">Score below 0.6, and</text>
+<text x="600" y="2468.2" text-anchor="middle" class="diamond-text">more candidates left unused?</text>
+</g>
+<g class="node">
+<rect x="850.0" y="2403.5" width="320.0" height="127.5" rx="10" class="box-fill-retry box-stroke-retry" />
+<text x="868.0" y="2427.5" class="node-title">Retry once</text>
+<text x="868.0" y="2452.0" class="node-body">Reranks a wider pool (40 chunks, 0.3</text>
+<text x="868.0" y="2467.5" class="node-body">bar), feeds the judge's gap list</text>
+<text x="868.0" y="2483.0" class="node-body">back as instructions, regenerates,</text>
+<text x="868.0" y="2498.5" class="node-body">and re-judges — then keeps whichever</text>
+<text x="868.0" y="2514.0" class="node-body">attempt scored higher.</text>
+</g>
+<g class="node">
+<rect x="350.0" y="2539.5" width="500.0" height="81.0" rx="10" class="box-fill box-stroke" />
+<text x="368.0" y="2563.5" class="node-title">verify_citations()</text>
+<text x="368.0" y="2588.0" class="node-body">Regex-checks the answer actually names a chunk_id or node id</text>
+<text x="368.0" y="2603.5" class="node-body">it drew on; appends a caution note if it doesn't.</text>
+</g>
+<g class="node">
+<rect x="350.0" y="2648.5" width="500.0" height="96.5" rx="10" class="box-fill box-stroke" />
+<text x="368.0" y="2672.5" class="node-title">Assemble response + cache.set_cached_answer()</text>
+<text x="368.0" y="2697.0" class="node-body">Answer, cited chunks, graph nodes/edges, confidence, and</text>
+<text x="368.0" y="2712.5" class="node-body">retrieval_scope are cached in Redis (1-hour TTL); the trace is</text>
+<text x="368.0" y="2728.0" class="node-body">closed and flushed to Langfuse.</text>
+</g>
+<g class="node">
+<rect x="450.0" y="2771.0" width="300.0" height="81.0" rx="10" class="box-fill-terminal box-stroke-terminal" />
+<text x="468.0" y="2795.0" class="node-title">JSON response</text>
+<text x="468.0" y="2819.5" class="node-body">Returned to the caller that opened</text>
+<text x="468.0" y="2835.0" class="node-body">this request.</text>
+</g>
+        </svg>
+      </figure>
+    </div>
+    <figcaption class="diagram-caption">The full request lifecycle of <code class="inline" style="background:none;border:none;padding:0;">/api/ask</code>, from the client's question to the cached JSON response — scroll to see the full height.</figcaption>
+  </div>
+
+  <div class="sourcemap">
+    <h2>Where each stage lives</h2>
+    <p class="hint">All paths relative to <code class="inline">tax_kg_poc_revised/</code>.</p>
+    <div class="map-table-scroll">
+      <table class="map-table">
+        <thead>
+          <tr><th>Stage</th><th>File</th><th>Role</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="stage">Route + orchestration</td><td class="path"><code>framework/webapp/app.py</code></td><td>Owns <code class="inline">/api/ask</code>; calls every module below in order and assembles the response.</td></tr>
+          <tr><td class="stage">Cache</td><td class="path"><code>core/retrieve/cache.py</code></td><td>Redis-backed question→answer cache and per-request agent-state log; fails safe with no Redis.</td></tr>
+          <tr><td class="stage">Intent</td><td class="path"><code>core/retrieve/intent.py</code></td><td>One LLM call, scoped by the domain pack's valid intent labels.</td></tr>
+          <tr><td class="stage">Retrieval orchestrator</td><td class="path"><code>core/retrieve/graphrag.py</code></td><td><code>GraphRAGRetriever</code> — citation lookup, Cypher generation + execution, vector search, chunk traversal, metadata filters, PII enforcement.</td></tr>
+          <tr><td class="stage">Privacy</td><td class="path"><code>core/retrieve/pii.py</code></td><td><code>PiiMasker</code> — HMAC pseudonymization rules, sourced from the domain pack's <code>DomainConfig</code>.</td></tr>
+          <tr><td class="stage">Relevance</td><td class="path"><code>core/retrieve/reranker.py</code></td><td>BGE cross-encoder reranking with a primary and fallback relevance tier.</td></tr>
+          <tr><td class="stage">Grounding</td><td class="path"><code>core/retrieve/grounding.py</code></td><td>Confidence scoring and post-generation citation verification.</td></tr>
+          <tr><td class="stage">Answer quality</td><td class="path"><code>core/retrieve/answer_quality.py</code></td><td>Independent LLM judge; drives the single bounded retry.</td></tr>
+          <tr><td class="stage">Observability</td><td class="path"><code>core/retrieve/observability.py</code></td><td>Wraps every LLM call above in one Langfuse trace per question.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer class="page-foot">Traced from source, 24 Aug 2026 — regenerate this page after any change to <code class="inline">core/retrieve/</code>.</footer>
+</div>
