@@ -156,11 +156,8 @@ def test_pick_canonical_prefers_ingested_judgment_over_stub():
 
 # --- 3. PII: opinion pseudonymisation + plain-row masking --------------------------------
 
-@pytest.mark.xfail(strict=True, reason=(
-    "BUG extract_opinion.party_variants()/redact(): a single-word client name ('Infosys') fails "
-    "looks_like_party_name() (no corporate suffix, < 2 capitalised words) so it is never pseudonymised, "
-    "and redact() is case-sensitive so 'INFOSYS'/'ZOMATO LIMITED' survive in chunk text - which is shown "
-    "to the answer LLM and to users researching other clients' matters."))
+# 2026-10-14: fixed on phase0/review-pii (looks_like_party_name accepts a
+# single capitalised word; redact() is case-insensitive) - now a regression test.
 def test_opinion_redaction_catches_single_word_and_uppercase_client():
     import extract_opinion
     red = extract_opinion.build_redactions("Infosys", "", "")

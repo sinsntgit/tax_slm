@@ -305,13 +305,31 @@ _GENERIC_FIRST_WORDS = {"the", "india", "indian", "global", "international", "na
                         "united", "general", "resident", "non-resident", "unrelated", "not", "a", "an"}
 
 
+# 2026-10-14: review/phase0 PII bug - a one-word party ("Infosys", "Zomato")
+# has no corporate suffix and < 2 capitalised words, so it was never treated
+# as a name and never pseudonymised. A single capitalised token is now a name
+# unless it is one of these generic descriptors (a description like
+# "Individual" must not turn every "individual" in the text into [COUNTERPARTY]).
+_SINGLE_WORD_DESCRIPTORS = _GENERIC_FIRST_WORDS | {
+    "individual", "company", "companies", "firm", "client", "assessee", "taxpayer", "resident",
+    "nonresident", "partnership", "trust", "government", "foreign", "parent", "subsidiary",
+    "buyer", "seller", "investor", "investors", "employee", "employees", "employer", "vendor",
+    "customer", "lender", "borrower", "shareholder", "shareholders", "promoter", "promoters",
+    "huf", "aop", "boi", "llp", "various", "multiple", "others", "self"}
+
+
 def looks_like_party_name(name: str) -> bool:
     base = re.sub(r"\([^)]*\)", "", name or "").strip()
     if not base or _NOT_A_NAME_RE.match(base):
         return False
     if _CORPORATE_SUFFIX_RE.search(base):
         return True
-    return sum(1 for w in base.split() if w[:1].isupper()) >= 2
+    words = base.split()
+    if len(words) == 1:
+        w = words[0].strip(",.")
+        return (len(w) >= 3 and w[:1].isupper() and re.fullmatch(r"[A-Za-z][A-Za-z&.'-]*", w) is not None
+                and w.lower() not in _SINGLE_WORD_DESCRIPTORS)
+    return sum(1 for w in words if w[:1].isupper()) >= 2
 
 
 def party_variants(name: str, organisation: bool = True) -> list[str]:
@@ -335,24 +353,81 @@ def party_variants(name: str, organisation: bool = True) -> list[str]:
     return sorted(variants, key=len, reverse=True)
 
 
+def _full_name_forms(name: str) -> set[str]:
+    """The party's name exactly as given (with/without a trailing parenthetical),
+    lower-cased - as opposed to DERIVED short forms such as its first word."""
+    name = (name or "").strip()
+    base = re.sub(r"\s*\([^)]*\)\s*$", "", name).strip().rstrip(",")
+    return {f.lower() for f in (name, base) if f}
+
+
 def build_redactions(client: str, counterparty: str, partner: str, protected: str = "") -> list[tuple[str, str]]:
     """`protected`: text of the cited authorities - a single-word short form
     (e.g. "Apollo") that also occurs in a cited case name is NOT used as a
-    variant, so pseudonymising the client never mangles an authority."""
+    variant, so pseudonymising the client never mangles an authority.
+
+    2026-10-14: that check is now case-insensitive, and it never drops the
+    party's OWN full name - a one-word client "Infosys" that also occurs in a
+    cited "Infosys BPO Ltd v. CIT" would otherwise never be pseudonymised at
+    all. redact(..., protected=protected_phrases(...)) instead leaves the
+    cited-authority text itself intact for single-word variants."""
     pairs = [(v, "[CLIENT]") for v in party_variants(client)]
     pairs += [(v, "[COUNTERPARTY]") for v in party_variants(counterparty)]
     pairs += [(v, "[PARTNER]") for v in party_variants(partner, organisation=False)]
+    full = _full_name_forms(client) | _full_name_forms(counterparty) | _full_name_forms(partner)
     pairs = [(v, t) for v, t in pairs
-             if " " in v or not re.search(r"(?<!\w)" + re.escape(v) + r"(?!\w)", protected or "")]
+             if " " in v or v.lower() in full
+             or not re.search(r"(?<!\w)" + re.escape(v) + r"(?!\w)", protected or "", re.I)]
     return sorted(pairs, key=lambda p: len(p[0]), reverse=True)
 
 
-def redact(text: str, redactions: list[tuple[str, str]]) -> str:
+def protected_phrases(parsed: dict) -> list[str]:
+    """Cited-authority strings redact() must leave intact: each raw citation,
+    plus a case's bare name ("Apollo Tyres Ltd v. CIT") as it usually appears
+    in running text."""
+    phrases = set()
+    for raw in (parsed.get("cases_cited_raw") or []) + (parsed.get("sections_cited_raw") or []) \
+            + (parsed.get("treaty_raw") or []):
+        raw = (raw or "").strip()
+        if not raw:
+            continue
+        phrases.add(raw)
+        bare = re.split(r"\s*[,(\[]", raw, maxsplit=1)[0].strip()
+        if bare and bare != raw and _CASE_RE.search(bare):
+            phrases.add(bare)
+    return sorted(phrases, key=len, reverse=True)
+
+
+def redact(text: str, redactions: list[tuple[str, str]], protected=()) -> str:
+    """2026-10-14: case-insensitive (review/phase0 PII bug: "ZOMATO LIMITED" /
+    "INFOSYS" survived a case-sensitive replace); word-boundary safe as before.
+    Multi-word variants are replaced everywhere (unchanged behaviour); single-
+    word variants everywhere EXCEPT inside the `protected` cited-authority
+    phrases, so "Infosys BPO Ltd v. CIT" stays a usable citation."""
     if not text or not redactions:
         return text
+
+    def sub(t: str, variant: str, token: str) -> str:
+        return re.sub(r"(?<![\w\[])" + re.escape(variant) + r"(?!\w)", token, t, flags=re.I)
+
     for variant, token in redactions:
-        text = re.sub(r"(?<![\w\[])" + re.escape(variant) + r"(?!\w)", token, text)
-    return text
+        if " " in variant:
+            text = sub(text, variant, token)
+    single = [p for p in redactions if " " not in p[0]]
+    if not single:
+        return text
+    held: list[str] = []
+
+    def hold(m):
+        held.append(m.group(0))
+        return f"{len(held) - 1}"
+
+    for phrase in protected or ():
+        if phrase:
+            text = re.sub(r"(?<!\w)" + re.escape(phrase) + r"(?!\w)", hold, text, flags=re.I)
+    for variant, token in single:
+        text = sub(text, variant, token)
+    return re.sub("(\\d+)", lambda m: held[int(m.group(1))], text)
 
 
 # --- cited-authority classification + id resolution ---------------------------
@@ -566,7 +641,8 @@ def build_graph_from_opinion(parsed: dict, source_file: str, doc_meta: dict | No
     protected = " | ".join(parsed["cases_cited_raw"] + parsed["sections_cited_raw"] + parsed["treaty_raw"])
     redactions = build_redactions(parsed["client"], parsed["counterparty"], parsed["partner"],
                                   protected=protected) if redact_parties else []
-    text = {k: redact(v, redactions) for k, v in parsed["text_by_key"].items()}
+    keep = protected_phrases(parsed)
+    text = {k: redact(v, redactions, keep) for k, v in parsed["text_by_key"].items()}
 
     def add_stub(stub: dict):
         if stub["id"] not in stub_ids:
@@ -694,8 +770,8 @@ def build_graph_from_opinion(parsed: dict, source_file: str, doc_meta: dict | No
     category_parts = [c.strip() for c in re.split(r"\s*/\s*", parsed["category"]) if c.strip()]
     opinion_props = {
         "opinion_id": parsed["opinion_id"],
-        "title": redact(title, redactions),
-        "full_citation": f"{parsed['opinion_id']} - {redact(title, redactions)}" if parsed["opinion_id"] else redact(title, redactions),
+        "title": redact(title, redactions, keep),
+        "full_citation": f"{parsed['opinion_id']} - {redact(title, redactions, keep)}" if parsed["opinion_id"] else redact(title, redactions, keep),
         "category": parsed["category"],
         "legal_concepts": category_parts,
         "opinion_date": parsed["date"],
@@ -756,7 +832,7 @@ def build_graph_from_opinion(parsed: dict, source_file: str, doc_meta: dict | No
     for n, s in enumerate(parsed["sections"], start=1):
         if s["key"] in BOILERPLATE_SECTION_KEYS:
             continue
-        body_text = redact(s["text"], redactions)
+        body_text = redact(s["text"], redactions, keep)
         if s["key"] == "opinion_conclusion":
             body_text = text.get("opinion_conclusion", body_text)
             if parsed["confidence_level"]:

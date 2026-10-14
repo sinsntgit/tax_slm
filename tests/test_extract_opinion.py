@@ -168,6 +168,53 @@ def test_redaction_never_mangles_cited_authorities():
     assert eo.party_variants("Not applicable") == []
 
 
+# 2026-10-14: phase0/review-pii - single-word / upper-case party names.
+
+def test_single_word_and_case_variant_party_names_are_pseudonymised():
+    pairs = eo.build_redactions("Infosys", "Zomato Limited", "Mehta")
+    text = ("INFOSYS paid fees to ZOMATO LIMITED; infosys's CFO met Zomato. Infosystems Ltd and "
+            "Zomatoes are unrelated. Signed: MEHTA.")
+    out = eo.redact(text, pairs)
+    assert out == ("[CLIENT] paid fees to [COUNTERPARTY]; [CLIENT]'s CFO met [COUNTERPARTY]. Infosystems Ltd and "
+                   "Zomatoes are unrelated. Signed: [PARTNER].")
+    # generic one-word descriptions are NOT names (else every "individual" in the text would be replaced)
+    assert eo.party_variants("Individual") == [] and eo.party_variants("Unrelated") == []
+    assert not eo.looks_like_party_name("Individual") and eo.looks_like_party_name("Infosys")
+
+
+def test_single_word_client_keeps_cited_authority_intact():
+    citation = "Infosys BPO Ltd v. DCIT, (2015) 60 taxmann.com 1 (Bang.)"
+    parsed = {"cases_cited_raw": [citation], "sections_cited_raw": [], "treaty_raw": []}
+    # the client's OWN full name is never dropped just because a cited case contains it...
+    pairs = eo.build_redactions("Infosys", "", "", protected=citation)
+    assert ("Infosys", "[CLIENT]") in pairs
+    keep = eo.protected_phrases(parsed)
+    assert "Infosys BPO Ltd v. DCIT" in keep
+    out = eo.redact("Infosys relied on Infosys BPO Ltd v. DCIT and on " + citation + "; INFOSYS agrees.", pairs, keep)
+    # ...but the authority's own text is left intact (bare name and full citation).
+    assert out == "[CLIENT] relied on Infosys BPO Ltd v. DCIT and on " + citation + "; [CLIENT] agrees."
+    # the existing rule still holds and is case-insensitive: a DERIVED short
+    # form found in a cited authority is not used as a variant at all
+    pairs2 = eo.build_redactions("Apollo Holdings Private Limited", "", "", protected="APOLLO TYRES LTD v. CIT")
+    assert ("Apollo", "[CLIENT]") not in pairs2
+    assert eo.redact("APOLLO HOLDINGS PRIVATE LIMITED relied on Apollo Tyres", pairs2) == \
+        "[CLIENT] relied on Apollo Tyres"
+
+
+def test_single_word_client_end_to_end_chunks_are_redacted():
+    path = _by_prefix("OP-01")
+    text = path.read_text(encoding="utf-8").replace("Nimbus Technologies Private Limited", "Infosys")
+    text = text.replace("Nimbus", "INFOSYS")
+    parsed = eo.parse_opinion(text, path.name)
+    assert parsed["client"] == "Infosys"
+    graph = eo.build_graph_from_opinion(parsed, path.name)
+    props = graph["entities"][0]["properties"]
+    assert props["client_name"] == "Infosys"
+    for t in [c["text"] for c in graph["chunks"]] + [props["facts"], props["analysis"], props["title"]]:
+        assert "infosys" not in t.lower()
+    assert any("[CLIENT]" in c["text"] for c in graph["chunks"])
+
+
 # --- id parity with the other converters -----------------------------------------
 
 def test_section_ids_match_case_law_resolver_and_chunking():
