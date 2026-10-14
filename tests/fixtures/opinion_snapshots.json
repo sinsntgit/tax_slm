@@ -1,0 +1,682 @@
+{
+ "OP-01_withholding_tax_fts_section195.md": {
+  "node_id": "FirmOpinion_OP_01",
+  "opinion_id": "OP-01",
+  "date": "2026-01-14",
+  "category": "International Tax / Withholding Tax (TDS)",
+  "confidence_level": "More likely than not",
+  "confidence_band": "more_likely_than_not",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "Article:Article_12_TaxTreaty_USA",
+   "CaseLaw:CaseLaw_CIT_v_De_Beers_India_Minerals_P_Ltd_2012_346_ITR_467_Kar",
+   "CaseLaw:CaseLaw_Engineering_Analysis_Centre_of_Excellence_Pvt_Ltd_v_CIT_2021",
+   "Clause:ITA1961__Clause_9_1_vii",
+   "Explanation:Explanation_2_to_ITA1961__Clause_9_1_vii",
+   "Section:ITA1961__Section_195",
+   "SubSection:ITA1961__SubSection_90_2",
+   "TaxTreaty:TaxTreaty_USA"
+  ],
+  "relationships": [
+   "Article_12_TaxTreaty_USA-[PART_OF|cited_reference]->TaxTreaty_USA",
+   "FirmOpinion_OP_01-[RELIES_ON_CASE|ingested_document]->CaseLaw_CIT_v_De_Beers_India_Minerals_P_Ltd_2012_346_ITR_467_Kar",
+   "FirmOpinion_OP_01-[RELIES_ON_CASE|ingested_document]->CaseLaw_Engineering_Analysis_Centre_of_Excellence_Pvt_Ltd_v_CIT_2021",
+   "FirmOpinion_OP_01-[RELIES_ON_PROVISION|ingested_document]->Article_12_TaxTreaty_USA",
+   "FirmOpinion_OP_01-[RELIES_ON_PROVISION|ingested_document]->Explanation_2_to_ITA1961__Clause_9_1_vii",
+   "FirmOpinion_OP_01-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Clause_9_1_vii",
+   "FirmOpinion_OP_01-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_195",
+   "FirmOpinion_OP_01-[RELIES_ON_PROVISION|ingested_document]->ITA1961__SubSection_90_2"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [],
+  "ambiguity_types": []
+ },
+ "OP-02_slump_sale_section50B.md": {
+  "node_id": "FirmOpinion_OP_02",
+  "opinion_id": "OP-02",
+  "date": "2026-01-22",
+  "category": "M&A Tax / Business Reorganisation",
+  "confidence_level": "High degree of comfort on characterisation; net-worth computation may attract scrutiny",
+  "confidence_band": "high",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "CaseLaw:CaseLaw_CIT_v_Artex_Manufacturing_Co_1997_227_ITR_260_SC",
+   "CaseLaw:CaseLaw_PNB_Finance_Ltd_v_CIT_2008_307_ITR_75_SC",
+   "Rule:ITR1962__Rule_6H",
+   "Section:ITA1961__Section_50B",
+   "SubSection:ITA1961__SubSection_2_19AA",
+   "SubSection:ITA1961__SubSection_2_42C"
+  ],
+  "relationships": [
+   "FirmOpinion_OP_02-[RELIES_ON_CASE|ingested_document]->CaseLaw_CIT_v_Artex_Manufacturing_Co_1997_227_ITR_260_SC",
+   "FirmOpinion_OP_02-[RELIES_ON_CASE|ingested_document]->CaseLaw_PNB_Finance_Ltd_v_CIT_2008_307_ITR_75_SC",
+   "FirmOpinion_OP_02-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_50B",
+   "FirmOpinion_OP_02-[RELIES_ON_PROVISION|ingested_document]->ITA1961__SubSection_2_19AA",
+   "FirmOpinion_OP_02-[RELIES_ON_PROVISION|ingested_document]->ITA1961__SubSection_2_42C",
+   "FirmOpinion_OP_02-[RELIES_ON_PROVISION|ingested_document]->ITR1962__Rule_6H"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [],
+  "ambiguity_types": []
+ },
+ "OP-03_ltcg_unlisted_shares_section112.md": {
+  "node_id": "FirmOpinion_OP_03",
+  "opinion_id": "OP-03",
+  "date": "2026-02-03",
+  "category": "Capital Gains Tax",
+  "confidence_level": "High",
+  "confidence_band": "high",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "Section:ITA1961__Section_112",
+   "Section:ITA1961__Section_48",
+   "SubSection:ITA1961__SubSection_2_29A",
+   "SubSection:ITA1961__SubSection_2_42A"
+  ],
+  "relationships": [
+   "FirmOpinion_OP_03-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_112",
+   "FirmOpinion_OP_03-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_48",
+   "FirmOpinion_OP_03-[RELIES_ON_PROVISION|ingested_document]->ITA1961__SubSection_2_29A",
+   "FirmOpinion_OP_03-[RELIES_ON_PROVISION|ingested_document]->ITA1961__SubSection_2_42A"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [],
+  "ambiguity_types": []
+ },
+ "OP-04_gaar_holdco_interposition.md": {
+  "node_id": "FirmOpinion_OP_04",
+  "opinion_id": "OP-04",
+  "date": "2026-02-11",
+  "category": "GAAR / Anti-Avoidance",
+  "confidence_level": "Fairly arguable position at best; recommend restructuring rationale be strengthened",
+  "confidence_band": "fairly_arguable",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "CBDTCircular:CBDTCircular_7_of_2017",
+   "CaseLaw:CaseLaw_Vodafone_International_Holdings_BV_v_UOI_2012_341_ITR_1_SC",
+   "Rule:ITR1962__Rule_10U",
+   "Section:ITA1961__Section_96",
+   "Section:ITA1961__Section_97",
+   "SubSection:ITA1961__SubSection_90_2A",
+   "TaxTreaty:TaxTreaty_Mauritius"
+  ],
+  "relationships": [
+   "FirmOpinion_OP_04-[RELIES_ON_AUTHORITY|ingested_document]->CBDTCircular_7_of_2017",
+   "FirmOpinion_OP_04-[RELIES_ON_CASE|ingested_document]->CaseLaw_Vodafone_International_Holdings_BV_v_UOI_2012_341_ITR_1_SC",
+   "FirmOpinion_OP_04-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_96",
+   "FirmOpinion_OP_04-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_97",
+   "FirmOpinion_OP_04-[RELIES_ON_PROVISION|ingested_document]->ITA1961__SubSection_90_2A",
+   "FirmOpinion_OP_04-[RELIES_ON_PROVISION|ingested_document]->ITR1962__Rule_10U",
+   "FirmOpinion_OP_04-[RELIES_ON_PROVISION|ingested_document]->TaxTreaty_Mauritius"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [],
+  "ambiguity_types": []
+ },
+ "OP-05_transfer_pricing_management_fee.md": {
+  "node_id": "FirmOpinion_OP_05",
+  "opinion_id": "OP-05",
+  "date": "2026-02-19",
+  "category": "Transfer Pricing",
+  "confidence_level": "Reasonable / more likely than not, contingent on documentation",
+  "confidence_band": "more_likely_than_not",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "CaseLaw:CaseLaw_CIT_v_EKL_Appliances_Ltd_2012_345_ITR_241_Del",
+   "CaseLaw:CaseLaw_Magneti_Marelli_Powertrain_India_P_Ltd_v_DCIT",
+   "Rule:ITR1962__Rule_10B",
+   "Rule:ITR1962__Rule_10CA",
+   "Section:ITA1961__Section_92",
+   "Section:ITA1961__Section_92C",
+   "Section:ITA1961__Section_92CA"
+  ],
+  "relationships": [
+   "FirmOpinion_OP_05-[RELIES_ON_CASE|ingested_document]->CaseLaw_CIT_v_EKL_Appliances_Ltd_2012_345_ITR_241_Del",
+   "FirmOpinion_OP_05-[RELIES_ON_CASE|ingested_document]->CaseLaw_Magneti_Marelli_Powertrain_India_P_Ltd_v_DCIT",
+   "FirmOpinion_OP_05-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_92",
+   "FirmOpinion_OP_05-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_92C",
+   "FirmOpinion_OP_05-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_92CA",
+   "FirmOpinion_OP_05-[RELIES_ON_PROVISION|ingested_document]->ITR1962__Rule_10B",
+   "FirmOpinion_OP_05-[RELIES_ON_PROVISION|ingested_document]->ITR1962__Rule_10CA"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [],
+  "ambiguity_types": []
+ },
+ "OP-06_esop_taxation_startup_deferral.md": {
+  "node_id": "FirmOpinion_OP_06",
+  "opinion_id": "OP-06",
+  "date": "2026-02-27",
+  "category": "Employment Tax / ESOP",
+  "confidence_level": "High",
+  "confidence_band": "high",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "CBDTCircular:CBDTCircular_18_of_2020",
+   "Clause:ITA1961__Clause_17_2_vi",
+   "Rule:ITR1962__Rule_3_8",
+   "Rule:ITR1962__Rule_3_9",
+   "SubSection:ITA1961__SubSection_192_1C"
+  ],
+  "relationships": [
+   "FirmOpinion_OP_06-[RELIES_ON_AUTHORITY|ingested_document]->CBDTCircular_18_of_2020",
+   "FirmOpinion_OP_06-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Clause_17_2_vi",
+   "FirmOpinion_OP_06-[RELIES_ON_PROVISION|ingested_document]->ITA1961__SubSection_192_1C",
+   "FirmOpinion_OP_06-[RELIES_ON_PROVISION|ingested_document]->ITR1962__Rule_3_8",
+   "FirmOpinion_OP_06-[RELIES_ON_PROVISION|ingested_document]->ITR1962__Rule_3_9"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [],
+  "ambiguity_types": []
+ },
+ "OP-07_buyback_tax_section115QA.md": {
+  "node_id": "FirmOpinion_OP_07",
+  "opinion_id": "OP-07",
+  "date": "2026-03-05",
+  "category": "Corporate Tax / Buyback",
+  "confidence_level": "High (based on express statutory amendment)",
+  "confidence_band": "high",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "Clause:ITA1961__Clause_2_22_f",
+   "Section:ITA1961__Section_115QA",
+   "SubSection:ITA1961__SubSection_10_34A",
+   "SubSection:ITA1961__SubSection_56_2"
+  ],
+  "relationships": [
+   "FirmOpinion_OP_07-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Clause_2_22_f",
+   "FirmOpinion_OP_07-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_115QA",
+   "FirmOpinion_OP_07-[RELIES_ON_PROVISION|ingested_document]->ITA1961__SubSection_10_34A",
+   "FirmOpinion_OP_07-[RELIES_ON_PROVISION|ingested_document]->ITA1961__SubSection_56_2"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [],
+  "ambiguity_types": []
+ },
+ "OP-08_angel_tax_section56_2_viib.md": {
+  "node_id": "FirmOpinion_OP_08",
+  "opinion_id": "OP-08",
+  "date": "2026-03-12",
+  "category": "Corporate Tax / Angel Tax",
+  "confidence_level": "Moderate; fairly arguable if the valuation assumptions are robustly documented",
+  "confidence_band": "moderate",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "CaseLaw:CaseLaw_Agro_Portfolio_P_Ltd_v_ITO_2018",
+   "CaseLaw:CaseLaw_VBHC_Value_Homes_P_Ltd_v_ITO",
+   "Clause:ITA1961__Clause_56_2_viib",
+   "Rule:ITR1962__Rule_11UA"
+  ],
+  "relationships": [
+   "FirmOpinion_OP_08-[RELIES_ON_CASE|ingested_document]->CaseLaw_Agro_Portfolio_P_Ltd_v_ITO_2018",
+   "FirmOpinion_OP_08-[RELIES_ON_CASE|ingested_document]->CaseLaw_VBHC_Value_Homes_P_Ltd_v_ITO",
+   "FirmOpinion_OP_08-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Clause_56_2_viib",
+   "FirmOpinion_OP_08-[RELIES_ON_PROVISION|ingested_document]->ITR1962__Rule_11UA"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [],
+  "ambiguity_types": []
+ },
+ "OP-09_reassessment_validity_section148.md": {
+  "node_id": "FirmOpinion_OP_09",
+  "opinion_id": "OP-09",
+  "date": "2026-03-20",
+  "category": "Tax Litigation / Procedure",
+  "confidence_level": "Fairly arguable",
+  "confidence_band": "fairly_arguable",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "CaseLaw:CaseLaw_Union_of_India_v_Ashish_Agarwal_2022_444_ITR_1_SC",
+   "CaseLaw:CaseLaw_Union_of_India_v_Rajeev_Bansal_2024_SC",
+   "Section:ITA1961__Section_147",
+   "Section:ITA1961__Section_148",
+   "Section:ITA1961__Section_148A",
+   "Section:ITA1961__Section_149"
+  ],
+  "relationships": [
+   "FirmOpinion_OP_09-[RELIES_ON_CASE|ingested_document]->CaseLaw_Union_of_India_v_Ashish_Agarwal_2022_444_ITR_1_SC",
+   "FirmOpinion_OP_09-[RELIES_ON_CASE|ingested_document]->CaseLaw_Union_of_India_v_Rajeev_Bansal_2024_SC",
+   "FirmOpinion_OP_09-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_147",
+   "FirmOpinion_OP_09-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_148",
+   "FirmOpinion_OP_09-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_148A",
+   "FirmOpinion_OP_09-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_149"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [
+   "TOLA, 2020"
+  ],
+  "ambiguity_types": [
+   "unclassified_authority"
+  ]
+ },
+ "OP-10_mat_fccb_conversion_115JB.md": {
+  "node_id": "FirmOpinion_OP_10",
+  "opinion_id": "OP-10",
+  "date": "2026-03-27",
+  "category": "Corporate Tax / MAT",
+  "confidence_level": "High",
+  "confidence_band": "high",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "CaseLaw:CaseLaw_Apollo_Tyres_Ltd_v_CIT_2002_255_ITR_273_SC",
+   "CaseLaw:CaseLaw_CIT_v_Bhari_Information_Tech_Sys_P_Ltd_2011",
+   "Explanation:Explanation_1_to_ITA1961__Section_115JB",
+   "Section:ITA1961__Section_115JB",
+   "SubSection:ITA1961__SubSection_115JB_2A",
+   "SubSection:ITA1961__SubSection_115JB_2B",
+   "SubSection:ITA1961__SubSection_115JB_2C"
+  ],
+  "relationships": [
+   "FirmOpinion_OP_10-[RELIES_ON_CASE|ingested_document]->CaseLaw_Apollo_Tyres_Ltd_v_CIT_2002_255_ITR_273_SC",
+   "FirmOpinion_OP_10-[RELIES_ON_CASE|ingested_document]->CaseLaw_CIT_v_Bhari_Information_Tech_Sys_P_Ltd_2011",
+   "FirmOpinion_OP_10-[RELIES_ON_PROVISION|ingested_document]->Explanation_1_to_ITA1961__Section_115JB",
+   "FirmOpinion_OP_10-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_115JB",
+   "FirmOpinion_OP_10-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_115JB",
+   "FirmOpinion_OP_10-[RELIES_ON_PROVISION|ingested_document]->ITA1961__SubSection_115JB_2A",
+   "FirmOpinion_OP_10-[RELIES_ON_PROVISION|ingested_document]->ITA1961__SubSection_115JB_2B",
+   "FirmOpinion_OP_10-[RELIES_ON_PROVISION|ingested_document]->ITA1961__SubSection_115JB_2C"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [],
+  "ambiguity_types": []
+ },
+ "OP-11_poem_mauritius_subsidiary.md": {
+  "node_id": "FirmOpinion_OP_11",
+  "opinion_id": "OP-11",
+  "date": "2026-04-03",
+  "category": "International Tax / Residency",
+  "confidence_level": "Fairly arguable / at risk absent remedial steps",
+  "confidence_band": "fairly_arguable",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "CBDTCircular:CBDTCircular_6_of_2017",
+   "SubSection:ITA1961__SubSection_6_3"
+  ],
+  "relationships": [
+   "FirmOpinion_OP_11-[RELIES_ON_AUTHORITY|ingested_document]->CBDTCircular_6_of_2017",
+   "FirmOpinion_OP_11-[RELIES_ON_PROVISION|ingested_document]->ITA1961__SubSection_6_3"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [],
+  "ambiguity_types": []
+ },
+ "OP-12_equalisation_levy_digital_ads.md": {
+  "node_id": "FirmOpinion_OP_12",
+  "opinion_id": "OP-12",
+  "date": "2026-04-10",
+  "category": "International Tax / Digital Tax",
+  "confidence_level": "High",
+  "confidence_band": "high",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "SubSection:ITA1961__SubSection_10_50"
+  ],
+  "relationships": [
+   "FirmOpinion_OP_12-[RELIES_ON_PROVISION|ingested_document]->ITA1961__SubSection_10_50"
+  ],
+  "other_act_references": [
+   "Section 165, Finance Act, 2016"
+  ],
+  "other_authorities_cited": [
+   "CBDT FAQs on Equalisation Levy"
+  ],
+  "ambiguity_types": [
+   "other_act_section",
+   "unclassified_authority"
+  ]
+ },
+ "OP-13_indirect_transfer_explanation5.md": {
+  "node_id": "FirmOpinion_OP_13",
+  "opinion_id": "OP-13",
+  "date": "2026-04-17",
+  "category": "International Tax / Indirect Transfer",
+  "confidence_level": "High",
+  "confidence_band": "high",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "CaseLaw:CaseLaw_Tiger_Global_International_II_Holdings_v_AAR_Del_HC_2020",
+   "CaseLaw:CaseLaw_Vodafone_International_Holdings_BV_v_UOI_2012_341_ITR_1_SC",
+   "Clause:ITA1961__Clause_9_1_i",
+   "Explanation:Explanation_5_to_ITA1961__Clause_9_1_i",
+   "Rule:ITR1962__Rule_11UB"
+  ],
+  "relationships": [
+   "FirmOpinion_OP_13-[RELIES_ON_CASE|ingested_document]->CaseLaw_Tiger_Global_International_II_Holdings_v_AAR_Del_HC_2020",
+   "FirmOpinion_OP_13-[RELIES_ON_CASE|ingested_document]->CaseLaw_Vodafone_International_Holdings_BV_v_UOI_2012_341_ITR_1_SC",
+   "FirmOpinion_OP_13-[RELIES_ON_PROVISION|ingested_document]->Explanation_5_to_ITA1961__Clause_9_1_i",
+   "FirmOpinion_OP_13-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Clause_9_1_i",
+   "FirmOpinion_OP_13-[RELIES_ON_PROVISION|ingested_document]->ITR1962__Rule_11UB"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [],
+  "ambiguity_types": []
+ },
+ "OP-14_charitable_trust_exemption_2_15.md": {
+  "node_id": "FirmOpinion_OP_14",
+  "opinion_id": "OP-14",
+  "date": "2026-04-24",
+  "category": "Exempt Entities / Charitable Trusts",
+  "confidence_level": "High",
+  "confidence_band": "high",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "CaseLaw:CaseLaw_ACIT_Exemptions_v_Ahmedabad_Urban_Development_Authority_2022",
+   "Section:ITA1961__Section_11",
+   "Section:ITA1961__Section_12",
+   "Section:ITA1961__Section_12AB",
+   "SubSection:ITA1961__SubSection_2_15"
+  ],
+  "relationships": [
+   "FirmOpinion_OP_14-[RELIES_ON_CASE|ingested_document]->CaseLaw_ACIT_Exemptions_v_Ahmedabad_Urban_Development_Authority_2022",
+   "FirmOpinion_OP_14-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_11",
+   "FirmOpinion_OP_14-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_12",
+   "FirmOpinion_OP_14-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_12AB",
+   "FirmOpinion_OP_14-[RELIES_ON_PROVISION|ingested_document]->ITA1961__SubSection_2_15"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [],
+  "ambiguity_types": []
+ },
+ "OP-15_presumptive_taxation_44ADA.md": {
+  "node_id": "FirmOpinion_OP_15",
+  "opinion_id": "OP-15",
+  "date": "2026-05-01",
+  "category": "Individual Taxation / Presumptive Scheme",
+  "confidence_level": "High",
+  "confidence_band": "high",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "Section:ITA1961__Section_44AA",
+   "Section:ITA1961__Section_44AB",
+   "Section:ITA1961__Section_44ADA"
+  ],
+  "relationships": [
+   "FirmOpinion_OP_15-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_44AA",
+   "FirmOpinion_OP_15-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_44AB",
+   "FirmOpinion_OP_15-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_44ADA"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [],
+  "ambiguity_types": []
+ },
+ "OP-16_startup_deduction_80IAC.md": {
+  "node_id": "FirmOpinion_OP_16",
+  "opinion_id": "OP-16",
+  "date": "2026-05-08",
+  "category": "Corporate Tax / Start-up Incentives",
+  "confidence_level": "High on substantive eligibility; contingent on procedural certification",
+  "confidence_band": "high",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "Section:ITA1961__Section_80IAC"
+  ],
+  "relationships": [
+   "FirmOpinion_OP_16-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_80IAC"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [
+   "DPIIT Notification G.S.R. 127(E)"
+  ],
+  "ambiguity_types": [
+   "unclassified_authority"
+  ]
+ },
+ "OP-17_jda_capital_gains_45_5A.md": {
+  "node_id": "FirmOpinion_OP_17",
+  "opinion_id": "OP-17",
+  "date": "2026-05-15",
+  "category": "Individual Taxation / Real Estate",
+  "confidence_level": "High",
+  "confidence_band": "high",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "CaseLaw:CaseLaw_CIT_v_Balbir_Singh_Maini_2017_398_ITR_531_SC",
+   "Section:ITA1961__Section_194IC",
+   "SubSection:ITA1961__SubSection_45_5A"
+  ],
+  "relationships": [
+   "FirmOpinion_OP_17-[RELIES_ON_CASE|ingested_document]->CaseLaw_CIT_v_Balbir_Singh_Maini_2017_398_ITR_531_SC",
+   "FirmOpinion_OP_17-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_194IC",
+   "FirmOpinion_OP_17-[RELIES_ON_PROVISION|ingested_document]->ITA1961__SubSection_45_5A"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [],
+  "ambiguity_types": []
+ },
+ "OP-18_software_royalty_engineering_analysis.md": {
+  "node_id": "FirmOpinion_OP_18",
+  "opinion_id": "OP-18",
+  "date": "2026-05-22",
+  "category": "International Tax / Withholding Tax (TDS)",
+  "confidence_level": "High",
+  "confidence_band": "high",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "Article:Article_12_TaxTreaty_Ireland",
+   "CaseLaw:CaseLaw_Engineering_Analysis_Centre_of_Excellence_Pvt_Ltd_v_CIT_2021",
+   "Clause:ITA1961__Clause_9_1_vi",
+   "Explanation:Explanation_2_to_ITA1961__Clause_9_1_vi",
+   "Section:ITA1961__Section_195",
+   "TaxTreaty:TaxTreaty_Ireland"
+  ],
+  "relationships": [
+   "Article_12_TaxTreaty_Ireland-[PART_OF|cited_reference]->TaxTreaty_Ireland",
+   "FirmOpinion_OP_18-[RELIES_ON_CASE|ingested_document]->CaseLaw_Engineering_Analysis_Centre_of_Excellence_Pvt_Ltd_v_CIT_2021",
+   "FirmOpinion_OP_18-[RELIES_ON_PROVISION|ingested_document]->Article_12_TaxTreaty_Ireland",
+   "FirmOpinion_OP_18-[RELIES_ON_PROVISION|ingested_document]->Explanation_2_to_ITA1961__Clause_9_1_vi",
+   "FirmOpinion_OP_18-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Clause_9_1_vi",
+   "FirmOpinion_OP_18-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_195"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [],
+  "ambiguity_types": []
+ },
+ "OP-19_ccd_debt_classification_94B.md": {
+  "node_id": "FirmOpinion_OP_19",
+  "opinion_id": "OP-19",
+  "date": "2026-05-29",
+  "category": "International Tax / Thin Capitalisation",
+  "confidence_level": "High",
+  "confidence_band": "high",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "CaseLaw:CaseLaw_CIT_v_Rajshree_Sugars_Chemicals_Ltd_Mad_HC",
+   "Clause:ITA1961__Clause_36_1_iii",
+   "Section:ITA1961__Section_94B",
+   "SubSection:ITA1961__SubSection_2_28A"
+  ],
+  "relationships": [
+   "FirmOpinion_OP_19-[RELIES_ON_CASE|ingested_document]->CaseLaw_CIT_v_Rajshree_Sugars_Chemicals_Ltd_Mad_HC",
+   "FirmOpinion_OP_19-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Clause_36_1_iii",
+   "FirmOpinion_OP_19-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_94B",
+   "FirmOpinion_OP_19-[RELIES_ON_PROVISION|ingested_document]->ITA1961__SubSection_2_28A"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [],
+  "ambiguity_types": []
+ },
+ "OP-20_carry_forward_losses_amalgamation_72A.md": {
+  "node_id": "FirmOpinion_OP_20",
+  "opinion_id": "OP-20",
+  "date": "2026-06-05",
+  "category": "M&A Tax / Amalgamation",
+  "confidence_level": "High, contingent on post-merger compliance",
+  "confidence_band": "high",
+  "statute_regime": "ITA1961",
+  "chunk_sections": [
+   "facts",
+   "questions",
+   "legal_framework",
+   "precedents_considered",
+   "analysis",
+   "opinion_conclusion"
+  ],
+  "stubs": [
+   "CaseLaw:CaseLaw_CIT_v_Select_Holiday_Resorts_P_Ltd_Del_HC",
+   "CaseLaw:CaseLaw_Indo_Rama_Synthetics_I_Ltd_v_CIT_2011_330_ITR_363_Del",
+   "Rule:ITR1962__Rule_9C",
+   "Section:ITA1961__Section_72A"
+  ],
+  "relationships": [
+   "FirmOpinion_OP_20-[RELIES_ON_CASE|ingested_document]->CaseLaw_CIT_v_Select_Holiday_Resorts_P_Ltd_Del_HC",
+   "FirmOpinion_OP_20-[RELIES_ON_CASE|ingested_document]->CaseLaw_Indo_Rama_Synthetics_I_Ltd_v_CIT_2011_330_ITR_363_Del",
+   "FirmOpinion_OP_20-[RELIES_ON_PROVISION|ingested_document]->ITA1961__Section_72A",
+   "FirmOpinion_OP_20-[RELIES_ON_PROVISION|ingested_document]->ITR1962__Rule_9C"
+  ],
+  "other_act_references": [],
+  "other_authorities_cited": [],
+  "ambiguity_types": []
+ }
+}

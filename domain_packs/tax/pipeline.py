@@ -20,6 +20,10 @@ code"):
   treaty_pdf  -> converters/pdf_to_md_generic.py   -> converters/extract_treaty.py
                  (DTAA/protocol/TIEA - deterministic Article-by-Article split
                  + one short LLM call for the notification preamble)
+  firm_opinion -> converters/pdf_to_md_generic.py  -> converters/extract_opinion.py
+                 (2026-10-14: firm opinion - fully deterministic frontmatter +
+                 section parse, no LLM call; cited authorities become
+                 cited_reference stubs - see that module's docstring)
 
 circular_pdf/treaty_pdf reuse pdf_to_md_generic.py for conversion (2026-08-27:
 added per explicit request to wire these into the Ingest UI) rather than
@@ -107,6 +111,24 @@ FILE_TYPES = {
                         "one short LLM read of the notification preamble for country, dates, and "
                         "every notification that has given the treaty legal effect.",
         "defaults": {"source_type": "TaxTreaty", "authority_level": "Treaty", "source_class": "TreatyNetworkSource"},
+    },
+    # 2026-10-14: NEW (phase0/opinions) - firm opinions, the customer's own
+    # proprietary knowledge. .md/.txt are read as-is by pdf_to_md_generic.py
+    # (so YAML frontmatter survives); a .pdf goes through the same generic
+    # converter and extract_opinion.py falls back to parsing the letter body.
+    # No entry-point store refresh is needed (absent from
+    # _ENTRY_POINT_REFRESH below on purpose): opinion retrieval
+    # (opinion_agent.py, the opinion_expert_views category) runs on the
+    # Chunk vector index, which stage [4/4] embed_chunks_json() already
+    # ensures and fills.
+    "firm_opinion": {
+        "label": "Firm Opinion (MD / TXT / PDF)",
+        "accept": ".md,.txt,.pdf",
+        "description": "A formal firm tax opinion - deterministic parse of frontmatter + body sections "
+                        "(facts, issue, analysis, conclusion, caveats, reliance) into one FirmOpinion node "
+                        "with per-section chunks; cited sections/cases/treaties/circulars become "
+                        "provenance-marked stubs that join the real ingested authorities.",
+        "defaults": {"source_type": "FirmOpinion", "authority_level": "Firm", "source_class": "KnowledgeRepositoryItem"},
     },
 }
 
@@ -322,6 +344,18 @@ def run_extraction(md_path: Path, file_type: str, doc_meta: dict) -> tuple[Path,
                "--authority-level", doc_meta.get("authority_level", "Treaty"),
                "--jurisdiction", doc_meta.get("jurisdiction", "India"),
                "--file-type", file_type]
+    elif file_type == "firm_opinion":
+        # 2026-10-14: NEW - see FILE_TYPES["firm_opinion"].
+        cmd = [sys.executable, str(CONVERTERS_DIR / "extract_opinion.py"),
+               "--md", str(md_path), "--schema", str(SCHEMA_PATH),
+               "--out", str(graph_path), "--chunks-out", str(chunks_path),
+               "--document-id", doc_id, "--document-name", doc_meta.get("document_name", doc_id),
+               "--source-type", doc_meta.get("source_type", "FirmOpinion"),
+               "--authority-level", doc_meta.get("authority_level", "Firm"),
+               "--jurisdiction", doc_meta.get("jurisdiction", "India"),
+               "--file-type", file_type]
+        if doc_meta.get("cited_act_namespace"):
+            cmd += ["--cited-act-namespace", doc_meta["cited_act_namespace"]]
     else:  # generic
         cmd = [sys.executable, str(CONVERTERS_DIR / "extract_generic.py"),
                "--md", str(md_path), "--schema", str(SCHEMA_PATH),

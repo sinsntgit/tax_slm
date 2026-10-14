@@ -289,6 +289,11 @@ def attach_pipeline_metadata(entity: dict, doc_meta: dict, run_timestamp: str, c
         props.setdefault("source_chunk_ids", str(chunk_index))
         props.setdefault("chunk_id", str(chunk_index))
     props.setdefault("content_hash", compute_content_hash(props.get("hasText", "")))
+    # 2026-10-14: provenance (framework/core/ingest/provenance.py) - a
+    # setdefault, so a stub the caller already marked cited_reference keeps it;
+    # everything else this shared stamper sees was extracted from the document
+    # being ingested. Literal (no import) - same value as provenance.INGESTED_DOCUMENT.
+    props.setdefault("provenance", "ingested_document")
 
 
 def build_datasource_entity_and_links(
