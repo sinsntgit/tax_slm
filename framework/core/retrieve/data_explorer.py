@@ -75,11 +75,15 @@ def _clamp_page(page) -> int:
         return 1
 
 
-def _matches_search(props: dict, search_lower: str) -> bool:
+def _matches_search(props: dict, search_lower: str, unsearchable=()) -> bool:
+    """2026-10-14: phase0/review-pii - `unsearchable` (the PII masker's
+    always-masked properties, e.g. FirmOpinion.client_name) are skipped:
+    the row comes back masked, but MATCHING on them is an oracle - searching
+    "Zomato" in the FirmOpinion tab would reveal which opinion is Zomato's."""
     if not search_lower:
         return True
-    for v in props.values():
-        if v is None:
+    for k, v in props.items():
+        if v is None or k in unsearchable:
             continue
         try:
             if search_lower in str(v).lower():
@@ -122,7 +126,8 @@ def list_labels(session) -> list:
     return [r["label"] for r in session.run("CALL db.labels() YIELD label RETURN label ORDER BY label")]
 
 
-def list_nodes(session, label: str, search: str = "", page=1, page_size=DEFAULT_PAGE_SIZE) -> dict:
+def list_nodes(session, label: str, search: str = "", page=1, page_size=DEFAULT_PAGE_SIZE,
+               unsearchable_properties=()) -> dict:
     """Paginated, free-text-searchable property listing for ONE Neo4j label
     ("Metadata" tab) - see module docstring for why this filters in Python."""
     label_safe = neo4j_client.safe_identifier(label)
@@ -132,7 +137,7 @@ def list_nodes(session, label: str, search: str = "", page=1, page_size=DEFAULT_
     ))
     search_lower = (search or "").strip().lower()
     filtered = [{"db_id": r["db_id"], "properties": dict(r["props"])}
-                for r in rows if _matches_search(dict(r["props"]), search_lower)]
+                for r in rows if _matches_search(dict(r["props"]), search_lower, unsearchable_properties)]
 
     page = _clamp_page(page)
     page_size = _clamp_page_size(page_size)
@@ -188,7 +193,7 @@ def list_chunks(session, search: str = "", page=1, page_size=DEFAULT_PAGE_SIZE) 
 
 
 def list_knowledge_index(session, index_name: str, search: str = "", page=1,
-                          page_size=DEFAULT_PAGE_SIZE) -> dict:
+                          page_size=DEFAULT_PAGE_SIZE, unsearchable_properties=()) -> dict:
     """What's actually IN one local semantic-entry-point vector store
     ("Knowledge Index" tab) - db_ids from local_vector_store.list_all(),
     joined against Neo4j (label-agnostic, same `MATCH (n) WHERE
@@ -213,7 +218,7 @@ def list_knowledge_index(session, index_name: str, search: str = "", page=1,
     ))
     search_lower = (search or "").strip().lower()
     filtered = [{"db_id": r["db_id"], "labels": r["labels"], "properties": dict(r["props"])}
-                for r in rows if _matches_search(dict(r["props"]), search_lower)]
+                for r in rows if _matches_search(dict(r["props"]), search_lower, unsearchable_properties)]
     filtered.sort(key=lambda r: r["db_id"])
 
     start = (page - 1) * page_size

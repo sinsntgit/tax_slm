@@ -165,11 +165,8 @@ def test_pick_canonical_prefers_ingested_judgment_over_stub():
 
 # --- 3. PII: opinion pseudonymisation + plain-row masking --------------------------------
 
-@pytest.mark.xfail(strict=True, reason=(
-    "BUG extract_opinion.party_variants()/redact(): a single-word client name ('Infosys') fails "
-    "looks_like_party_name() (no corporate suffix, < 2 capitalised words) so it is never pseudonymised, "
-    "and redact() is case-sensitive so 'INFOSYS'/'ZOMATO LIMITED' survive in chunk text - which is shown "
-    "to the answer LLM and to users researching other clients' matters."))
+# 2026-10-14: fixed on phase0/review-pii (looks_like_party_name accepts a
+# single capitalised word; redact() is case-insensitive) - now a regression test.
 def test_opinion_redaction_catches_single_word_and_uppercase_client():
     import extract_opinion
     red = extract_opinion.build_redactions("Infosys", "", "")
@@ -178,12 +175,8 @@ def test_opinion_redaction_catches_single_word_and_uppercase_client():
     assert "ZOMATO" not in extract_opinion.redact("ZOMATO LIMITED (the Company) paid...", red2)
 
 
-@pytest.mark.xfail(strict=True, reason=(
-    "BUG pii.PiiMasker.mask_plain_rows(): ALWAYS_MASKED_FIELDS (config.py now lists FirmOpinion "
-    "client_name/counterparty_name, the opinions branch's ONLY protection for real client identity) are "
-    "applied only when a row value is a NODE dict. An NL2Cypher row like {'o.client_name': 'Zomato "
-    "Limited'} (RETURN o.client_name) is a scalar, gets regex-only masking, and the raw client name reaches "
-    "the answer LLM, the LLM call log and the UI."))
+# 2026-10-14: fixed on phase0/review-pii (mask_plain_rows keys always-masked
+# fields off the row key, recursively) - now a regression test.
 def test_plain_row_scalar_client_name_is_masked(monkeypatch):
     from framework.core.retrieve import pii
     monkeypatch.setattr(pii, "_log_pii_access", lambda *a, **k: None)
@@ -192,11 +185,8 @@ def test_plain_row_scalar_client_name_is_masked(monkeypatch):
     assert "Zomato" not in str(rows)
 
 
-@pytest.mark.xfail(strict=True, reason=(
-    "BUG app._run_unstructured_agent() agentic branch: response['plain_rows'] is overwritten AFTER "
-    "_api_ask_impl() with orchestrator_result['plain_rows'] straight from GraphRAGRetriever."
-    "run_graph_retrieval(), which never masks (retrieve() is the 'single enforcement point', bypassed "
-    "here) - FirmOpinion node properties (client_name) go to the browser unmasked."))
+# 2026-10-14: fixed on phase0/review-pii (agentic branch masks the
+# orchestrator's rows; run_tool() masks at the source) - now a regression test.
 def test_agentic_plain_rows_are_pii_masked(monkeypatch):
     from framework.webapp import app as webapp
     from framework.core.retrieve import pii
