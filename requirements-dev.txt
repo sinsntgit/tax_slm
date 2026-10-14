@@ -1,0 +1,8 @@
+# 2026-10-14: NEW - test/CI dependencies, on top of requirements.txt.
+#   pip install -r requirements.txt -r requirements-dev.txt
+# CI installs requirements.txt WITHOUT sentence-transformers (it pulls torch,
+# ~1-2GB of wheels, and its models need a Hugging Face download anyway) -
+# tests/conftest.py installs an offline stand-in for it instead. See
+# .github/workflows/tests.yml.
+pytest>=8.0
+numpy>=1.24      # conftest.py's sentence_transformers stub + local_vector_store

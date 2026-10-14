@@ -187,7 +187,14 @@ def rerank(question: str, candidate_chunks: list[dict], top_n: int | None = None
     resolved_fallback_max = cfg["fallback_max_chunks"] if fallback_max_chunks is None else fallback_max_chunks
     top_n = resolved_top_n
 
-    if all("rerank_score" in c for c in candidate_chunks):
+    # 2026-10-14: BUGFIX - was `"rerank_score" in c`. A list that already went
+    # through the skip_rerank branch above carries an EXPLICIT
+    # rerank_score=None on every chunk (key present, no score), so a later
+    # normal rerank() of that same list (e.g. app.py's quality-gate retry on
+    # retrieved["candidate_chunks"]) took this "reuse" branch and then crashed
+    # with TypeError comparing None >= float below. A None is not a score -
+    # re-score instead. Caught by tests/test_reranker.py.
+    if all(c.get("rerank_score") is not None for c in candidate_chunks):
         step_logger.log(f"[bge_reranker] Reusing {len(candidate_chunks)} already-scored candidates "
                          f"(same list scored earlier this request) - skipping re-predict.")
     else:

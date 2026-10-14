@@ -869,7 +869,15 @@ class _ChunkBuilder:
         # (before the first marked sub-block) - peeled the same way a leaf
         # would be, since a lead-in can itself carry a proviso/explanation
         # that applies to the WHOLE scope rather than any one child.
-        this_entity_id = generate_entity_id(section, subsection, clause)
+        # 2026-10-14: BUGFIX - was generate_entity_id(...) WITHOUT the builder's
+        # namespace, so with a namespace (every Act ingestion since 2026-08-27)
+        # each SPLIT Section/SubSection/Clause wrapper was minted as e.g.
+        # "Section_2" while its leaves were "ITA2025__Clause_2_1_a" - the
+        # wrappers collided across Acts (exactly what namespacing exists to
+        # prevent), PART_OF edges pointed at the un-namespaced id, and
+        # chunk_act_document()'s builder._eid(number) lookup never found the
+        # wrapper to set its marginal_heading. Caught by tests/test_chunking.py.
+        this_entity_id = self._eid(section, subsection, clause)
         citation = generate_full_citation(section, subsection, clause)
         lead_main, lead_provisos, lead_explanations = _peel_provisos_and_explanations(
             lead_in_block[2] if lead_in_block else []
@@ -1034,7 +1042,13 @@ def chunk_act_document(raw_text: str, namespace: Optional[str] = None, act_props
 
     for idx, (start_ln, number, title) in enumerate(section_starts):
         end_ln = section_starts[idx + 1][0] - 1 if idx + 1 < len(section_starts) else schedule_boundary - 1
-        body = [(ln, t) for ln, t in main_body if start_ln < ln <= end_ln]
+        # 2026-10-14: BUGFIX - a "## CHAPTER ..." heading sits between the
+        # last section of one chapter and the first of the next, i.e. INSIDE
+        # the preceding section's line range, so it was being glued onto the
+        # text of that section's last leaf/proviso/explanation (hasText and
+        # Chunk content both ended in "\n## CHAPTER II -- ..."). Chapter
+        # headings are already captured separately via chapter_for_line().
+        body = [(ln, t) for ln, t in main_body if start_ln < ln <= end_ln and not CHAPTER_HEADING_RE.match(t)]
         # First body line is glued to the section number, e.g. "55. (1) For..."
         # or "2.In this Act,...". Strip that leading "N." prefix so the rest
         # parses like any other line (a lead-in sentence, or an immediate

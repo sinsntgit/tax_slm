@@ -43,7 +43,14 @@ def sanitize_props(props: dict) -> dict:
         elif isinstance(v, list):
             if not v:
                 continue
-            if all(isinstance(item, (str, int, float, bool)) for item in v):
+            # 2026-10-14: BUGFIX - also require ONE element type. The old check
+            # passed mixed lists like ["9", 10] (LLM extractions mix numeric and
+            # string section numbers) straight through, which Neo4j rejects
+            # ("Collections containing mixed types can not be stored in
+            # properties"), failing that node's whole write - the docstring
+            # above already promised mixed arrays get JSON-serialized instead.
+            if (all(isinstance(item, (str, int, float, bool)) for item in v)
+                    and len({type(item) for item in v}) == 1):
                 cleaned[k] = v
             else:
                 cleaned[k] = json.dumps(v, default=str)

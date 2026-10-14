@@ -266,6 +266,18 @@ DEFAULT_CITED_ACT_NAMESPACE = "ITA1961"
 
 SECTION_CITATION_RE = re.compile(r'^\s*(\d+[A-Z]{0,3})((?:\s*\([^)]+\)){0,3})\s*$', re.IGNORECASE)
 
+# 2026-10-14: NEW - "Income-tax Act" / "Income Tax Act" / "IT Act" spellings all
+# name the Act whose section ids resolve_section_citation() mints; an empty
+# act means "not stated", which this corpus treats as the Income-tax Act (the
+# historical behavior). Anything else (Copyright Act, Companies Act, ...) is a
+# DIFFERENT statute whose section numbers must never be wired to Income-tax
+# Act nodes - see build_graph_from_extraction()'s INTERPRETS loop.
+_INCOME_TAX_ACT_RE = re.compile(r'income[\s-]*tax\s+act|^\s*i\.?\s*t\.?\s+act\b', re.IGNORECASE)
+
+
+def _is_income_tax_act(act: str) -> bool:
+    return not (act or "").strip() or bool(_INCOME_TAX_ACT_RE.search(act))
+
 
 def resolve_section_citation(number: str, namespace: str | None = None) -> tuple[str | None, dict]:
     """Returns (target_entity_id, parsed_parts). parsed_parts has
@@ -310,7 +322,10 @@ _FORUM_LEVEL_PATTERNS = [
     (re.compile(r'high court', re.IGNORECASE), "High Court"),
     (re.compile(r'\bitat\b|income.?tax appellate tribunal|\btribunal\b', re.IGNORECASE), "Tribunal"),
     (re.compile(r'\baar\b|authority for advance ruling', re.IGNORECASE), "AAR"),
-    (re.compile(r'commissioner.*appeals|\bcit\(a\)\b', re.IGNORECASE), "Commissioner (Appeals)"),
+    # 2026-10-14: BUGFIX - was r'...|\bcit\(a\)\b': a trailing \b after ")"
+    # needs a WORD character next, so the common bare form "CIT(A)" /
+    # "CIT(A) Pune" never matched and such orders got forum_level "".
+    (re.compile(r'commissioner.*appeals|\bcit\s*\(a\)', re.IGNORECASE), "Commissioner (Appeals)"),
 ]
 
 
@@ -385,7 +400,10 @@ def derive_jurisdiction_scope(court: str, forum_level: str) -> str:
 # derive_jurisdiction_scope()'s docstring).
 def derive_stance(extraction: dict) -> tuple[str, str]:
     issue_outcomes = extraction.get("issue_outcomes", []) or []
-    winners = [(o or {}).get("winner", "").strip().lower() for o in issue_outcomes]
+    # 2026-10-14: BUGFIX - `or ""` (not just a .get() default): the LLM emits
+    # an explicit `"winner": null` for an undecided/remanded issue, and
+    # None.strip() crashed the whole case's graph build.
+    winners = [str((o or {}).get("winner") or "").strip().lower() for o in issue_outcomes]
     winners = [w for w in winners if w in ("assessee", "revenue")]
     if not winners:
         return "unknown", "No issue_outcomes with a recognized winner ('assessee'/'revenue') were extracted."
@@ -424,8 +442,9 @@ def derive_retrieval_summary(extraction: dict, citation: str) -> str:
     if citation or court:
         parts.append(f"{citation} ({court})." if court else f"{citation}.")
     for finding in extraction.get("findings", []) or []:
-        issue = (finding or {}).get("issue", "").strip()
-        holding = (finding or {}).get("holding", "").strip()
+        # 2026-10-14: BUGFIX - `or ""` for explicit JSON nulls, same as derive_stance().
+        issue = str((finding or {}).get("issue") or "").strip()
+        holding = str((finding or {}).get("holding") or "").strip()
         if issue and holding:
             parts.append(f"{issue}: {holding}")
         elif holding:
@@ -560,7 +579,9 @@ def build_graph_from_extraction(extraction: dict, source_file: str, file_type: s
                 + extraction.get("sections_applied", [])
                 + extraction.get("sections_referred", [])
             )
-            if s.get("act") and s.get("number") and "income-tax act" not in s["act"].lower()
+            # 2026-10-14: was `"income-tax act" not in act.lower()`, which listed
+            # an unhyphenated "Income Tax Act, 1961" here as an OTHER Act.
+            if s.get("act") and s.get("number") and not _is_income_tax_act(s["act"])
         )),
         "treaty_references": sorted(set(
             f"{t['treaty']} Article {t['article']}"
@@ -600,6 +621,15 @@ def build_graph_from_extraction(extraction: dict, source_file: str, file_type: s
         for entry in extraction.get(field, []) or []:
             number = (entry or {}).get("number", "") if isinstance(entry, dict) else str(entry)
             if not number:
+                continue
+            # 2026-10-14: BUGFIX - a section of ANOTHER statute (e.g. Copyright
+            # Act 1957 s.14 "exclusive rights", cited throughout Engineering
+            # Analysis) was resolved into the Income-tax Act namespace and wired
+            # as INTERPRETS -> ITA1961__Section_14 ("heads of income") - a wrong,
+            # legally misleading edge. Such citations are already captured in
+            # case_props["other_act_references"]; leave the edge out rather than
+            # guess (the "no value beats a wrong one" convention).
+            if isinstance(entry, dict) and not _is_income_tax_act(entry.get("act", "")):
                 continue
             target_id, parts = resolve_section_citation(number, namespace=cited_act_namespace)
             if not target_id:
