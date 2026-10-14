@@ -1,0 +1,4 @@
+# 2026-10-14: run outputs contain full model answers + retrieved chunk text
+# (potentially licensed/confidential corpus content) - keep them local. Copy a
+# run's summary.json/report.md somewhere deliberate if it must be shared.
+runs/

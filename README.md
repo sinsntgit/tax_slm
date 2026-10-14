@@ -194,6 +194,10 @@ python -m framework.cli.export_training_data --out data/training_exports/run1 \
     --provider CLAUDE --min-judge-score 0.8      # dedup on system+user by default
 ```
 
+## Evaluation
+
+The gold-set evaluation harness and the release gates (frontier baseline compared with the Tax SLM) live in `eval/`. See [`eval/README.md`](eval/README.md).
+
 ## Layout
 
 ```

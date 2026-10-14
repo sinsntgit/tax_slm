@@ -1,0 +1,110 @@
+{
+  "_comment": "Release gates evaluated by `python -m eval.compare <candidate_run> <baseline_run>`. 2026-10-14: initial values = the PROPOSED gates from the Tax SLM product plan; change thresholds here, not in code. type=absolute checks a candidate metric (dotted path into summary.json 'overall'); type=relative_to_baseline checks candidate/baseline mean ratios on items both runs answered. blocking=false gates are reported but never decide PASS/FAIL. enabled=false gates are listed as NOT_MEASURED (not yet implemented).",
+  "settings": {
+    "authority_item_threshold": 0.85
+  },
+  "gates": [
+    {
+      "id": "zero_fabricated_citations",
+      "description": "No answer cites a document/chunk that was not among the retrieved sources",
+      "type": "absolute",
+      "metric": "citations.fabricated_total",
+      "op": "<=",
+      "threshold": 0,
+      "blocking": true
+    },
+    {
+      "id": "judge_quality_vs_baseline",
+      "description": "Each existing judge dimension >= 90% of the frontier baseline (paired items)",
+      "type": "relative_to_baseline",
+      "judge_metrics": [
+        "answer_quality.overall",
+        "answer_quality.groundedness",
+        "answer_quality.completeness",
+        "answer_quality.specificity",
+        "answer_quality.statutory_fidelity",
+        "answer_quality.holding_discipline",
+        "answer_quality.authority_hierarchy",
+        "evaluation.overall"
+      ],
+      "op": ">=",
+      "threshold": 0.90,
+      "min_paired_items": 10,
+      "blocking": true
+    },
+    {
+      "id": "authority_recall_per_question",
+      "description": "Every gold question has >= authority_item_threshold (85%) of its required authorities cited in the answer",
+      "type": "absolute",
+      "metric": "authority.items_meeting_threshold_rate",
+      "op": ">=",
+      "threshold": 1.0,
+      "blocking": true
+    },
+    {
+      "id": "format_compliance",
+      "description": "a/b/c/d skeleton (answer_generation v6) present and in order, research-mode answers",
+      "type": "absolute",
+      "metric": "format.compliance_rate",
+      "op": ">=",
+      "threshold": 0.98,
+      "blocking": true
+    },
+    {
+      "id": "research_latency",
+      "description": "Research-mode answer latency p95 under 60 s (client wall clock, timeouts included)",
+      "type": "absolute",
+      "metric": "latency.research.p95",
+      "op": "<",
+      "threshold": 60,
+      "blocking": true
+    },
+    {
+      "id": "run_validity_no_cache_hits",
+      "description": "No answer served from the Redis response cache (cache key ignores the model - a hit may be another model's answer)",
+      "type": "absolute",
+      "metric": "cache_hits",
+      "op": "<=",
+      "threshold": 0,
+      "blocking": true
+    },
+    {
+      "id": "run_validity_error_rate",
+      "description": "At most 2% of items failed to return an answer",
+      "type": "absolute",
+      "metric": "error_rate",
+      "op": "<=",
+      "threshold": 0.02,
+      "blocking": true
+    },
+    {
+      "id": "must_not_claim",
+      "description": "No must_not_claim pattern fired (heuristic screen - review snippets in report.md)",
+      "type": "absolute",
+      "metric": "must_not_claim.violations_total",
+      "op": "<=",
+      "threshold": 0,
+      "blocking": false
+    },
+    {
+      "id": "cypher_validity",
+      "description": "NL2Cypher output parses and runs (Phase 1 - not yet measured)",
+      "type": "absolute",
+      "metric": "cypher.validity_rate",
+      "op": ">=",
+      "threshold": 0.95,
+      "blocking": true,
+      "enabled": false
+    },
+    {
+      "id": "extraction_accuracy",
+      "description": "Ingestion extraction accuracy vs labelled documents (Phase 1 - not yet measured)",
+      "type": "absolute",
+      "metric": "extraction.accuracy",
+      "op": ">=",
+      "threshold": 0.9,
+      "blocking": true,
+      "enabled": false
+    }
+  ]
+}
