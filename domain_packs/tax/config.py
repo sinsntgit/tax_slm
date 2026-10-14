@@ -11,6 +11,8 @@ import re
 
 from framework.contracts.domain_config import CitationRules, DomainConfig
 from framework.core.retrieve.category_retrieval import CategorySpec
+from framework.core.ingest.entity_resolution import KeyProperties  # 2026-10-14: CaseLaw key normalizer
+from domain_packs.tax.case_names import normalize_case_name, same_designations  # 2026-10-14: see RESOLUTION_KEY_PROPERTIES["CaseLaw"]
 
 # NOTE on ontology version: domain_packs/tax/ontology/schema.json is generated
 # from New_tax_ontology_v5.owl (../../../ontology/New_tax_ontology_v5.owl in
@@ -142,7 +144,17 @@ RESOLUTION_KEY_PROPERTIES = {
     "SubClause": ["section_no", "sub_section_no", "clause_id", "sub_clause_id"],
     "Proviso": ["section_no", "sub_section_no", "clause_id"],
     "Explanation": ["section_no", "sub_section_no", "clause_id"],
-    "CaseLaw": ["case_name"],
+    # 2026-10-14 (phase0/followups): same property, now compared through
+    # case_names.normalize_case_name() (party names only; reporter citations,
+    # years, court suffixes stripped; Pvt Ltd/Private Limited, CIT/
+    # Commissioner of Income Tax, v./vs, M/s unified) so a cited-case stub
+    # ("... Pvt Ltd v. CIT, (2021) 432 ITR 471 (SC)") resolves onto the
+    # ingested judgment ("... Private Limited v. The Commissioner of Income
+    # Tax, (2021) 2 SCC 1") - they scored ~75 before, below the 95 merge bar.
+    # Key only: node ids are unchanged. Still a list (KeyProperties subclasses it).
+    # same_designations vetoes a merge across different revenue officers
+    # ("X v. ITO" vs "X v. CIT"), which the fuzzy ratio alone scores ~97.
+    "CaseLaw": KeyProperties(["case_name"], normalizer=normalize_case_name, compatible=same_designations),
     "AmendingAct": ["amendingActNo", "amendingActYear"],
     "DefinedTerm": ["id"],
     "Issue": ["full_citation", "hasText"],

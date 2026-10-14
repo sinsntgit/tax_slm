@@ -222,7 +222,10 @@ class GraphIngestionEngine:
                 continue
             cand_key = entity_resolution.resolution_key(label, existing_props, existing_id, self.domain_config.resolution_key_properties)
             candidates.append((existing_id, cand_key))
-        return entity_resolution.best_match(key, candidates)
+        # 2026-10-14: + the type's optional compatibility veto (KeyProperties.compatible).
+        return entity_resolution.best_match(
+            key, candidates,
+            compatible=entity_resolution.key_guard(label, self.domain_config.resolution_key_properties))
 
     def load_entities(self, session, entities: list[dict], mode: str) -> tuple[set, dict[str, str]]:
         created_labels: set = set()

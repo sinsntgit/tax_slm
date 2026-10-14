@@ -52,6 +52,35 @@ def normalize(text: str) -> str:
     return t
 
 
+class KeyProperties(list):
+    """2026-10-14 (phase0/followups): NEW - a resolution_key_properties entry
+    that also carries a domain-specific `normalizer(str) -> str`, applied to
+    the joined property values BEFORE the generic normalize() - e.g. the tax
+    pack's case-name normalizer, which strips reporter citations/court
+    suffixes and unifies "Pvt Ltd"/"Private Limited", "CIT"/"Commissioner of
+    Income Tax", so a cited-case stub and the ingested judgment produce the
+    same key. A list subclass on purpose: every existing consumer that treats
+    the entry as a plain list of property names keeps working unchanged, and
+    no resolution_key() call site needs a new argument. Affects only the
+    fuzzy-comparison KEY, never a node id. A normalizer that raises or
+    returns "" falls back to the raw text."""
+
+    def __init__(self, props, normalizer=None, compatible=None):
+        super().__init__(props)
+        self.normalizer = normalizer
+        # Optional `compatible(key_a, key_b) -> bool` veto, checked BEFORE the
+        # fuzzy score: fuzzy ratios on long keys can clear HIGH_SIMILARITY
+        # even when one short, legally decisive token differs (e.g. the
+        # respondent "ito" vs "cit" in otherwise identical case names). False
+        # means "never the same entity", whatever the score.
+        self.compatible = compatible
+
+
+def key_guard(entity_type: str, resolution_key_properties: dict | None):
+    """2026-10-14: the KeyProperties.compatible veto for this type, or None."""
+    return getattr((resolution_key_properties or {}).get(entity_type), "compatible", None)
+
+
 def resolution_key(entity_type: str, properties: dict, fallback_id: str,
                     resolution_key_properties: dict | None = None) -> str:
     """Builds the normalized string used for fuzzy comparison. `resolution_key_properties`
@@ -61,7 +90,14 @@ def resolution_key(entity_type: str, properties: dict, fallback_id: str,
     if props:
         parts = [str(properties.get(p, "")) for p in props if properties.get(p)]
         if parts:
-            return normalize(f"{entity_type} " + " ".join(parts))
+            text = " ".join(parts)
+            normalizer = getattr(props, "normalizer", None)
+            if normalizer is not None:
+                try:
+                    text = normalizer(text) or text
+                except Exception:
+                    pass
+            return normalize(f"{entity_type} " + text)
     return normalize(f"{entity_type} {fallback_id}")
 
 
@@ -71,9 +107,12 @@ def similarity(key_a: str, key_b: str) -> float:
     return fuzz.token_sort_ratio(key_a, key_b)
 
 
-def best_match(key: str, candidates: list[tuple[str, str]]) -> tuple[str | None, float]:
+def best_match(key: str, candidates: list[tuple[str, str]], compatible=None) -> tuple[str | None, float]:
     best_id, best_score = None, 0.0
     for cand_id, cand_key in candidates:
+        # 2026-10-14: optional per-type veto - see KeyProperties.compatible.
+        if compatible is not None and not compatible(key, cand_key):
+            continue
         score = similarity(key, cand_key)
         if score > best_score:
             best_id, best_score = cand_id, score
@@ -102,7 +141,8 @@ def resolve_within_batch(entities: list[dict],
         for ent in group:
             key = resolution_key(etype, ent.get("properties", {}), ent["id"], resolution_key_properties)
             best_id_key = [(e["id"], k) for k, e in resolved]
-            best_id, best_score = best_match(key, best_id_key)
+            best_id, best_score = best_match(key, best_id_key,
+                                             compatible=key_guard(etype, resolution_key_properties))
             best_entity = next((e for k, e in resolved if e["id"] == best_id), None) if best_id else None
 
             if best_entity is not None and best_score >= HIGH_SIMILARITY and ent["id"] != best_entity["id"]:
