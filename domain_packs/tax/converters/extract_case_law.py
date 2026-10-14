@@ -112,6 +112,7 @@ _sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), 
 import chunking  # same directory (domain_packs/tax/converters/)
 from framework.core.infra import llm_client
 from framework.core.infra import step_logger
+from framework.core.ingest import provenance
 from framework.core.retrieve import observability
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -719,12 +720,16 @@ def build_graph_from_extraction(extraction: dict, source_file: str, file_type: s
             if not name:
                 continue
             other_id = f"CaseLaw_{_slug(name)}"
-            entities.append({"id": other_id, "type": "CaseLaw", "properties": {
+            # 2026-10-14: provenance.mark_stub() - cited_reference + an explicit
+            # empty sourceMdPath (the stamping loop below would otherwise give
+            # this stub THIS judgment's .md path via setdefault). graph_loader
+            # never lets this stub overwrite an already-ingested judgment.
+            entities.append({"id": other_id, "type": "CaseLaw", "properties": provenance.mark_stub({
                 "case_name": name, "full_citation": name,
                 "confidence": 0.3,  # stub - not yet ingested from its own judgment text
                 "extraction_notes": f"Stub created from a precedent reference in {citation}; "
                                      f"will be filled in properly if/when this case is itself ingested.",
-            }})
+            }, cited_in=doc_id)})
             relationships.append({"type": rel_type, "source": case_id, "target": other_id, "properties": {}})
             # 2026-08-31: NEW - reify OVERRULES as a dated LegalEvent too (see
             # chunking.build_legal_event()'s docstring) - the event date is
@@ -796,6 +801,9 @@ def build_graph_from_extraction(extraction: dict, source_file: str, file_type: s
         # line_start/line_end makes sense for it the way it does for a
         # deterministically-parsed Act Section).
         e["properties"].setdefault("sourceMdPath", source_md_path or "")
+        # 2026-10-14: everything not explicitly marked as a stub above was
+        # extracted from THIS judgment's own text.
+        e["properties"].setdefault("provenance", provenance.INGESTED_DOCUMENT)
 
     chunks = build_chunks_and_link(entities, case_id, citation, file_type)
 

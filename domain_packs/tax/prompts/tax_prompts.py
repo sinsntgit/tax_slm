@@ -3912,4 +3912,53 @@ automatically after your answer.""",
     ],
 }
 
+# 2026-10-14: NEW answer_generation v7 (phase0/opinions). Every graph entity/
+# relationship now carries a `provenance` property (framework/core/ingest/
+# provenance.py): "ingested_document" = read from that authority's/document's
+# own text; "cited_reference" = a STUB that exists only because some other
+# document (a firm opinion, a judgment, a circular) cited it. v6's Section 3A
+# tells the model graph rows are "verified facts" - true for ingested nodes, but
+# a stub's properties come from the CITING document's citation string, so
+# presenting them as verified would be exactly the unsupported-assertion
+# failure Section 3 forbids. v7 = v6's exact text + ONE inserted Section 3B
+# right after 3A; v6 is untouched (derived here, not edited in place, so the
+# v6 registration above stays byte-identical). Built by insertion rather than
+# a full copy so a reviewer can diff v6->v7 by reading 3B alone.
+ANSWER_GENERATION_V7_PROVENANCE_SECTION = """---
+# 3B. PROVENANCE OF GRAPH FACTS - VERIFIED vs CITED-ONLY
+Every graph node and relationship in the retrieved context may carry a `provenance` field:
+- "ingested_document": extracted from that document's OWN text (an Act section parsed from the Act,
+  a judgment ingested from the judgment, a firm opinion ingested from the opinion). Section 3A applies:
+  treat these as verified.
+- "cited_reference": a placeholder that exists ONLY because another document cited it - its properties
+  come from the citing document's citation string and have NOT been verified against the authority's
+  own text. Never present such an item's content, holding, wording or status as verified. Describe it as
+  "cited in <the opinion/case/circular that cites it> - not verified against the authority's text", and
+  do not attribute to it any proposition that only the citing document makes about it.
+- A RELATIONSHIP whose provenance is "ingested_document" (e.g. an opinion RELIES_ON_CASE a stub case) is a
+  verified record of what the ingesting document SAYS; the target's content is still unverified if the
+  target node is "cited_reference".
+- If a graph item carries no provenance field, do not call it verified against the authority's own text
+  unless a retrieved source text chunk from that authority supports it.
+Firm opinions (FirmOpinion) are the firm's own prior positions, not binding authority - report them as
+such, alongside (never in place of) the statutory and judicial authorities they rely on.
+"""
+
+_V6 = next(v for v in _REPO["answer_generation"] if v.version == "v6")
+_V7_ANCHOR = "---\n# 4. USE ALL RELEVANT CONTEXT"
+_v7_template = _V6.template.replace("(v6)", "(v7)", 1)
+_v7_template = (_v7_template.replace(_V7_ANCHOR, ANSWER_GENERATION_V7_PROVENANCE_SECTION + _V7_ANCHOR, 1)
+                if _V7_ANCHOR in _v7_template else _v7_template + "\n" + ANSWER_GENERATION_V7_PROVENANCE_SECTION)
+_REPO["answer_generation"].append(PromptVersion(
+    name="answer_generation",
+    version="v7",
+    approved_by="system-default",
+    approved_at="2026-10-14",
+    notes="v6 + one inserted Section 3B: graph facts/relationships count as verified only when "
+          "provenance is 'ingested_document'; 'cited_reference' stubs must be described as 'cited in "
+          "<opinion/case> - not verified against the authority's text'. Needed once firm-opinion "
+          "ingestion (extract_opinion.py) started minting cited-authority stubs at scale.",
+    template=_v7_template,
+))
+
 PROMPT_PACK = PromptPack(domain_name="tax", repo=_REPO)

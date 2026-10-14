@@ -21,6 +21,7 @@ import json
 
 from framework.core.infra import neo4j_client, step_logger
 from framework.core.ingest import entity_resolution
+from framework.core.ingest import provenance
 
 SUPERSEDED_BY_REL = "SUPERSEDED_BY"
 HAS_SOURCE_CHUNK_REL = "hasSourceChunk"
@@ -221,6 +222,8 @@ class GraphIngestionEngine:
         resolved_id_map: dict[str, str] = {}
         n_created, n_updated, n_unchanged, n_versioned = 0, 0, 0, 0
         n_cross_merged, n_flagged = 0, 0
+        # 2026-10-14: provenance counters - see the provenance guard below.
+        n_kept_higher_provenance, n_upgraded, n_stub_merged = 0, 0, 0
 
         total = len(entities)
         for i, ent in enumerate(entities):
@@ -235,6 +238,12 @@ class GraphIngestionEngine:
 
             existing_props = get_existing_node_properties(session, label, entity_id)
 
+            # 2026-10-14: provenance (see framework/core/ingest/provenance.py).
+            # Missing -> ingested_document. Decided AFTER the fuzzy cross-run
+            # match below too (a stub can resolve onto a real node's id there).
+            new_props["provenance"] = provenance.normalize(new_props.get("provenance"))
+
+            was_existing = existing_props is not None
             if existing_props is None:
                 match_id, score = self.find_cross_graph_match(session, label, new_props, entity_id)
                 if match_id and score >= entity_resolution.HIGH_SIMILARITY:
@@ -252,18 +261,66 @@ class GraphIngestionEngine:
                     n_created += 1
                 else:
                     n_created += 1
-            elif mode == "amendment":
-                old_hash = existing_props.get("content_hash")
-                new_hash = new_props.get("content_hash")
-                if old_hash and new_hash and old_hash != new_hash:
-                    clone_as_historical_node(session, label, entity_id, existing_props)
-                    n_versioned += 1
-                else:
-                    n_unchanged += 1
-            else:
-                n_updated += 1
 
-            final_props = sanitize_props(diff_and_prepare_update(existing_props, new_props, mode))
+            # 2026-10-14: provenance guard - BEFORE the amendment/base branches,
+            # because neither of those may run for a provenance mismatch:
+            #  * lower-ranked incoming (a cited_reference stub onto a node a
+            #    real document produced): never overwrite or downgrade - skip
+            #    the write entirely (not even "fill missing keys": a stub's
+            #    keys describe the CITING document, not this authority).
+            #  * higher-ranked incoming (the real document arriving after its
+            #    stub): replace the node's properties outright (`SET n =`) so
+            #    stub-only residue doesn't linger, and never clone the stub as
+            #    a "superseded" historical version in amendment mode - a stub
+            #    is not a prior version of the authority.
+            #  * equal rank, both unverified (stub onto stub): fill gaps only,
+            #    existing values win, no versioning.
+            # Applies to fuzzy cross-run merges too (a CaseLaw stub whose
+            # case_name fuzzy-resolves onto an already-ingested judgment).
+            stub_fill_only = False
+            if existing_props is not None:
+                incoming_rank = provenance.rank(new_props["provenance"])
+                existing_rank = provenance.rank(existing_props.get("provenance"))
+                if incoming_rank < existing_rank:
+                    n_kept_higher_provenance += 1
+                    step_logger.vlog(f"  provenance: kept existing {label} {entity_id} "
+                                      f"({provenance.normalize(existing_props.get('provenance'))}) - "
+                                      f"not overwritten by a {new_props['provenance']} write")
+                    continue
+                if incoming_rank > existing_rank:
+                    upgraded = dict(new_props)
+                    upgraded["upgraded_from_provenance"] = provenance.normalize(existing_props.get("provenance"))
+                    label_safe = neo4j_client.safe_identifier(label)
+                    session.run(
+                        f"""
+                        MERGE (n:{label_safe} {{id: $entity_id}})
+                        SET n = $props
+                        """,
+                        entity_id=entity_id, props=sanitize_props(upgraded),
+                    )
+                    if label not in created_labels:
+                        neo4j_client.ensure_id_constraint(session, label)
+                        created_labels.add(label)
+                    n_upgraded += 1
+                    continue
+                stub_fill_only = incoming_rank < provenance.rank(provenance.INGESTED_DOCUMENT)
+
+            if stub_fill_only:
+                final_props = sanitize_props({**new_props, **existing_props})
+                n_stub_merged += 1
+            else:
+                if was_existing and mode == "amendment":
+                    old_hash = existing_props.get("content_hash")
+                    new_hash = new_props.get("content_hash")
+                    if old_hash and new_hash and old_hash != new_hash:
+                        clone_as_historical_node(session, label, entity_id, existing_props)
+                        n_versioned += 1
+                    else:
+                        n_unchanged += 1
+                elif was_existing:
+                    n_updated += 1
+                final_props = sanitize_props(diff_and_prepare_update(existing_props, new_props, mode))
+
             label_safe = neo4j_client.safe_identifier(label)
 
             session.run(
@@ -279,7 +336,9 @@ class GraphIngestionEngine:
 
         step_logger.log(f"Entities: {n_created} newly created, {n_updated} overwritten (base mode), "
                          f"{n_versioned} amended-and-versioned, {n_unchanged} unchanged (amendment mode, same content_hash), "
-                         f"{n_cross_merged} cross-run fuzzy-merged, {n_flagged} flagged as possible duplicates (possibleDuplicateOf).")
+                         f"{n_cross_merged} cross-run fuzzy-merged, {n_flagged} flagged as possible duplicates (possibleDuplicateOf), "
+                         f"{n_kept_higher_provenance} kept (existing node has higher provenance than the incoming stub), "
+                         f"{n_upgraded} upgraded from stub to real content, {n_stub_merged} stub-onto-stub gap-fills.")
         return created_labels, resolved_id_map
 
     def load_relationships(self, session, relationships: list[dict]):
@@ -299,6 +358,17 @@ class GraphIngestionEngine:
             source = rel["source"]
             target = rel["target"]
             props = sanitize_props(rel.get("properties", {}))
+            # 2026-10-14: provenance on edges too (see provenance.py). Missing
+            # -> ingested_document. An UNVERIFIED edge (cited_reference/
+            # model_suggested - e.g. Article -PART_OF-> TaxTreaty inferred from
+            # an opinion's citation string) only fills in when the edge does
+            # not exist yet (ON CREATE SET), so it can never overwrite or
+            # downgrade the same edge already asserted by a real ingested
+            # document; an ingested_document edge always writes (SET), which
+            # is what upgrades a previously stub-only edge.
+            props["provenance"] = provenance.normalize(props.get("provenance"))
+            unverified = provenance.rank(props["provenance"]) < provenance.rank(provenance.INGESTED_DOCUMENT)
+            set_clause = "ON CREATE SET r += $props" if unverified else "SET r += $props"
             try:
                 result = session.run(
                     f"""
@@ -306,7 +376,7 @@ class GraphIngestionEngine:
                     OPTIONAL MATCH (b {{id: $target}})
                     FOREACH (_ IN CASE WHEN a IS NOT NULL AND b IS NOT NULL THEN [1] ELSE [] END |
                         MERGE (a)-[r:{rel_type}]->(b)
-                        SET r += $props
+                        {set_clause}
                     )
                     RETURN a IS NOT NULL AS source_found, b IS NOT NULL AS target_found
                     """,

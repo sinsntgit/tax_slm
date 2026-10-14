@@ -632,6 +632,13 @@ class _ChunkBuilder:
                     "amendingActNo": act_number, "amendingActYear": year,
                     "full_citation": f"Act No. {act_number} of {year}",
                     "confidence": 1.0, "extraction_notes": "",
+                    # 2026-10-14: provenance (framework/core/ingest/provenance.py) -
+                    # this node exists only because an amendment footnote CITED the
+                    # amending Act; its own text is never ingested here. Literal
+                    # strings (not an import) to keep chunking.py dependency-free.
+                    # sourceMdPath "" so attach_pipeline_metadata()'s setdefault
+                    # can't point it at the Act's .md (wrong text for this node).
+                    "provenance": "cited_reference", "sourceMdPath": "",
                 },
             }
         return act_id

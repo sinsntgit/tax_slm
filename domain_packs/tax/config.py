@@ -156,7 +156,11 @@ RESOLUTION_KEY_PROPERTIES = {
 # --- PII (was webapp/pii.py's ALWAYS_MASKED_FIELDS / REGEX_DETECTORS) --------
 ALWAYS_MASKED_FIELDS = {
     "CaseLaw": ["case_name", "bench"],
-    "FirmOpinion": ["partner_name", "client_industry"],
+    # 2026-10-14: + client_name/counterparty_name - converters/extract_opinion.py
+    # (the first real FirmOpinion producer) stores the real party names ONLY in
+    # these properties (text properties/chunks are pseudonymised at ingestion),
+    # so masking them here is what keeps client identity out of the UI/answers.
+    "FirmOpinion": ["partner_name", "client_industry", "client_name", "counterparty_name"],
 }
 
 PAN_RE = re.compile(r"\b[A-Z]{5}[0-9]{4}[A-Z]\b")                       # Indian PAN: AAAAA9999A

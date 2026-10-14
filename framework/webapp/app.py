@@ -1577,14 +1577,21 @@ def _api_ask_impl(question: str, metadata_filters: dict | None, retrieval_mode: 
         detail = doc_details_map.get(str(chunk_id), {}) or {}
         doc_name = detail.get("document_name")
         page = detail.get("page")
+        # 2026-10-14: provenance appended (answer_generation v7 Section 3B
+        # needs the model to see it), plus a marker when the chunk is a firm
+        # opinion (a prior firm position, not an authority). Suffix only, so
+        # the "<doc>, p. N" part the citation rules key on is unchanged.
+        suffix = " | firm_opinion" if detail.get("entity_type") == "FirmOpinion" else ""
+        if detail.get("provenance"):
+            suffix += f" | provenance={detail['provenance']}"
         if doc_name and page:
-            return f"chunk_id={chunk_id} | {doc_name}, p. {page}"
+            return f"chunk_id={chunk_id} | {doc_name}, p. {page}{suffix}"
         if doc_name:
-            return f"chunk_id={chunk_id} | {doc_name}"
+            return f"chunk_id={chunk_id} | {doc_name}{suffix}"
         fallback_citation = detail.get("entity_citation") or detail.get("chunk_citation")
         if fallback_citation:
-            return f"chunk_id={chunk_id} | {fallback_citation}"
-        return f"chunk_id={chunk_id}"
+            return f"chunk_id={chunk_id} | {fallback_citation}{suffix}"
+        return f"chunk_id={chunk_id}{suffix}"
 
     def _build_context_parts(chunks: list[dict], extra_instructions: str = "",
                               doc_details_map: dict | None = None, parent_context_map: dict | None = None) -> list[str]:

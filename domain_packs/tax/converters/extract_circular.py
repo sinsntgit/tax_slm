@@ -102,6 +102,7 @@ import extract_entities  # same directory - reused for attach_pipeline_metadata(
                           # compute_content_hash()/build_datasource_entity_and_links()
 import extract_generic  # same directory - reused for split_into_paragraph_chunks()
 from framework.core.infra import llm_client, step_logger
+from framework.core.ingest import provenance
 from framework.core.retrieve import observability
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -307,12 +308,14 @@ def build_graph_from_extraction(extraction: dict, full_text: str, source_file: s
             if not name:
                 continue
             other_id = f"CBDTCircular_{_slug(name)}"
-            entities.append({"id": other_id, "type": "CBDTCircular", "properties": {
+            # 2026-10-14: provenance.mark_stub() - see extract_case_law.py's
+            # precedent stubs for the same change and why sourceMdPath is pinned.
+            entities.append({"id": other_id, "type": "CBDTCircular", "properties": provenance.mark_stub({
                 "full_citation": name, "circular_number": name,
                 "confidence": 0.3,
                 "extraction_notes": f"Stub created from a reference in {label}; will be filled in "
                                      f"properly if/when this circular is itself ingested.",
-            }})
+            }, cited_in=doc_meta.get("document_id"))})
             relationships.append({"type": rel_type, "source": circular_id, "target": other_id, "properties": {}})
             # 2026-08-31: NEW - reify SUPERSEDES/WITHDRAWS as a dated
             # LegalEvent too (see chunking.build_legal_event()'s docstring) -

@@ -357,7 +357,8 @@ class GraphRAGRetriever:
                     RETURN pair.chunk_id AS chunk_id, e.document_id AS document_id,
                            e.document_name AS document_name, e.source_type AS source_type,
                            e.authority_level AS authority_level, e.jurisdiction AS jurisdiction,
-                           e.full_citation AS entity_citation, labels(e) AS entity_labels
+                           e.full_citation AS entity_citation, labels(e) AS entity_labels,
+                           e.provenance AS provenance
                     """,
                     pairs=[{"chunk_id": cid, "db_id": db_id} for cid, db_id in synthetic_db_ids.items()],
                 ))
@@ -372,6 +373,11 @@ class GraphRAGRetriever:
                     "jurisdiction": r["jurisdiction"],
                     "entity_citation": r["entity_citation"],
                     "entity_type": (r["entity_labels"] or [None])[0],
+                    # 2026-10-14: provenance (framework/core/ingest/provenance.py) -
+                    # surfaced so app.py's chunk label can tell the answer model
+                    # (answer_generation v7, Section 3B). None for nodes loaded
+                    # before provenance existed.
+                    "provenance": r["provenance"],
                 }
 
         if real_chunk_ids:
@@ -385,7 +391,7 @@ class GraphRAGRetriever:
                            e.document_id AS document_id, e.document_name AS document_name,
                            e.source_type AS source_type, e.authority_level AS authority_level,
                            e.jurisdiction AS jurisdiction, e.full_citation AS entity_citation,
-                           labels(e) AS entity_labels
+                           labels(e) AS entity_labels, e.provenance AS provenance
                     """,
                     chunk_ids=real_chunk_ids,
                 ))
@@ -400,6 +406,11 @@ class GraphRAGRetriever:
                     "jurisdiction": r["jurisdiction"],
                     "entity_citation": r["entity_citation"],
                     "entity_type": (r["entity_labels"] or [None])[0],
+                    # 2026-10-14: provenance (framework/core/ingest/provenance.py) -
+                    # surfaced so app.py's chunk label can tell the answer model
+                    # (answer_generation v7, Section 3B). None for nodes loaded
+                    # before provenance existed.
+                    "provenance": r["provenance"],
                 }
         return details
 
