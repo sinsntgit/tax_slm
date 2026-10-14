@@ -981,7 +981,9 @@ def api_data_explorer_nodes():
     page_size = request.args.get("page_size", data_explorer.DEFAULT_PAGE_SIZE)
     try:
         with neo4j_client.get_session() as session:
-            result = data_explorer.list_nodes(session, label, search=search, page=page, page_size=page_size)
+            # 2026-10-14: phase0/review-pii - never MATCH on always-masked fields (search oracle).
+            result = data_explorer.list_nodes(session, label, search=search, page=page, page_size=page_size,
+                                              unsearchable_properties=set(pii.always_masked_fields.get(label, ())))
         result["rows"] = pii.mask_nodes(
             [{"label": label, "db_id": r["db_id"], "properties": r["properties"]} for r in result["rows"]],
             context=f"/api/data-explorer/nodes label={label!r} search={search!r}",
@@ -1020,7 +1022,8 @@ def api_data_explorer_index(index_name):
     try:
         with neo4j_client.get_session() as session:
             result = data_explorer.list_knowledge_index(session, index_name, search=search,
-                                                          page=page, page_size=page_size)
+                                                          page=page, page_size=page_size,
+                                                          unsearchable_properties=pii.always_masked_property_names)
         result["rows"] = pii.mask_nodes(
             [{"label": (r.get("labels") or ["?"])[0], "db_id": r["db_id"], "properties": r["properties"]}
              for r in result["rows"]],
@@ -1217,6 +1220,22 @@ def _resolve_include_parent_context(retrieval_mode: str, include_parent_context:
     if include_parent_context is not None:
         return bool(include_parent_context)
     return retrieval_mode != "vector_only"
+
+
+def _masked_parent_context(chunk_ids: list) -> dict:
+    """2026-10-14: phase0/review-pii - get_parent_section_context() returns an
+    ancestor's raw hasText (incl. an uploaded client GenericDocument's full
+    text), which goes into the answer prompt and the response's
+    source_references without ever passing retrieve()'s masking. Same
+    regex masking chunk text gets."""
+    ctx = retriever.get_parent_section_context(chunk_ids) or {}
+    out = {}
+    for cid, pc in ctx.items():
+        pc = dict(pc or {})
+        if isinstance(pc.get("parent_text"), str):
+            pc["parent_text"] = pii.mask_chunk_text(pc["parent_text"], context="/api/ask parent_context")
+        out[cid] = pc
+    return out
 
 
 # 2026-10-14 (phase0/followups): answer_mode -> PROMPT_PACK name, mirrored from
@@ -1515,6 +1534,10 @@ def _api_ask_impl(question: str, metadata_filters: dict | None, retrieval_mode: 
     if supplementary_chunks:
         seen_chunk_ids = {str(c.get("chunk_id")) for c in candidate_chunks}
         merged_extra = [c for c in supplementary_chunks if str(c.get("chunk_id")) not in seen_chunk_ids]
+        # 2026-10-14: phase0/review-pii - supplementary chunks (agentic
+        # evidence, feedback-driven vector_search_chunks() hits) never went
+        # through retrieve()'s mask_chunks(); mask them like candidate_chunks.
+        merged_extra = pii.mask_chunks(merged_extra, context="/api/ask supplementary_chunks")
         if merged_extra:
             candidate_chunks = candidate_chunks + merged_extra
             app.logger.info(f"[_api_ask_impl] merged {len(merged_extra)} feedback-driven supplementary "
@@ -1558,6 +1581,12 @@ def _api_ask_impl(question: str, metadata_filters: dict | None, retrieval_mode: 
             # coverage this time," not break the whole /api/ask call.
             app.logger.warning(f"[category_retrieval] run_category_retrieval failed: {e}")
             category_results = []
+        # 2026-10-14: phase0/review-pii - category chunks come straight from
+        # get_chunks_by_ids()/vector_search_chunks(), bypassing retrieve()'s
+        # mask_chunks(), and go into the answer prompt and the response.
+        for cat in category_results:
+            if getattr(cat, "chunks", None):
+                cat.chunks = pii.mask_chunks(cat.chunks, context=f"/api/ask category={cat.key}")
         cache.update_agent_state(run_id, "category_retrieval",
                                   {"categories": category_retrieval.summarize_category_coverage(category_results)})
         observability.log_span(trace, "category_retrieval", question,
@@ -1583,7 +1612,7 @@ def _api_ask_impl(question: str, metadata_filters: dict | None, retrieval_mode: 
     # defeating the point of the comparison (see graphrag.py's docstring).
     # 2026-10-14: decided by _resolve_include_parent_context() (same default
     # rule, plus the internal include_parent_context override agentic uses).
-    parent_context = retriever.get_parent_section_context([c["chunk_id"] for c in top_chunks]) \
+    parent_context = _masked_parent_context([c["chunk_id"] for c in top_chunks]) \
         if use_parent_context else {}
     for ref in grounding_info["source_references"]:
         ref["document"] = doc_details.get(str(ref["chunk_id"]), {})
@@ -1864,7 +1893,7 @@ def _api_ask_impl(question: str, metadata_filters: dict | None, retrieval_mode: 
         wider_ids = [c["chunk_id"] for c in wider_chunks]
         wider_doc_details = retriever.get_document_details(wider_ids)
         # 2026-08-26: same vector_only guard as the first-pass parent_context above.
-        wider_parent_context = retriever.get_parent_section_context(wider_ids) if use_parent_context else {}
+        wider_parent_context = _masked_parent_context(wider_ids) if use_parent_context else {}
 
         gap_text = "; ".join(quality["gaps"]) if quality["gaps"] else "the answer was judged too thin or under-cited"
         retry_instructions = (
@@ -3000,8 +3029,13 @@ def _run_unstructured_agent(question: str, metadata_filters: dict | None, retrie
         # comment above for why vector_only's own retrieve() call can't
         # report these fields itself.
         response["cypher"] = "; ".join(orchestrator_result["cypher_queries"]) or None
-        response["plain_rows"] = orchestrator_result["plain_rows"]
-        internal["plain_rows"] = orchestrator_result["plain_rows"]
+        # 2026-10-14: phase0/review-pii - these rows never pass through
+        # retrieve()'s masking; masked here (idempotent - run_tool() already
+        # masks them) before they reach the browser, judges, evaluators and
+        # the LLM call log.
+        masked_rows = pii.mask_plain_rows(orchestrator_result["plain_rows"], context="agentic plain_rows")
+        response["plain_rows"] = masked_rows
+        internal["plain_rows"] = masked_rows
         agent_trace_record = {
             "agent": "tax_unstructured_query_agent",
             "action": "Ran the agentic retrieval loop (planner + tool calls + sufficiency check, "

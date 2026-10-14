@@ -64,6 +64,9 @@ def _log_pii_access(entity_type: str | None, property_name: str | None, detectio
         logger.warning(f"[pii] WARNING: could not write PiiAccessLog entry ({e}). Masking still applied.")
 
 
+_MASKED_TOKEN_RE = re.compile(r"\[[A-Z0-9_]+_REDACTED_[0-9a-f]{10}\]")
+
+
 def mask_value(raw_value: str, token_prefix: str) -> str:
     digest = hmac.new(PII_MASK_SALT.encode("utf-8"), str(raw_value).encode("utf-8"), hashlib.sha256).hexdigest()[:10]
     return f"[{token_prefix}_REDACTED_{digest}]"
@@ -81,6 +84,7 @@ class PiiMasker:
         self._always_masked_property_names = {
             name for names in self.always_masked_fields.values() for name in names
         }
+        self.always_masked_property_names = frozenset(self._always_masked_property_names)
 
     def mask_free_text(self, text: str, entity_type: str | None = None, property_name: str | None = None,
                         context: str = "") -> tuple[str, list[str]]:
@@ -141,27 +145,68 @@ class PiiMasker:
             masked_chunks.append(c2)
         return masked_chunks
 
-    def mask_plain_row_value(self, value, context: str = ""):
+    def always_masked_field_for_key(self, key) -> str | None:
+        """2026-10-14: review/phase0 PII bug - the always-masked field a
+        plain-row KEY names, if any. NL2Cypher rows are keyed by the RETURN
+        expression, so a scalar arrives as 'o.client_name', 'client_name' or
+        'collect(o.client_name)' - matched on a whole identifier, not equality.
+        KNOWN LIMIT: an alias that hides the property ('o.client_name AS who')
+        can't be recognised from the key - only the ingestion-time
+        pseudonymisation of opinion text stands behind that case."""
+        if not isinstance(key, str) or not key:
+            return None
+        if key in self._always_masked_property_names:
+            return key
+        for name in self._always_masked_property_names:
+            if re.search(r"(?<![\w])" + re.escape(name) + r"(?![\w])", key):
+                return name
+        return None
+
+    def _mask_always(self, value, field: str, context: str):
+        """Masks EVERY string inside `value` (scalar, list, or map) as the
+        always-masked `field` - a collect()/map of client names is as
+        identifying as one."""
+        if isinstance(value, str):
+            # Idempotent: rows masked upstream (retrieval_orchestrator.run_tool)
+            # may be masked again at the app boundary - keep the same token.
+            if not value or _MASKED_TOKEN_RE.fullmatch(value):
+                return value
+            _log_pii_access(None, field, "always_masked_field(plain_row)", value, context)
+            return mask_value(value, field.upper())
+        if isinstance(value, (list, tuple)):
+            return [self._mask_always(v, field, context) for v in value]
+        if isinstance(value, dict):
+            return {k: (v if k in self.never_mask_properties else self._mask_always(v, field, context))
+                    for k, v in value.items()}
+        return value
+
+    def mask_plain_row_value(self, value, context: str = "", key: str | None = None):
+        # 2026-10-14: review/phase0 PII bug - ALWAYS_MASKED_FIELDS used to be
+        # applied only to a str directly inside a dict value, so a SCALAR row
+        # ({'o.client_name': 'Zomato Limited'}), a list (collect(...)), and a
+        # node-shaped dict ({'id','label','properties': {...}}) nested one
+        # level deeper all passed through with regex-only masking. Now `key`
+        # (the row key / map key this value sits under) decides, recursively.
+        field = self.always_masked_field_for_key(key)
+        if field:
+            return self._mask_always(value, field, context)
         if isinstance(value, dict):
             masked = {}
             for k, v in value.items():
                 if k in self.never_mask_properties:
                     masked[k] = v
-                elif k in self._always_masked_property_names and isinstance(v, str):
-                    masked[k] = mask_value(v, k.upper())
-                    _log_pii_access(None, k, "always_masked_field(plain_row)", v, context)
-                elif isinstance(v, str):
-                    masked[k], _ = self.mask_free_text(v, property_name=k, context=context)
                 else:
-                    masked[k] = v
+                    masked[k] = self.mask_plain_row_value(v, context, key=k)
             return masked
+        if isinstance(value, (list, tuple)):
+            return [self.mask_plain_row_value(v, context, key=None) for v in value]
         if isinstance(value, str):
-            masked_text, _ = self.mask_free_text(value, context=context)
+            masked_text, _ = self.mask_free_text(value, property_name=key, context=context)
             return masked_text
         return value
 
     def mask_plain_rows(self, rows: list[dict], context: str = "") -> list[dict]:
-        return [{k: self.mask_plain_row_value(v, context) for k, v in row.items()} for row in rows]
+        return [{k: self.mask_plain_row_value(v, context, key=k) for k, v in row.items()} for row in rows]
 
     def scan_for_pii(self, value, _path: str = "$") -> list[dict]:
         """Independent, read-only verification scan - used by a domain

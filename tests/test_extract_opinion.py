@@ -204,14 +204,19 @@ def test_single_word_client_keeps_cited_authority_intact():
 def test_single_word_client_end_to_end_chunks_are_redacted():
     path = _by_prefix("OP-01")
     text = path.read_text(encoding="utf-8").replace("Nimbus Technologies Private Limited", "Infosys")
-    text = text.replace("Nimbus", "INFOSYS")
+    text = text.replace("Nimbus", "INFOSYS").replace('title: "Opinion on', 'title: "Opinion for Infosys on', 1)
     parsed = eo.parse_opinion(text, path.name)
-    assert parsed["client"] == "Infosys"
+    assert parsed["client"] == "Infosys" and "Infosys" in parsed["title"]
     graph = eo.build_graph_from_opinion(parsed, path.name)
     props = graph["entities"][0]["properties"]
     assert props["client_name"] == "Infosys"
     for t in [c["text"] for c in graph["chunks"]] + [props["facts"], props["analysis"], props["title"]]:
         assert "infosys" not in t.lower()
+    # document_name (copied onto the node + every chunk, shown in source labels) uses the redacted title
+    assert "[CLIENT]" in props["document_name"]
+    for e in graph["entities"]:
+        assert "infosys" not in str(e["properties"].get("document_name", "")).lower()
+    assert "infosys" not in str([{k: v for k, v in c.items() if k != "text"} for c in graph["chunks"]]).lower()
     assert any("[CLIENT]" in c["text"] for c in graph["chunks"])
 
 

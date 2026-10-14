@@ -49,6 +49,30 @@ MAX_RETRIEVAL_ITERATIONS = 3
 
 
 def run_tool(retriever: GraphRAGRetriever, plan: dict, trace=None) -> dict:
+    """_dispatch_tool() + PII masking of its evidence.
+
+    2026-10-14: phase0/review-pii - GraphRAGRetriever.retrieve() is the
+    'single enforcement point' for PII masking, but agentic mode and
+    structured_research's law_agent call the retriever's tool methods
+    directly and so bypassed it: raw FirmOpinion node properties
+    (client_name) went into the sufficiency-check prompt, the LLM call log,
+    the answer prompt, the browser (response['plain_rows']) and the
+    evaluators. Masking here, where evidence first enters the loop, covers
+    every one of those consumers with the retriever's own masker (same
+    domain rules retrieve() uses)."""
+    evidence = _dispatch_tool(retriever, plan, trace=trace)
+    masker = getattr(retriever, "pii", None)
+    if masker is None:
+        # Only test doubles lack .pii - GraphRAGRetriever always builds one.
+        logger.warning("[retrieval_orchestrator] retriever has no PII masker - evidence NOT masked")
+        return evidence
+    context = f"retrieval_orchestrator.run_tool tool={plan.get('tool')}"
+    evidence["plain_rows"] = masker.mask_plain_rows(evidence.get("plain_rows") or [], context=context)
+    evidence["chunks"] = masker.mask_chunks(evidence.get("chunks") or [], context=context)
+    return evidence
+
+
+def _dispatch_tool(retriever: GraphRAGRetriever, plan: dict, trace=None) -> dict:
     """Dispatches ONE tool call (CYPHER/VECTOR/CITATION - same shape
     retrieval_planner.plan_retrieval() returns) and returns its result
     reshaped into the common {"plain_rows": [...], "chunks": [...],

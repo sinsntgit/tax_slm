@@ -632,17 +632,20 @@ def build_graph_from_opinion(parsed: dict, source_file: str, doc_meta: dict | No
     opinion_node_id = f"FirmOpinion_{extract_case_law._slug(opinion_key)}"
     doc_id = doc_meta.get("document_id") or f"opinion_{extract_case_law._slug(opinion_key)}"
     title = parsed["title"] or opinion_key
-    doc_meta.setdefault("document_id", doc_id)
-    doc_meta.setdefault("document_name", f"{opinion_key} - {title}" if parsed["title"] else opinion_key)
-    doc_meta.setdefault("file_type", file_type)
-    doc_meta.setdefault("source_md_path", source_md_path or "")
-    namespace = detect_act_namespace(parsed["body"], doc_meta.get("cited_act_namespace"))
-
     protected = " | ".join(parsed["cases_cited_raw"] + parsed["sections_cited_raw"] + parsed["treaty_raw"])
     redactions = build_redactions(parsed["client"], parsed["counterparty"], parsed["partner"],
                                   protected=protected) if redact_parties else []
     keep = protected_phrases(parsed)
     text = {k: redact(v, redactions, keep) for k, v in parsed["text_by_key"].items()}
+    doc_meta.setdefault("document_id", doc_id)
+    # 2026-10-14: phase0/review-pii - document_name is copied onto the node and
+    # every chunk and shown in source labels to the answer model and the UI
+    # (get_document_details), so it must carry the REDACTED title, not the raw one.
+    doc_meta.setdefault("document_name", f"{opinion_key} - {redact(title, redactions, keep)}"
+                        if parsed["title"] else opinion_key)
+    doc_meta.setdefault("file_type", file_type)
+    doc_meta.setdefault("source_md_path", source_md_path or "")
+    namespace = detect_act_namespace(parsed["body"], doc_meta.get("cited_act_namespace"))
 
     def add_stub(stub: dict):
         if stub["id"] not in stub_ids:
