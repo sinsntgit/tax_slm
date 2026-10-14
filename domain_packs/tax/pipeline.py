@@ -44,6 +44,7 @@ import time
 import uuid
 from pathlib import Path
 
+from domain_packs.tax import ingest_dedup  # 2026-10-14: NEW - duplicate-upload/ingest prevention
 from framework.core.ingest import pipeline_ops
 from framework.core.retrieve import graphrag as graphrag_module
 
@@ -177,10 +178,28 @@ def llm_chunk_info() -> dict:
 
 
 def save_upload(filename: str, content: bytes) -> Path:
-    safe_name = f"{uuid.uuid4().hex[:8]}_{Path(filename).name}"
-    path = UPLOAD_DIR / safe_name
-    path.write_bytes(content)
-    return path
+    """2026-10-14: CHANGED - was `<uuid4[:8]>_<name>`, a fresh name for every
+    upload even of identical bytes (the root cause of the duplicate
+    converted_md/CaseLaw copies - see ingest_dedup.py's module docstring).
+    Now content-addressed, returning the existing path for identical bytes."""
+    return save_upload_dedup(filename, content)[0]
+
+
+def save_upload_dedup(filename: str, content: bytes) -> tuple[Path, dict]:
+    """2026-10-14: NEW - save_upload() plus {"content_sha256",
+    "duplicate_upload", "existing_upload"} for the UI's upload response."""
+    return ingest_dedup.save_upload_dedup(UPLOAD_DIR, filename, content)
+
+
+def describe_upload_duplicates(upload_path: Path) -> list[dict]:
+    """2026-10-14: NEW - documents already in the graph ingested from this
+    exact upload's bytes (see ingest_dedup.find_ingested_copies()); [] when
+    none or when Neo4j can't be reached (the ingest job re-checks anyway)."""
+    try:
+        return ingest_dedup.find_ingested_copies(ingest_dedup.sha256_of_file(upload_path),
+                                                 MD_DIR / f"{upload_path.stem}.md")
+    except Exception:
+        return []
 
 
 def save_uploads_batch(files: list[tuple[str, bytes]]) -> list[Path]:
@@ -337,14 +356,16 @@ def _log(job_id: str, line: str):
             _JOBS[job_id]["log"].append(line)
 
 
-def start_ingestion_job(upload_path: Path, file_type: str, doc_meta: dict, mode: str) -> str:
+def start_ingestion_job(upload_path: Path, file_type: str, doc_meta: dict, mode: str,
+                        force_reingest: bool = False) -> str:
     job_id = uuid.uuid4().hex[:12]
     with _JOBS_LOCK:
         _JOBS[job_id] = {
             "status": "running", "log": [], "result": None, "error": None,
             "started_at": time.time(), "finished_at": None,
         }
-    thread = threading.Thread(target=_run_ingestion_job, args=(job_id, upload_path, file_type, doc_meta, mode), daemon=True)
+    thread = threading.Thread(target=_run_ingestion_job, args=(job_id, upload_path, file_type, doc_meta, mode, force_reingest),
+                              daemon=True)
     thread.start()
     return job_id
 
@@ -354,9 +375,24 @@ def get_job(job_id: str) -> dict | None:
         return dict(_JOBS[job_id]) if job_id in _JOBS else None
 
 
-def _run_ingestion_job(job_id: str, upload_path: Path, file_type: str, doc_meta: dict, mode: str):
+def _run_ingestion_job(job_id: str, upload_path: Path, file_type: str, doc_meta: dict, mode: str,
+                       force_reingest: bool = False):
     try:
         from domain_packs.tax.config import DOMAIN_CONFIG
+
+        # 2026-10-14: NEW - skip a file whose exact bytes are already in the
+        # graph unless force_reingest ("re-ingest anyway") - see
+        # ingest_dedup.py. A skip is a successful no-op: status "done" with
+        # result.skipped=True, so the UI shows it as such rather than an error.
+        content_sha256, duplicate_of = ingest_dedup.prepare_duplicate_check(
+            upload_path, MD_DIR / f"{upload_path.stem}.md", force_reingest, lambda line: _log(job_id, line))
+        if duplicate_of:
+            with _JOBS_LOCK:
+                _JOBS[job_id]["status"] = "done"
+                _JOBS[job_id]["finished_at"] = time.time()
+                _JOBS[job_id]["result"] = {"skipped": True, "reason": "duplicate", "duplicate_of": duplicate_of,
+                                           "content_sha256": content_sha256}
+            return
 
         _log(job_id, f"[1/4] Converting {upload_path.name} to Markdown (file_type={file_type})...")
         md_path, convert_stats, convert_log = convert_document(upload_path, file_type)
@@ -369,6 +405,10 @@ def _run_ingestion_job(job_id: str, upload_path: Path, file_type: str, doc_meta:
         for line in extract_log:
             _log(job_id, line)
         _log(job_id, f"Extraction complete -> {graph_path}")
+        # 2026-10-14: NEW - stamp source_file_sha256 + converge a re-ingested
+        # judgment onto its existing CaseLaw id (ingest_dedup.py).
+        ingest_dedup.finalize_graph_for_load(graph_path, chunks_path, file_type, content_sha256, md_path,
+                                             lambda line: _log(job_id, line))
 
         _log(job_id, f"[3/4] Loading graph into Neo4j (mode={mode})...")
         ingest_stats = pipeline_ops.ingest_graph_json(DOMAIN_CONFIG, str(graph_path),
@@ -445,7 +485,8 @@ def _batch_log(batch_id: str, line: str):
             job["log"] = job["log"][-_BATCH_LOG_TAIL_MAX:]
 
 
-def start_batch_ingestion_job(upload_paths: list[Path], file_type: str, doc_meta_template: dict, mode: str) -> str:
+def start_batch_ingestion_job(upload_paths: list[Path], file_type: str, doc_meta_template: dict, mode: str,
+                              force_reingest: bool = False) -> str:
     """Same shape as start_ingestion_job() but for many files at once - e.g.
     a whole folder of case-law PDFs uploaded together. doc_meta_template is
     applied to every file EXCEPT document_id/document_name, which are always
@@ -461,6 +502,7 @@ def start_batch_ingestion_job(upload_paths: list[Path], file_type: str, doc_meta
             "total": len(upload_paths),
             "completed": 0,
             "failed": 0,
+            "skipped": 0,  # 2026-10-14: NEW - already-ingested duplicates (see ingest_dedup.py)
             "current_file": None,
             "files": [],   # [{"filename", "status": "ok"|"error", "error": str|None, "result": dict|None}]
             "result": None,
@@ -469,7 +511,8 @@ def start_batch_ingestion_job(upload_paths: list[Path], file_type: str, doc_meta
             "finished_at": None,
         }
     thread = threading.Thread(
-        target=_run_batch_ingestion_job, args=(batch_id, upload_paths, file_type, doc_meta_template, mode), daemon=True
+        target=_run_batch_ingestion_job, args=(batch_id, upload_paths, file_type, doc_meta_template, mode, force_reingest),
+        daemon=True
     )
     thread.start()
     return batch_id
@@ -480,7 +523,8 @@ def get_batch_job(batch_id: str) -> dict | None:
         return dict(_JOBS[batch_id]) if batch_id in _JOBS else None
 
 
-def _run_batch_ingestion_job(batch_id: str, upload_paths: list[Path], file_type: str, doc_meta_template: dict, mode: str):
+def _run_batch_ingestion_job(batch_id: str, upload_paths: list[Path], file_type: str, doc_meta_template: dict, mode: str,
+                             force_reingest: bool = False):
     from domain_packs.tax.config import DOMAIN_CONFIG
 
     total = len(upload_paths)
@@ -499,8 +543,23 @@ def _run_batch_ingestion_job(batch_id: str, upload_paths: list[Path], file_type:
         doc_meta.setdefault("document_name", upload_path.stem)
 
         try:
+            # 2026-10-14: NEW - same duplicate skip as the single-file job.
+            content_sha256, duplicate_of = ingest_dedup.prepare_duplicate_check(
+                upload_path, MD_DIR / f"{upload_path.stem}.md", force_reingest,
+                lambda line: _batch_log(batch_id, f"[{i}/{total}] {upload_path.name}: {line}"))
+            if duplicate_of:
+                with _JOBS_LOCK:
+                    _JOBS[batch_id]["skipped"] += 1
+                    _JOBS[batch_id]["files"].append({
+                        "filename": upload_path.name, "status": "skipped", "error": None,
+                        "result": {"skipped": True, "reason": "duplicate", "duplicate_of": duplicate_of,
+                                   "content_sha256": content_sha256}})
+                continue
             md_path, convert_stats, convert_log = convert_document(upload_path, file_type)
             graph_path, chunks_path, extract_stats, extract_log = run_extraction(md_path, file_type, doc_meta)
+            ingest_dedup.finalize_graph_for_load(
+                graph_path, chunks_path, file_type, content_sha256, md_path,
+                lambda line: _batch_log(batch_id, f"[{i}/{total}] {upload_path.name}: {line}"))
             ingest_stats = pipeline_ops.ingest_graph_json(
                 DOMAIN_CONFIG, str(graph_path), str(chunks_path) if chunks_path else None, mode
             )
@@ -551,4 +610,5 @@ def _run_batch_ingestion_job(batch_id: str, upload_paths: list[Path], file_type:
             _JOBS[batch_id]["finished_at"] = time.time()
     _batch_log(batch_id, f"Batch complete: {total} file(s), "
                           f"{_JOBS.get(batch_id, {}).get('completed', '?')} succeeded, "
+                          f"{_JOBS.get(batch_id, {}).get('skipped', 0)} skipped as already ingested, "
                           f"{_JOBS.get(batch_id, {}).get('failed', '?')} failed.")

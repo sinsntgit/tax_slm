@@ -370,6 +370,11 @@
                 <option value="amendment">amendment (preserve history of changed provisions)</option>
               </select>
             </div>
+            <!-- 2026-10-14: NEW - a file whose exact bytes are already in the graph is
+                 skipped by default (see domain_packs/tax/ingest_dedup.py); this opts out. -->
+            <div class="field">
+              <label><input type="checkbox" id="force-reingest" /> Re-ingest even if already ingested</label>
+            </div>
           </div>
           <button class="btn btn-primary blueprint" id="ingest-btn"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Run Ingestion</button>
           <span id="ingest-status-pill" style="margin-left:10px;"></span>
@@ -3155,6 +3160,17 @@ function enableStep(card) { card.style.opacity = "1"; card.style.pointerEvents =
 // answer JSON, so this is defense-in-depth for anything that still isn't -
 // falls back to a readable message built from the HTTP status instead of
 // letting a JSON-parse exception surface verbatim to the user.
+// 2026-10-14: NEW - upload-time duplicate notice (see /api/upload's
+// duplicate_upload/already_ingested fields and domain_packs/tax/ingest_dedup.py).
+function duplicateUploadNote(result) {
+  const docs = result.already_ingested || [];
+  if (docs.length) {
+    return ` - already ingested as ${docs.map(d => d.document_id).join(", ")}; Run Ingestion will skip it ` +
+      `unless "Re-ingest even if already ingested" is ticked.`;
+  }
+  return result.duplicate_upload ? ` - identical to an earlier upload (${result.existing_upload}), reusing it.` : "";
+}
+
 async function parseJsonResponse(res) {
   const text = await res.text();
   try {
@@ -3179,7 +3195,7 @@ document.getElementById("upload-btn").addEventListener("click", async () => {
       const result = await parseJsonResponse(res);
       if (!res.ok) throw new Error(result.error || "Upload failed");
       uploadedPath = result.upload_path;
-      document.getElementById("upload-status").innerText = `Uploaded: ${result.filename} (${(result.size_bytes/1024).toFixed(1)} KB)`;
+      document.getElementById("upload-status").innerText = `Uploaded: ${result.filename} (${(result.size_bytes/1024).toFixed(1)} KB)` + duplicateUploadNote(result);
       enableStep(document.getElementById("convert-card"));
       enableStep(document.getElementById("ingest-meta-card"));
       const stem = file.name.replace(/\.[^.]+$/, "");
@@ -3216,7 +3232,8 @@ document.getElementById("upload-btn").addEventListener("click", async () => {
       const res = await fetch(`${API}/api/upload`, { method: "POST", body: formData });
       const result = await parseJsonResponse(res);
       if (!res.ok) throw new Error(result.error || "Upload failed");
-      uploaded.push({ filename: result.filename, upload_path: result.upload_path });
+      uploaded.push({ filename: result.filename, upload_path: result.upload_path,
+                      already_ingested: (result.already_ingested || []).length > 0 });
     } catch (err) {
       failed.push({ filename: file.name, error: err.message || String(err) });
     }
@@ -3225,6 +3242,9 @@ document.getElementById("upload-btn").addEventListener("click", async () => {
   document.getElementById("upload-status").innerText = failed.length
     ? `Uploaded ${uploaded.length}/${files.length} file(s) — ${failed.length} failed: ${failed.map(f => `${f.filename} (${f.error})`).join("; ")}`
     : `Uploaded ${uploaded.length} file(s). Set shared metadata below and click Run Ingestion.`;
+  const alreadyIn = uploaded.filter(f => f.already_ingested).length;
+  if (alreadyIn) document.getElementById("upload-status").innerText +=
+    ` ${alreadyIn} of them are already in the graph and will be skipped unless "Re-ingest even if already ingested" is ticked.`;
 });
 
 document.getElementById("convert-btn").addEventListener("click", async () => {
@@ -3279,7 +3299,8 @@ document.getElementById("ingest-btn").addEventListener("click", async () => {
     try {
       const res = await fetch(`${API}/api/ingest/batch/start`, {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ upload_paths: batchUploadPaths, file_type: fileType, doc_meta: docMeta, mode }),
+        body: JSON.stringify({ upload_paths: batchUploadPaths, file_type: fileType, doc_meta: docMeta, mode,
+                               force_reingest: document.getElementById("force-reingest").checked }),
       });
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || "Could not start batch ingestion");
@@ -3317,7 +3338,8 @@ document.getElementById("ingest-btn").addEventListener("click", async () => {
   try {
     const res = await fetch(`${API}/api/ingest/start`, {
       method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ upload_path: uploadedPath, file_type: fileType, doc_meta: docMeta, mode }),
+      body: JSON.stringify({ upload_path: uploadedPath, file_type: fileType, doc_meta: docMeta, mode,
+                             force_reingest: document.getElementById("force-reingest").checked }),
     });
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || "Could not start ingestion");
@@ -3357,9 +3379,9 @@ async function pollBatchJob(batchId, rowEntry) {
     resultBox.classList.remove("hidden");
     if (job.status === "done") {
       pill.innerHTML = `<span class="tag tag-success">done</span>`;
-      rowEntry.stage = "Validated"; rowEntry.result = `${job.completed || 0}/${total} ok, ${job.failed || 0} failed`;
+      rowEntry.stage = "Validated"; rowEntry.result = `${job.completed || 0}/${total} ok, ${job.skipped || 0} skipped, ${job.failed || 0} failed`;
       const failedFiles = (job.files || []).filter(f => f.status === "error");
-      resultBox.innerHTML = `<b>Batch ingestion complete.</b><br>${job.completed || 0} of ${total} file(s) succeeded, ${job.failed || 0} failed.<br>` +
+      resultBox.innerHTML = `<b>Batch ingestion complete.</b><br>${job.completed || 0} of ${total} file(s) succeeded, ${job.skipped || 0} skipped as already ingested, ${job.failed || 0} failed.<br>` +
         (failedFiles.length ? `<span class="text-danger">Failed: ${failedFiles.map(f => esc(f.filename)).join(", ")}</span><br>` : "") +
         `<span class="text-muted">Switch to KG Explorer and click Load / Search to see it.</span>`;
       loadSchema();
@@ -3387,6 +3409,17 @@ async function pollIngestJob(jobId, rowEntry) {
     clearInterval(pollTimer);
     pollTimer = null;
     document.getElementById("ingest-btn").disabled = false;
+    if (job.status === "done" && job.result && job.result.skipped) {
+      // 2026-10-14: NEW - duplicate skipped (see ingest_dedup.py); the log says why.
+      pill.innerHTML = `<span class="tag tag-accent">skipped</span>`;
+      resultBox.classList.remove("hidden");
+      rowEntry.stage = "Skipped"; rowEntry.result = "already ingested";
+      resultBox.innerHTML = `<b>Skipped - this exact file is already in the graph.</b><br>` +
+        (job.result.duplicate_of || []).map(d => esc(`${d.document_id} (${d.document_name || "-"})`)).join("<br>") +
+        `<br><span class="text-muted">Tick "Re-ingest even if already ingested" and run again to re-ingest it anyway.</span>`;
+      renderQueueTable();
+      return;
+    }
     if (job.status === "done") {
       pill.innerHTML = `<span class="tag tag-success">done</span>`;
       resultBox.classList.remove("hidden");

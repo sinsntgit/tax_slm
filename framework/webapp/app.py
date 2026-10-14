@@ -368,9 +368,20 @@ def api_upload():
         return jsonify({"error": "No file selected."}), 400
     try:
         content = f.read()
-        saved_path = PIPELINE.save_upload(f.filename, content)
+        # 2026-10-14: duplicate reporting (see domain_packs/tax/ingest_dedup.py)
+        # - identical bytes reuse the existing upload, and the UI is told when
+        # this exact file is already in the graph so it can offer "re-ingest
+        # anyway" instead of silently creating a duplicate document. getattr:
+        # a pack without these helpers keeps the plain save_upload() path.
+        dedup_info, already_ingested = {}, []
+        if hasattr(PIPELINE, "save_upload_dedup"):
+            saved_path, dedup_info = PIPELINE.save_upload_dedup(f.filename, content)
+            already_ingested = PIPELINE.describe_upload_duplicates(saved_path)
+        else:
+            saved_path = PIPELINE.save_upload(f.filename, content)
         return jsonify({
             "upload_path": str(saved_path), "filename": f.filename, "size_bytes": len(content),
+            **dedup_info, "already_ingested": already_ingested,
         })
     except Exception as e:
         app.logger.exception("Failed in /api/upload")
@@ -441,7 +452,10 @@ def api_ingest_start():
     if not upload_path or not file_type:
         return jsonify({"error": "upload_path and file_type are required."}), 400
     try:
-        job_id = PIPELINE.start_ingestion_job(Path(upload_path), file_type, doc_meta, mode)
+        # 2026-10-14: force_reingest - "re-ingest anyway" for a file whose
+        # exact bytes are already in the graph (otherwise the job skips it).
+        extra = {"force_reingest": True} if body.get("force_reingest") else {}
+        job_id = PIPELINE.start_ingestion_job(Path(upload_path), file_type, doc_meta, mode, **extra)
         return jsonify({"job_id": job_id})
     except Exception as e:
         app.logger.exception("Failed in /api/ingest/start")
@@ -477,7 +491,9 @@ def api_ingest_batch_start():
     if not upload_paths or not isinstance(upload_paths, list) or not file_type:
         return jsonify({"error": "upload_paths (non-empty list) and file_type are required."}), 400
     try:
-        batch_id = PIPELINE.start_batch_ingestion_job([Path(p) for p in upload_paths], file_type, doc_meta, mode)
+        extra = {"force_reingest": True} if body.get("force_reingest") else {}  # 2026-10-14: see /api/ingest/start
+        batch_id = PIPELINE.start_batch_ingestion_job([Path(p) for p in upload_paths], file_type, doc_meta, mode,
+                                                      **extra)
         return jsonify({"batch_id": batch_id, "total": len(upload_paths)})
     except Exception as e:
         app.logger.exception("Failed in /api/ingest/batch/start")
