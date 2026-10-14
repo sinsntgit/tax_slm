@@ -36,6 +36,8 @@ import json
 import re
 from pathlib import Path
 
+from framework.core.ingest import provenance  # 2026-10-14 (phase0/review-integrity): _is_stub()
+
 SOURCE_FILE_HASH_PROP = "source_file_sha256"
 # extract_case_law.py / extract_circular.py precedent/reference stub nodes
 # all carry extraction_notes starting with this.
@@ -135,8 +137,21 @@ def find_case_law_ids_for_file(content_sha256: str, md_path: Path | None = None)
 
 
 def _is_stub(entity: dict) -> bool:
-    notes = (entity.get("properties") or {}).get("extraction_notes") or ""
-    return str(notes).startswith(_STUB_NOTE_PREFIX)
+    """2026-10-14 (phase0/review-integrity): keyed on provenance first. Was
+    extraction_notes-only, which missed every stub that doesn't use that
+    wording - chunking._ensure_amending_act()'s AmendingAct stubs
+    (provenance=cited_reference, extraction_notes="") were stamped with the
+    citing Act PDF's source_file_sha256, i.e. recorded as produced by a file
+    that only cited them. A present-but-unranked/lower provenance counts as a
+    stub (provenance.rank() treats unknown values as untrusted). The legacy
+    notes check stays as a fallback for graph JSON written before provenance
+    existed. A MISSING provenance is NOT a stub (load-time default is
+    ingested_document)."""
+    props = entity.get("properties") or {}
+    prov = props.get("provenance")
+    if prov and provenance.rank(prov) < provenance.rank(provenance.INGESTED_DOCUMENT):
+        return True
+    return str(props.get("extraction_notes") or "").startswith(_STUB_NOTE_PREFIX)
 
 
 def stamp_source_file_hash(graph: dict, content_sha256: str) -> int:
@@ -158,7 +173,8 @@ def main_case_law_id(graph: dict) -> str | None:
     """The judgment's own CaseLaw id in an extract_case_law.py graph (the
     only CaseLaw entity with a node_id - precedent stubs get none)."""
     mains = [e["id"] for e in graph.get("entities", [])
-             if e.get("type") == "CaseLaw" and (e.get("properties") or {}).get("node_id")]
+             if e.get("type") == "CaseLaw" and (e.get("properties") or {}).get("node_id")
+             and not _is_stub(e)]  # 2026-10-14 (phase0/review-integrity): opinion stubs DO carry node_id
     return mains[0] if len(mains) == 1 else None
 
 

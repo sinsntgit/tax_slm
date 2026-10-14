@@ -60,9 +60,32 @@ CITATION_RULES = CitationRules(
 # (GenericDocument_<doc_id> / DocumentSection_<doc_id>_<n>) as the Act's,
 # so cross-run fuzzy entity resolution should be skipped for them for the
 # same reason.
+#
+# 2026-10-14 (phase0/review-integrity): read this set as "EXACT-ID IDENTITY
+# labels" - every label whose id is built deterministically from the
+# authority's own coordinates, so that a different id IS a different entity.
+# Added after review/phase0 showed cross-run fuzzy resolution (id-fallback
+# keys, no resolution_key_properties entry) auto-merging DIFFERENT entities
+# (scores from entity_resolution.similarity on the real id shapes):
+#   FirmOpinion        FirmOpinion_<opinion_id slug>      OP_01 vs OP_02      96.6
+#   Rule               ITR1962__Rule_<n>[_<sub>...]       Rule_10 vs Rule_11  95.2
+#   Article            Article_<n>_TaxTreaty_<country>    12 vs 13            96.9
+#   TaxTreaty          TaxTreaty_<country slug>           Austria/Australia   96.4
+#   TreatyNotification TreatyNotification_<c>_<i>_<no.>   _1_ vs _2_          96.2
+#   LegalEvent         LegalEvent_<type>_<instr>_<subj>   differs by 1 digit  98.8
+#   Act                <act namespace> (ITA1961 ...)      (root node, never fuzzy-joined)
+# Each of these ids is minted identically by the real converter and by
+# extract_opinion.py's cited_reference stubs (same f-strings - see
+# extract_opinion.build_graph_from_opinion), so a stub still joins its real
+# authority by exact id; it just can never be re-pointed at a NEIGHBOURING one.
+# CBDTCircular is deliberately NOT here: its real-document id is a slug of
+# the LLM-read number ("8/2026" -> CBDTCircular_8_2026) while stubs use
+# CBDTCircular_8_of_2026, so it resolves on a canonicalised circular_number
+# instead (RESOLUTION_KEY_PROPERTIES below) - with the numeric veto.
 STRUCTURAL_LABELS = frozenset({
     "Section", "SubSection", "Clause", "SubClause", "Proviso", "Explanation",
     "GenericDocument", "DocumentSection",
+    "FirmOpinion", "Rule", "Article", "TaxTreaty", "TreatyNotification", "LegalEvent", "Act",
 })
 
 # --- Chunk node metadata allowlists ------------------------------------------
@@ -164,6 +187,33 @@ RESOLUTION_KEY_PROPERTIES = {
     "LegalConcept": ["full_citation", "hasText"],
     "CaseCitation": ["full_citation", "reporter_name"],
 }
+
+# 2026-10-14 (phase0/review-integrity): CBDT circular identity. Circulars had
+# no entry above, so cross-run matching compared id text and an opinion's stub
+# CBDTCircular_8_of_2026 auto-merged (97.1) onto the real CBDTCircular_3_of_2026,
+# re-pointing the opinion's RELIES_ON_AUTHORITY edge at the wrong circular. A
+# circular IS its number/year, so key on circular_number, canonicalised so the
+# real document's LLM-read "8/2026" (id CBDTCircular_8_2026) and a stub's
+# "8 of 2026" / "Circular No. 08/2026" produce the same key, and rely on
+# key_guard()'s numeric veto (entity_resolution.same_number_tokens) so 8 can
+# never join 3. Applies to all three circular labels extract_circular.py emits.
+_CIRCULAR_NO_YEAR_RE = re.compile(r"(\d+)\s*(?:/|-|\bof\b)\s*((?:19|20)\d{2})\b", re.IGNORECASE)
+
+
+def canonical_circular_number(text: str) -> str:
+    """'Circular No. 08/2026' / '8 of 2026' / '8-2026' -> '8 of 2026'. Text
+    without a recognisable number/year pair is returned unchanged (the generic
+    normalize() + numeric veto still apply) rather than guessed at."""
+    m = _CIRCULAR_NO_YEAR_RE.search(text or "")
+    return f"{int(m.group(1))} of {m.group(2)}" if m else text
+
+
+_CIRCULAR_KEY = KeyProperties(["circular_number"], normalizer=canonical_circular_number)
+RESOLUTION_KEY_PROPERTIES.update({
+    "CBDTCircular": _CIRCULAR_KEY,
+    "ExplanatoryCircular": _CIRCULAR_KEY,
+    "ExtensionCircular": _CIRCULAR_KEY,
+})
 
 # --- PII (was webapp/pii.py's ALWAYS_MASKED_FIELDS / REGEX_DETECTORS) --------
 ALWAYS_MASKED_FIELDS = {
