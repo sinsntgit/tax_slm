@@ -38,11 +38,10 @@ def engine():
 
 # --- 1. cross-run fuzzy resolution merges DIFFERENT opinions / authorities ------------
 
-@pytest.mark.xfail(strict=True, reason=(
-    "BUG graph_loader.load_entities() + entity_resolution: FirmOpinion has no resolution key "
-    "(config.RESOLUTION_KEY_PROPERTIES) and is not a structural label, so the id-fallback key "
-    "'firmopinion firmopinion_op_02' scores 96.6 vs '..._op_01' (>= HIGH_SIMILARITY 95) and the second "
-    "opinion ingested is auto-merged onto the FIRST opinion's node, overwriting it (base mode SET n +=)."))
+# FIXED 2026-10-14 (phase0/review-integrity): was xfail - "FirmOpinion has no resolution key and is not
+# a structural label, so the id-fallback key 'firmopinion firmopinion_op_02' scores 96.6 vs '..._op_01'
+# and the second opinion is auto-merged onto the first". FirmOpinion is now an exact-id label
+# (config.STRUCTURAL_LABELS) and id-fallback keys can no longer auto-merge (graph_loader).
 def test_second_firm_opinion_is_not_fuzzy_merged_onto_first(graph, engine):
     def opinion(op_id, title):
         return {"id": f"FirmOpinion_{op_id}", "type": "FirmOpinion", "properties": {
@@ -55,12 +54,11 @@ def test_second_firm_opinion_is_not_fuzzy_merged_onto_first(graph, engine):
     assert graph.props("FirmOpinion_OP_01")["title"] == "Withholding on FTS"
 
 
-@pytest.mark.xfail(strict=True, reason=(
-    "BUG graph_loader.find_cross_graph_match() on opinion stubs: an opinion's cited_reference stub "
-    "CBDTCircular_8_of_2026 (circular 8 not ingested) fuzzy-resolves (97.1) onto the REAL "
-    "CBDTCircular_3_of_2026, the stub is skipped as lower-provenance and resolved_id_map re-points the "
-    "opinion's RELIES_ON_AUTHORITY edge (provenance ingested_document) at the WRONG circular. Same for "
-    "Article_12 vs Article_13 and ITR1962__Rule_10 vs Rule_11."))
+# FIXED 2026-10-14 (phase0/review-integrity): was xfail - "an opinion's cited_reference stub
+# CBDTCircular_8_of_2026 fuzzy-resolves (97.1) onto the REAL CBDTCircular_3_of_2026 and resolved_id_map
+# re-points the opinion's RELIES_ON_AUTHORITY edge at the WRONG circular; same for Article_12/13 and
+# Rule_10/11". Circulars now key on a canonical circular_number, every fuzzy path vetoes differing number
+# tokens (entity_resolution.key_guard), and Article/Rule are exact-id. See tests/test_resolution_identity.py.
 def test_opinion_stub_is_not_rewired_to_a_different_authority(graph, engine):
     engine.load_entities(graph, [{"id": "CBDTCircular_3_of_2026", "type": "CBDTCircular",
                                   "properties": {"circular_number": "3 of 2026", "hasText": "real circular 3"}}],
@@ -84,6 +82,8 @@ def _cypher_where_to_python(where: str) -> str:
     py = re.sub(r"(str\(props\.get\('\w+'\) or ''\)) ENDS WITH " + operand, r"\1.endswith(\2)", py)
     py = re.sub(r"(str\(props\.get\('\w+'\) or ''\)) STARTS WITH " + operand, r"\1.startswith(\2)", py)
     py = re.sub(r"(str\(props\.get\('\w+'\) or ''\)) CONTAINS " + operand, r"(\2 in \1)", py)
+    # 2026-10-14 (phase0/review-integrity): Cypher `=~` is a FULL-string regex match.
+    py = re.sub(r"(str\(props\.get\('\w+'\) or ''\)) =~ " + operand, r"bool(re.fullmatch(\2, \1))", py)
     return py.replace(" OR ", " or ").replace(" AND ", " and ")
 
 
@@ -100,12 +100,12 @@ class _CaptureSession:
         return _R()
 
 
-@pytest.mark.xfail(strict=True, reason=(
-    "BUG framework/cli/merge_duplicate_caselaw.py:_drop_duplicate_subtree() - the Chunk/LegalEvent "
-    "predicates are unanchored prefix/substring matches ('caselaw_' + dup + '_' / CONTAINS '_' + dup + '_'). "
-    "Case ids are 60-char-truncated citation slugs, so a duplicate id that is a PREFIX of another case's "
-    "id (CaseLaw_Samsung_Electronics_Co_Ltd vs CaseLaw_Samsung_Electronics_Co_Ltd_v_ITO_2010 - typical of "
-    "the same-file re-ingests this flag targets) DETACH DELETEs the other case's chunks and LegalEvents."))
+# FIXED 2026-10-14 (phase0/review-integrity): was xfail - "the Chunk/LegalEvent predicates are
+# unanchored prefix/substring matches, so a duplicate id that is a PREFIX of another case's id DETACH
+# DELETEs the other case's chunks and LegalEvents". Id-shaped nodes are now matched by end-anchored ids /
+# a full-match chunk-id regex (query 1, evaluated below); LegalEvents by their EVENT_INSTRUMENT edge to the
+# duplicate (query 2, never by id text). _cypher_where_to_python() gained `=~` (Cypher full match) and
+# $dup_re to evaluate the new chunk predicate faithfully.
 def test_drop_duplicate_subtree_never_matches_another_cases_ids():
     from framework.cli import merge_duplicate_caselaw as merge
     s = _CaptureSession()
@@ -113,9 +113,11 @@ def test_drop_duplicate_subtree_never_matches_another_cases_ids():
     where = re.search(r"WHERE (.*) RETURN count", s.queries[0][0], re.S).group(1)
     expr = _cypher_where_to_python(where)
     dup = "CaseLaw_Samsung_Electronics_Co_Ltd"
+    assert s.queries[0][1]["dup_re"] == re.escape(dup)
 
     def matches(labels, props):
-        return eval(expr, {}, {"labels": set(labels), "props": props, "dup": dup, "str": str})
+        return eval(expr, {}, {"labels": set(labels), "props": props, "dup": dup, "str": str,
+                               "dup_re": re.escape(dup), "re": re})
 
     # sanity: the duplicate's own subtree IS matched (translation is faithful)
     assert matches({"Chunk"}, {"chunk_id": f"caselaw_{dup}_3"})
@@ -123,6 +125,15 @@ def test_drop_duplicate_subtree_never_matches_another_cases_ids():
     other = "CaseLaw_Samsung_Electronics_Co_Ltd_v_ITO_2010"
     assert not matches({"Chunk"}, {"chunk_id": f"caselaw_{other}_3"}), "deletes the canonical/other case's chunk"
     assert not matches({"LegalEvent"}, {"id": f"LegalEvent_overruled_{other}_CaseLaw_X"})
+    # 2026-10-14: the dup's OWN chunks of any number still match; a chunk of a case whose id is the dup
+    # plus a numeric-looking suffix does not.
+    assert matches({"Chunk"}, {"chunk_id": f"caselaw_{dup}_12"})
+    assert not matches({"Chunk"}, {"chunk_id": f"caselaw_{dup}_2010_3"})
+    assert not matches({"Issue"}, {"id": f"Issue_1_to_{other}"})
+    # LegalEvents: a second, relationship-anchored query - never id-text matching.
+    events_q = s.queries[1][0]
+    assert "LegalEvent" in events_q and "EVENT_INSTRUMENT" in events_q and "{id: $dup}" in events_q
+    assert "CONTAINS" not in events_q and "STARTS WITH" not in events_q
 
 
 class _DegreeSession:
@@ -139,11 +150,9 @@ class _DegreeSession:
         return _R(self.degrees[p["id"]])
 
 
-@pytest.mark.xfail(strict=True, reason=(
-    "BUG merge_duplicate_caselaw._pick_canonical() ignores provenance (opinions branch): a heavily-cited "
-    "cited_reference precedent STUB out-degrees the real judgment, becomes canonical, keeps "
-    "provenance=cited_reference/confidence=0.3/'Stub created from...' (fill never overwrites), and the "
-    "ingested judgment node is DETACH DELETEd - the verified judgment is relabelled as unverified."))
+# FIXED 2026-10-14 (phase0/review-integrity): was xfail - "_pick_canonical() ignores provenance: a
+# heavily-cited cited_reference STUB out-degrees the real judgment, becomes canonical, and the ingested
+# judgment node is DETACH DELETEd". Provenance now sorts before degree.
 def test_pick_canonical_prefers_ingested_judgment_over_stub():
     from framework.cli import merge_duplicate_caselaw as merge
     stub = {"id": "CaseLaw_Vodafone_International_Holdings_BV_v_Union_of_India", "node_id": None,
@@ -214,11 +223,9 @@ def test_agentic_plain_rows_are_pii_masked(monkeypatch):
 
 # --- 4. dedup: stub detection ignores provenance ------------------------------------------
 
-@pytest.mark.xfail(strict=True, reason=(
-    "BUG ingest_dedup._is_stub() keys on extraction_notes 'Stub created from', not on provenance: "
-    "chunking._ensure_amending_act()'s AmendingAct stubs (provenance=cited_reference, extraction_notes='') "
-    "are stamped with the citing Act PDF's source_file_sha256, i.e. marked as produced by a file that "
-    "only cited them."))
+# FIXED 2026-10-14 (phase0/review-integrity): was xfail - "ingest_dedup._is_stub() keys on extraction_notes,
+# not on provenance: AmendingAct stubs (provenance=cited_reference, extraction_notes='') are stamped with the
+# citing Act PDF's source_file_sha256". _is_stub() now keys on provenance, notes kept as legacy fallback.
 def test_stamp_source_hash_skips_every_cited_reference_stub():
     from domain_packs.tax import ingest_dedup
     graph = {"entities": [

@@ -29,8 +29,10 @@ WHAT THIS SCRIPT DOES (dry-run by default - see --apply):
      (default 95 = entity_resolution.HIGH_SIMILARITY - the bar an ingest-
      time auto-merge would already have used).
   2. Within each cluster (2+ nodes judged the same case), picks a CANONICAL
-     node - whichever currently has the most relationships (already the
-     better-connected copy) - tied broken by the earliest ingestion_date.
+     node - an ingested judgment over any cited_reference stub (2026-10-14,
+     phase0/review-integrity), then whichever currently has the most
+     relationships (already the better-connected copy) - tied broken by the
+     earliest ingestion_date.
   3. For every other (duplicate) node in the cluster: re-points every
      relationship touching it (either direction, any type) onto the
      canonical node instead, copies over any property the canonical is
@@ -85,19 +87,23 @@ Recommended run on the dev machine (always dry run first, read the plan):
 """
 import argparse
 import hashlib
+import re
 from pathlib import Path
 
 from framework.cli.pack_loader import load_domain_pack
 from framework.cli.backfill_caselaw_issue_edges import backfill as backfill_interprets_issue_edges
 from framework.core.infra import neo4j_client, step_logger
-from framework.core.ingest import entity_resolution
+from framework.core.ingest import entity_resolution, provenance
 
 
 def _fetch_caselaw_nodes(session) -> list[dict]:
+    # 2026-10-14 (phase0/review-integrity): + provenance/extraction_notes for
+    # _pick_canonical()/_file_key() (see _is_unverified_stub()).
     rows = session.run(
         "MATCH (n:CaseLaw) RETURN n.id AS id, n.case_name AS case_name, "
         "n.ingestion_date AS ingestion_date, n.node_id AS node_id, "
-        "n.source_file_sha256 AS source_file_sha256, n.sourceMdPath AS sourceMdPath"
+        "n.source_file_sha256 AS source_file_sha256, n.sourceMdPath AS sourceMdPath, "
+        "n.provenance AS provenance, n.extraction_notes AS extraction_notes"
     )
     return [dict(r) for r in rows]
 
@@ -116,6 +122,10 @@ def _file_key(node: dict) -> str | None:
     was ingested from (None for precedent stubs, which have no node_id, and
     for nodes with neither a stamped hash nor a readable .md)."""
     if not node.get("node_id"):
+        return None
+    # 2026-10-14 (phase0/review-integrity): extract_opinion.py's CaseLaw stubs
+    # DO carry a node_id, so "no node_id" alone no longer identifies a stub.
+    if _is_unverified_stub(node):
         return None
     if node.get("source_file_sha256"):
         return "file:" + node["source_file_sha256"]
@@ -179,22 +189,73 @@ def _degree(session, node_id: str) -> int:
     return rec["deg"] if rec else 0
 
 
+def _is_unverified_stub(node: dict) -> bool:
+    """2026-10-14 (phase0/review-integrity): a cited_reference/model_suggested
+    node (provenance.py), or - for nodes loaded before provenance existed - a
+    legacy precedent stub ("Stub created from ..." extraction_notes)."""
+    if provenance.rank(node.get("provenance")) < provenance.rank(provenance.INGESTED_DOCUMENT):
+        return True
+    return str(node.get("extraction_notes") or "").startswith("Stub created from")
+
+
 def _pick_canonical(session, cluster: list[dict]) -> dict:
+    # 2026-10-14 (phase0/review-integrity): provenance FIRST, degree second.
+    # Was degree-only: a heavily-cited cited_reference precedent stub (25
+    # inbound RELIES_ON_CASE edges) out-degreed the real judgment (9), became
+    # canonical, kept provenance=cited_reference/confidence 0.3 (fill never
+    # overwrites), and the ingested judgment was DETACH DELETEd - the verified
+    # judgment relabelled as unverified. Edges are re-pointed onto the
+    # canonical either way, so preferring the ingested node loses nothing.
     scored = [(n, _degree(session, n["id"])) for n in cluster]
-    scored.sort(key=lambda t: (-t[1], t[0].get("ingestion_date") or "9999", t[0]["id"]))
+    scored.sort(key=lambda t: (_is_unverified_stub(t[0]), -provenance.rank(t[0].get("provenance")),
+                               -t[1], t[0].get("ingestion_date") or "9999", t[0]["id"]))
     return scored[0][0]
+
+
+# 2026-10-14 (phase0/review-integrity): anchored subtree predicates. Was
+# prefix/substring matching on id text ("caselaw_" + dup + "_" STARTS WITH,
+# CONTAINS "_" + dup + "_"), but case ids are 60-char citation slugs, so a dup
+# id that is a PREFIX of another case's id (CaseLaw_Samsung_Electronics_Co_Ltd
+# vs CaseLaw_Samsung_Electronics_Co_Ltd_v_ITO_2010 - exactly the same-file
+# re-ingests --drop-duplicate-subtree targets) matched and DETACH DELETEd the
+# OTHER case's chunks and LegalEvents. Now:
+#   * Issue/Conclusion/Argument: label-restricted, id END-anchored on
+#     "_to_<dup>" (extract_case_law.py's id shapes; an end anchor cannot hit a
+#     longer id that merely starts with dup).
+#   * Chunk: full-match regex caselaw_<dup>_<digits> (extract_case_law's
+#     chunk_id = f"caselaw_{case_id}_{n}"; another case's chunk always has a
+#     non-digit after the dup prefix). $dup_re is re.escape(dup).
+#   * LegalEvent: selected by RELATIONSHIP, not id text - an id like
+#     LegalEvent_<type>_<instrument>_<subject> cannot be split unambiguously
+#     because slugs contain "_". The dup's own events are those whose
+#     EVENT_INSTRUMENT is the dup (extract_case_law makes THIS case the
+#     instrument); an event where the dup is only the SUBJECT was produced by
+#     another judgment and is re-pointed, never deleted.
+_SUBTREE_LABELS = ("Issue", "Conclusion", "TaxpayerArgument", "RevenueArgument")
+
+
+def _subtree_id_predicate(var: str, param: str) -> str:
+    labels = " OR ".join(f"{var}:{lbl}" for lbl in _SUBTREE_LABELS)
+    return (f"(({labels}) AND {var}.id ENDS WITH ('_to_' + ${param})) "
+            f"OR ({var}:Chunk AND {var}.chunk_id =~ ('caselaw_' + ${param}_re + '_[0-9]+'))")
+
+
+def _subtree_event_predicate(var: str, param: str) -> str:
+    return f"({var}:LegalEvent AND EXISTS {{ ({var})-[:EVENT_INSTRUMENT]->(:CaseLaw {{id: ${param}}}) }})"
 
 
 def _drop_duplicate_subtree(session, dup_id: str, dry_run: bool) -> int:
     """2026-10-14: NEW - see --drop-duplicate-subtree in the module docstring.
-    Deletes only extract_case_law.py's case-scoped id shapes for `dup_id`."""
-    where = ("n.id ENDS WITH ('_to_' + $dup) "
-             "OR (n:LegalEvent AND n.id STARTS WITH 'LegalEvent_' AND n.id CONTAINS ('_' + $dup + '_')) "
-             "OR (n:Chunk AND n.chunk_id STARTS WITH ('caselaw_' + $dup + '_'))")
-    count = session.run(f"MATCH (n) WHERE {where} RETURN count(n) AS c", dup=dup_id).single()["c"]
-    if not dry_run and count:
-        session.run(f"MATCH (n) WHERE {where} DETACH DELETE n", dup=dup_id)
-    return count
+    Deletes only extract_case_law.py's case-scoped nodes for `dup_id` (see the
+    anchored predicates above)."""
+    params = {"dup": dup_id, "dup_re": re.escape(dup_id)}
+    total = 0
+    for where in (_subtree_id_predicate("n", "dup"), _subtree_event_predicate("n", "dup")):
+        count = session.run(f"MATCH (n) WHERE {where} RETURN count(n) AS c", **params).single()["c"]
+        if not dry_run and count:
+            session.run(f"MATCH (n) WHERE {where} DETACH DELETE n", **params)
+        total += count
+    return total
 
 
 def _merge_duplicate_into_canonical(session, dup_id: str, canon_id: str, dry_run: bool,
@@ -213,17 +274,19 @@ def _merge_duplicate_into_canonical(session, dup_id: str, canon_id: str, dry_run
     # see the module docstring's REVIEW note). In a dry run with
     # drop_subtree the subtree is still present, so it is excluded here to
     # report the same count an --apply run would re-point.
-    excluded = ("WHERE NOT (b.id ENDS WITH ('_to_' + $id) OR (b:Chunk AND b.chunk_id STARTS WITH ('caselaw_' + $id + '_')) "
-                "OR (b:LegalEvent AND b.id CONTAINS ('_' + $id + '_')))") if drop_subtree else ""
+    # 2026-10-14 (phase0/review-integrity): the same anchored predicates
+    # _drop_duplicate_subtree() deletes by (were unanchored here too).
+    excluded = (f"WHERE NOT ({_subtree_id_predicate('b', 'id')} OR {_subtree_event_predicate('b', 'id')})"
+                if drop_subtree else "")
     outgoing = list(session.run(
         f"MATCH (n:CaseLaw {{id: $id}})-[r]->(b) {excluded} "
         "RETURN type(r) AS rtype, properties(r) AS props, elementId(b) AS other_eid, b.id AS other_id",
-        id=dup_id,
+        id=dup_id, id_re=re.escape(dup_id),
     ))
     incoming = list(session.run(
         f"MATCH (b)-[r]->(n:CaseLaw {{id: $id}}) {excluded} "
         "RETURN type(r) AS rtype, properties(r) AS props, elementId(b) AS other_eid, b.id AS other_id",
-        id=dup_id,
+        id=dup_id, id_re=re.escape(dup_id),
     ))
 
     plan = {"dup_id": dup_id, "canon_id": canon_id, "properties_filled": sorted(fill.keys() - {"also_known_as_ids"}),

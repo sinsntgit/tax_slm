@@ -76,9 +76,48 @@ class KeyProperties(list):
         self.compatible = compatible
 
 
+_NUMBER_TOKEN_RE = re.compile(r"\d+")
+
+
+def same_number_tokens(key_a: str, key_b: str) -> bool:
+    """2026-10-14 (phase0/review-integrity): NEW - True iff both keys contain
+    the same multiset of digit runs. In this corpus a differing NUMBER is the
+    one token that distinguishes two different authorities whose citations are
+    otherwise identical text: CBDT Circular 8 vs 3 of 2026, Article 12 vs 13
+    of a DTAA, Rule 10 vs 11, Act No. 15 vs 16 of 2024, (2021) 432 ITR 471 vs
+    417, opinion OP-01 vs OP-02. token_sort_ratio scores every such pair
+    95-99 (one short token differs among many shared ones), i.e. an
+    AUTO-MERGE onto the wrong authority (review/phase0 tests). Multiset, not
+    sequence, to match token_sort_ratio's order-insensitivity. Cost of a
+    false veto (the same authority written "1,00,000" vs "100000"): a missed
+    merge, two nodes - the "leave unset rather than guess" side."""
+    return sorted(_NUMBER_TOKEN_RE.findall(key_a or "")) == sorted(_NUMBER_TOKEN_RE.findall(key_b or ""))
+
+
 def key_guard(entity_type: str, resolution_key_properties: dict | None):
-    """2026-10-14: the KeyProperties.compatible veto for this type, or None."""
-    return getattr((resolution_key_properties or {}).get(entity_type), "compatible", None)
+    """The compatibility veto applied before fuzzy scoring for this type.
+
+    2026-10-14: was just the type's KeyProperties.compatible (or None).
+    2026-10-14 (phase0/review-integrity): now ALWAYS returns a veto - the
+    numeric-token check (same_number_tokens) for every type, AND-ed with the
+    type's own KeyProperties.compatible when it has one. Applied wherever
+    key_guard() is (graph_loader cross-run matching, resolve_within_batch,
+    merge_duplicate_caselaw clustering), so no fuzzy path can join two
+    citations that differ only by a number."""
+    compatible = getattr((resolution_key_properties or {}).get(entity_type), "compatible", None)
+    if compatible is None:
+        return same_number_tokens
+    return lambda a, b: same_number_tokens(a, b) and compatible(a, b)
+
+
+def has_resolution_key(entity_type: str, properties: dict,
+                       resolution_key_properties: dict | None = None) -> bool:
+    """2026-10-14 (phase0/review-integrity): NEW - True iff resolution_key()
+    would build this entity's key from its configured properties, False when
+    it falls back to the entity's own id text. graph_loader uses this to
+    refuse to AUTO-MERGE on an id-fallback key (see find_cross_graph_match)."""
+    props = (resolution_key_properties or {}).get(entity_type)
+    return bool(props) and any(properties.get(p) for p in props)
 
 
 def resolution_key(entity_type: str, properties: dict, fallback_id: str,

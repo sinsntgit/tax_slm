@@ -278,4 +278,6 @@ def test_merge_repoints_chunks_by_element_id():
 def test_drop_subtree_dry_run_writes_nothing():
     s = _MergeSession()
     plan = merge._merge_duplicate_into_canonical(s, "CaseLaw_B", "CaseLaw_A", dry_run=True, drop_subtree=True)
-    assert plan["subtree_nodes_dropped"] == 7 and s.writes == []
+    # 2026-10-14 (phase0/review-integrity): two count queries now (id-shaped subtree + relationship-
+    # anchored LegalEvents), the mock answers 7 to each.
+    assert plan["subtree_nodes_dropped"] == 14 and s.writes == []

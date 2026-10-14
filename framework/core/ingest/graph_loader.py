@@ -223,9 +223,25 @@ class GraphIngestionEngine:
             cand_key = entity_resolution.resolution_key(label, existing_props, existing_id, self.domain_config.resolution_key_properties)
             candidates.append((existing_id, cand_key))
         # 2026-10-14: + the type's optional compatibility veto (KeyProperties.compatible).
-        return entity_resolution.best_match(
+        # 2026-10-14 (phase0/review-integrity): key_guard() now always also
+        # vetoes keys whose NUMBER tokens differ (entity_resolution.same_number_tokens).
+        match_id, score = entity_resolution.best_match(
             key, candidates,
             compatible=entity_resolution.key_guard(label, self.domain_config.resolution_key_properties))
+        # 2026-10-14 (phase0/review-integrity): an id-fallback key (the label has
+        # no resolution_key_properties entry, or none of its key properties are
+        # set) may FLAG a near-duplicate but never AUTO-MERGE onto one. A
+        # converter-built id is "shared prefix + small distinguishing suffix"
+        # (FirmOpinion_OP_01/_OP_02 scored 96.6, TaxTreaty_Austria/_Australia
+        # 96.4, DataSource_<doc>_8/_9 97.3), so an id-text score >= 95 says
+        # nothing about being the same real-world entity - and a wrong merge
+        # silently overwrites the earlier node (base mode SET n +=) and
+        # re-points the new document's edges at it. Capping just below
+        # HIGH_SIMILARITY keeps the possibleDuplicateOf review flag.
+        if match_id and not entity_resolution.has_resolution_key(
+                label, properties, self.domain_config.resolution_key_properties):
+            score = min(score, entity_resolution.HIGH_SIMILARITY - 0.1)
+        return match_id, score
 
     def load_entities(self, session, entities: list[dict], mode: str) -> tuple[set, dict[str, str]]:
         created_labels: set = set()
