@@ -126,6 +126,10 @@ appropriate code"):
   the detected intent and, for every citation, the document name, the
   precise structural citation, and the page number when available.
 
+## Evaluation
+
+The gold-set evaluation harness and the release gates (frontier baseline compared with the Tax SLM) live in `eval/`. See [`eval/README.md`](eval/README.md).
+
 ## Layout
 
 ```
