@@ -40,4 +40,5 @@ A Neo4j-backed Tax Knowledge Graph + GraphRAG retrieval system for Indian income
 
 - `pytest` from the repo root (cloud venv: `/home/claude/venv/bin/python -m pytest`). `tests/conftest.py` installs offline stand-ins for `sentence_transformers` (no Hugging Face access in the cloud) - code must import and run with them.
 - No Neo4j server in the cloud: unit tests mock the driver/session. Tests that need real Neo4j/LLM/.env are marked `@pytest.mark.live` and only run with `TAXKG_LIVE_TESTS=1` on the dev machine.
+- Mock Neo4j with `tests/helpers/neo4j_mock.py` (`fake_neo4j` fixture: `fake_neo4j.on("<cypher substring>", rows)`, then assert on `fake_neo4j.last(...).params`); converters are scripts, so tests put `domain_packs/tax/converters` on `sys.path` and `import chunking` / `import extract_case_law` directly (see `tests/test_chunking.py`). Live checks live in `tests/live/`. CI: `.github/workflows/tests.yml` (3.11 + 3.13, requirements.txt minus sentence-transformers, + `requirements-dev.txt`).
 - `tests/test_smoke_imports.py` must always pass - it already caught an import-time NameError in `llm_client.py` (2026-10-14).

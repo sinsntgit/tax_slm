@@ -204,6 +204,16 @@ GRAPH_ROW_FIELD_CAPS = {
     "cases_cited": 1200, "treaty_references": 500, "other_act_references": 400,
     "statutes_cited": 500, "keywords": 300, "legal_concepts": 300,
     "questions_of_law": 400, "hasText": 800, "facts": 800, "extraction_notes": 200,
+    # 2026-10-14: BUGFIX - retrievalSummary/retrievalKeywords (added to every
+    # CaseLaw node 2026-08-28, see extract_case_law.py's derive_retrieval_*())
+    # are embedding-only metadata that DUPLICATE holding/findings/keywords, yet
+    # were uncapped here - on the real Engineering Analysis node they are the
+    # two largest properties (~2.5KB/~3.1KB), which pushed the 3-row OVERRULES
+    # case this module was tuned against from ~13,400 back to ~17,800 chars,
+    # i.e. over GRAPH_ROWS_MAX_CHARS_DEFAULT, so the backstop was again slicing
+    # the LAST row (the overruled precedent) off mid-JSON. Caught by
+    # tests/test_grounding.py::test_engineering_analysis_fixture_rows_fit_backstop.
+    "retrievalSummary": 600, "retrievalKeywords": 300,
 }
 # Overall safety net per caller, now a BACKSTOP rather than the primary
 # truncation mechanism - per-field capping above should keep well under this

@@ -34,6 +34,11 @@ def _install_sentence_transformers_stub():
         def get_sentence_embedding_dimension(self):
             return 16
 
+        # 2026-10-14: sentence-transformers >=5 renamed the method above to
+        # get_embedding_dimension() (embedder.py calls the new name) - the
+        # stub offers both so embedder._get_model() runs offline.
+        get_embedding_dimension = get_sentence_embedding_dimension
+
         def encode(self, texts, normalize_embeddings=False, **k):
             single = isinstance(texts, str)
             items = [texts] if single else list(texts)
@@ -84,3 +89,11 @@ def pytest_collection_modifyitems(config, items):
 @pytest.fixture
 def fixtures_dir():
     return FIXTURES
+
+
+@pytest.fixture
+def fake_neo4j(monkeypatch):
+    """2026-10-14: NEW - a scripted, installed FakeNeo4j (see
+    tests/helpers/neo4j_mock.py). Script it with fake_neo4j.on(substring, records)."""
+    from tests.helpers.neo4j_mock import FakeNeo4j
+    return FakeNeo4j().install(monkeypatch)

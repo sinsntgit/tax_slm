@@ -45,7 +45,13 @@ def _get_model():
         with step_logger.Step(f"Loading embedding model '{EMBEDDING_MODEL_NAME}' "
                                f"(downloads once, then cached locally)"):
             _model = SentenceTransformer(EMBEDDING_MODEL_NAME)
-            _embedding_dim = _model.get_embedding_dimension()
+            # 2026-10-14: BUGFIX - get_embedding_dimension() only exists in
+            # sentence-transformers >= 5 (it renamed get_sentence_embedding_
+            # dimension()), but requirements.txt allows >=3.0.0 - on 3.x/4.x
+            # this raised AttributeError and every embed/ingest run failed.
+            # Use whichever name the installed version has.
+            _dim_fn = getattr(_model, "get_embedding_dimension", None) or _model.get_sentence_embedding_dimension
+            _embedding_dim = _dim_fn()
             step_logger.log(f"Model ready. Embedding dimension: {_embedding_dim}")
     return _model
 
