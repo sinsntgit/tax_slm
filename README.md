@@ -20,6 +20,8 @@ one behavioral consequence (v5 doesn't declare `SubClause`/`AmendingAct`/
 `DefinedTerm` as formal classes — the pipeline still mints nodes under those
 labels, same as the project's existing `Chunk`/`AuditRun` precedent).
 
+See [docs/LOCAL_SETUP_WINDOWS.md](docs/LOCAL_SETUP_WINDOWS.md) for step-by-step setup on a Windows laptop.
+
 ## Ingestion UI
 
 `framework/webapp/app.py` now has a full browser UI (`framework/webapp/static/index.html`)

@@ -33,7 +33,7 @@ corpus already ingested, and the venv active.
 ```bat
 cd D:\tax_kg_poc_revised
 docker compose up -d
-python -m framework.webapp.app --domain tax          :: leave running (http://localhost:5000)
+python -m framework.webapp.app --domain tax          :: leave running (http://localhost:5001)
 ```
 
 In a second terminal:
@@ -49,10 +49,10 @@ docker exec tax_kg_revised_redis redis-cli FLUSHDB
 python -m eval.goldset eval/gold/
 
 :: 3. Smoke test (3 items)
-python -m eval.run --gold eval/gold/ --target http://localhost:5000 --retrieval-mode hybrid --answer-mode research --out eval/runs/smoke --limit 3
+python -m eval.run --gold eval/gold/ --target http://localhost:5001 --retrieval-mode hybrid --answer-mode research --out eval/runs/smoke --limit 3
 
 :: 4. The baseline run (frontier model, set via USE_MODEL / USE_MODEL_RETRIEVAL in .env)
-python -m eval.run --gold eval/gold/ --target http://localhost:5000 --retrieval-mode hybrid --answer-mode research --judge --out eval/runs/2026-10-xx_frontier_hybrid_research --notes "USE_MODEL_RETRIEVAL=CLAUDE <model>, answer_generation v6"
+python -m eval.run --gold eval/gold/ --target http://localhost:5001 --retrieval-mode hybrid --answer-mode research --judge --out eval/runs/2026-10-xx_frontier_hybrid_research --notes "USE_MODEL_RETRIEVAL=CLAUDE <model>, answer_generation v6"
 ```
 
 **Judge model.** For the SLM run, route the judge calls to the same reference

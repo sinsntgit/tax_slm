@@ -27,7 +27,7 @@ A Neo4j-backed Tax Knowledge Graph + GraphRAG retrieval system for Indian income
 
 ## Version control status
 
-2026-10-14: now a git repository (branch `main`), developed in a cloud workspace and pushed to a private GitHub repo; the owner pulls it to the Windows dev machine (D:\tax_kg_poc_revised) to run against Docker. `.gitignore` excludes `.env`, `venv/`, all of `data/` (corpus, uploads, graphs, vector stores) and `kpmg_tax_slm_documents_artifacts/` (client deliverables). Small public/fictitious samples used by tests live in `tests/fixtures/`. The pre-git change history lives in the dated code comments, not in git.
+2026-10-14: now a git repository (branch `main`), developed in a cloud workspace and pushed to a private GitHub repo; the owner pulls it to the Windows dev machine (D:\tax_slm; setup in docs/LOCAL_SETUP_WINDOWS.md) to run against Docker. `.gitignore` excludes `.env`, `venv/`, all of `data/` (corpus, uploads, graphs, vector stores) and `kpmg_tax_slm_documents_artifacts/` (client deliverables). Small public/fictitious samples used by tests live in `tests/fixtures/`. The pre-git change history lives in the dated code comments, not in git.
 
 ## Team workflow (multiple agents)
 

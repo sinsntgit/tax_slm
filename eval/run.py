@@ -7,7 +7,7 @@ _api_ask_impl() so it measures exactly what a user gets (routing, caching,
 the agentic wrapper, disclaimer append, real latency) - and so the same
 command can later be pointed at an SLM-backed deployment unchanged.
 
-    python -m eval.run --gold eval/gold/ --target http://localhost:5000 \\
+    python -m eval.run --gold eval/gold/ --target http://localhost:5001 \\
         --retrieval-mode hybrid --answer-mode research --out eval/runs/<name> [--judge]
 
 Behaviour:
@@ -55,7 +55,7 @@ RESUME_KEYS = ("target", "endpoint", "retrieval_mode", "answer_mode")
 def build_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(prog="python -m eval.run", description=__doc__.split("\n\n")[0])
     ap.add_argument("--gold", default="eval/gold/", help="gold .jsonl file or directory (default eval/gold/)")
-    ap.add_argument("--target", default="http://localhost:5000", help="base URL of the running app")
+    ap.add_argument("--target", default="http://localhost:5001", help="base URL of the running app")
     ap.add_argument("--out", required=True, help="run directory, e.g. eval/runs/2026-10-14_frontier_hybrid")
     ap.add_argument("--endpoint", choices=sorted(ENDPOINTS), default="ask",
                     help="ask = /api/ask (default, the research path); fast = /api/ask/fast")
