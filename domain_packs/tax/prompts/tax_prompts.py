@@ -1700,6 +1700,364 @@ Rules:
   exactly: NO_QUERY
 """,
         ),
+        PromptVersion(
+            name="nl2cypher",
+            version="v12",
+            approved_by="system-default",
+            approved_at="2026-10-14",
+            notes="2026-10-14: Neo4j-5 correctness pass over v11 (all other text unchanged). "
+                  "(1) v1-v11 all said 'openCypher query for Apache AGE' - a leftover from the pre-Neo4j "
+                  "PostgreSQL/AGE build; the database is Neo4j 5, where AGE-isms (cypher()/$$ wrappers, "
+                  "::agtype casts) are syntax errors. "
+                  "(2) Added Neo4j-5-specific rules: exists(n.prop) was removed in Neo4j 5 (use IS NOT NULL); "
+                  "id(n) is the internal numeric id, not the `id` property; no $parameters (the query is run "
+                  "with none); no trailing semicolon; read-only clauses only; and 'a complete query or "
+                  "NO_QUERY' - graphrag.nl_to_cypher() now also rejects truncated/unbalanced output as "
+                  "NO_QUERY instead of executing it. "
+                  "(3) Section ids are Act-namespaced ('<NS>__Section_12A', chunking.generate_entity_id(), "
+                  "2026-08-27) for every Act ingested through the pipeline, so v11's exact "
+                  "{id: 'Section_12A'} examples matched NOTHING on a namespaced graph; v12 matches both forms "
+                  "(n.id = 'Section_X' OR n.id ENDS WITH '__Section_X'). "
+                  "(4) v11 said the 2025 Act supersedes same-numbered 1961 sections via SUPERSEDED_BY - wrong "
+                  "since namespacing (the Acts never share ids, and the 2025 Act renumbers sections); v12 "
+                  "routes 1961-vs-2025 questions to CORRESPONDS_TO (written by build_act_correspondence.py).",
+            template="""You translate a natural-language question about an Indian tax-law
+knowledge graph into a single read-only Cypher query for Neo4j 5. The query
+text is executed as-is through the Neo4j Python driver - plain Cypher only,
+never wrapped in SQL or any other host language.
+
+Valid node labels: {labels}
+Valid relationship types: {rel_types}
+
+IMPORTANT - how entities are actually stored:
+- Every node has exactly one identifying property called `id` (a string). For
+  Section/SubSection/Clause/SubClause/Proviso/Explanation nodes, this id is
+  built DETERMINISTICALLY from the citation itself:
+    Section_<code>                              e.g. Section_12A, Section_9
+    SubSection_<code>_<sub>                      e.g. SubSection_12A_4A
+    Clause_<code>_<sub>_<clause>                 e.g. Clause_55_2_b
+    SubClause_<code>_<sub>_<clause>_<subclause>  e.g. SubClause_2_42A_a_iii
+  There are NO other identifying properties like name/title/number/
+  section_number - do not invent them.
+- ACT NAMESPACES: when more than one Income-tax Act is ingested (the
+  Income-tax Act, 1961 and the Income-tax Act, 2025, which RENUMBERS most
+  sections), every Section/SubSection/Clause/SubClause id is prefixed with
+  its Act's namespace and a double underscore, e.g. `ITA1961__Section_90`,
+  `ITA2025__Section_159`. The namespace is whatever the Act was ingested
+  under - never guess it. A graph holding a single Act may have no prefix.
+- Build the code part of the id yourself from the citation named in the
+  question and match it EXACTLY in BOTH forms (prefixed or not):
+    WHERE n.id = 'Section_12A' OR n.id ENDS WITH '__Section_12A'
+    WHERE n.id = 'SubSection_12A_4A' OR n.id ENDS WITH '__SubSection_12A_4A'
+  `ENDS WITH '__<code>'` is still an exact match (the double underscore
+  anchors where the code starts), so it is NOT the forbidden widening below.
+  This returns the same-numbered provision from EACH ingested Act; do not
+  try to pick one Act yourself - the answer step labels each by its Act.
+- NEVER use `CONTAINS` or `STARTS WITH` on a section/subsection code to "be
+  safe" about the exact id. Section codes are NOT prefix-safe: '12' is a
+  literal substring of '12A', '12AA', '12AB', '120', ... - a CONTAINS/STARTS
+  WITH match on a short numeric code will silently pull in completely
+  unrelated sections alongside the one actually asked about. If the question
+  only names a bare section number with no subsection/clause (e.g. "Section
+  12A" with no "(1)"/"(4A)"/etc.), match ONLY the Section node by its exact
+  id - do not try to guess a specific subsection/clause id. The retrieval
+  pipeline separately walks that section's full subsection/clause hierarchy
+  for you, so an exact section-level match is enough.
+- If you are genuinely unsure a node with that exact id exists, it is better
+  to return NO_QUERY than to widen the match with CONTAINS/STARTS WITH.
+  (This caution is specifically about SHORT SECTION CODES - see the
+  NAMED-CASE exception immediately below, which does NOT carry this
+  restriction.)
+- Some nodes may have a few additional data properties (full_citation, court,
+  decisionDate, opinionID) if that data was captured - `id` is always
+  present, others may not be.
+
+NAMED-CASE QUESTIONS - "what did X hold", "what did X rely on", "explain the
+Y case", "what precedents does X cite" and similar name ONE specific
+judgment, not a section/subsection code. This is DIFFERENT from the
+Section/SubSection id rule above - do not apply that rule's "prefer NO_QUERY
+over CONTAINS" caution here:
+- CaseLaw node ids are built as `CaseLaw_<slug-of-full-citation>` (e.g.
+  `CaseLaw_engineering_analysis_centre_of_excellence_pvt_ltd_v_cit_2021_432_itr_471`)
+  - NOT predictable from a short case name in the question. Do NOT try to
+    guess this id, and do NOT output NO_QUERY just because you cannot
+    construct it.
+- Instead match on the `full_citation` (or `case_name`, when present) TEXT
+  property using `CONTAINS` on a lowercased short form of the name. Unlike
+  section codes, case names/citations are NOT short numeric strings prone to
+  substring collision, so CONTAINS is the correct and safe approach here -
+  this is an intentional exception to the section-id rule above, which
+  exists specifically to protect short section codes, not case names.
+- Once matched, that SAME node's own properties usually answer the whole
+  question directly - no further traversal needed:
+    `holding` / `final_outcome` - what the court decided.
+    `cases_cited` - every earlier case this judgment relied on, distinguished,
+      or referred to (a full list, already extracted at ingestion - this IS
+      the answer to "what earlier cases did it rely on", not a filter to
+      search other cases by).
+    `legal_concepts`, `statutes_cited`, `treaty_references` - supporting context.
+  Example - "What did the Supreme Court hold in Engineering Analysis on
+  software royalty, and what earlier cases did it rely on?":
+    MATCH (n:CaseLaw)
+    WHERE toLower(n.full_citation) CONTAINS 'engineering analysis'
+    RETURN n LIMIT 5
+
+NAMED-AMENDING-ACT QUESTIONS - "which sections did Act No. 15 of 2024 amend",
+"what did the Finance Act, 2021 change", "what changed under Act No. 7 of
+2025" and similar NAME one specific `AmendingAct` entity by its citation, not
+a section code. This is DIFFERENT from the Section/SubSection id rule above -
+do NOT try to build a deterministic id for an AmendingAct node, and it is
+DIFFERENT from the general AMENDMENT / SUPERSESSION QUESTIONS section below
+(which covers the un-named/general case and the separate SUPERSEDED_BY
+mechanism):
+- `AmendingAct` node ids are internal (e.g. `AmendingAct_7_2025`) and NOT
+  reliably derivable from how the question phrases the Act's name/year -
+  do NOT guess this id, and do NOT output NO_QUERY just because you cannot
+  construct it.
+- Instead match on the `full_citation` TEXT property using `CONTAINS` on a
+  lowercased form of the name, exactly like the NAMED-CASE pattern above for
+  CaseLaw nodes - this is safe here for the same reason (a citation like "act
+  no. 15 of 2024" is not a short numeric code prone to substring collision).
+- Once you have matched the specific AmendingAct node, traverse the
+  `AMENDED_BY` relationship INTO it from the sections/subsections/etc. it
+  amended: `(provision)-[:AMENDED_BY]->(act:AmendingAct)`. The relationship
+  points FROM the amended provision TO the amending Act, so match the
+  AmendingAct first/by name, then walk the edge BACKWARD to find every
+  provision pointing at it - do not reverse this direction.
+  Example - "Which sections did Act No. 15 of 2024 amend, and what changed
+  in each one?":
+    MATCH (provision)-[r:AMENDED_BY]->(act:AmendingAct)
+    WHERE toLower(act.full_citation) CONTAINS 'act no. 15 of 2024'
+    RETURN provision, r, act LIMIT 25
+  The matched `provision` nodes' own `hasText`/`marginal_heading` properties
+  (and any footnote-style amendment-detail property captured on the edge or
+  provision) answer "what changed in each one" - no further traversal needed.
+- Do NOT use `SUPERSEDED_BY` for a question that names a specific amending
+  Act/Finance Act by number and year - `SUPERSEDED_BY` is for a DIFFERENT
+  scenario (see AMENDMENT / SUPERSESSION QUESTIONS below) and does not
+  connect to named `AmendingAct` nodes at all, so it will silently return
+  irrelevant or empty results for this question shape.
+
+OVERRULING / REVERSAL QUESTIONS - "which decisions have been overruled",
+"what cases has X overruled", "which High Court rulings on <topic> have been
+reversed and by what authority" and similar ask for an AGGREGATE map across
+MANY cases, not one named judgment - this is DIFFERENT from NAMED-CASE
+QUESTIONS above, even though both involve CaseLaw nodes:
+- The `OVERRULES` relationship points FROM the later/superior-authority case
+  TO the earlier case it overruled: (overruling_case:CaseLaw)-[:OVERRULES]->
+  (overruled_case:CaseLaw). Its inverse is `OVERRULED_BY`, i.e.
+  (overruled_case)-[:OVERRULED_BY]->(overruling_case) - either direction
+  works, pick whichever reads more naturally for the question.
+- The overruled/target node's own `precedential_value` / `forum_level` /
+  `court` properties tell you what tier it was (High Court, Tribunal, etc.);
+  the overruling/source node's `court`/`forum_level` tell you the overruling
+  authority - both are usually needed to fully answer "which court decisions
+  have been overruled and BY WHAT AUTHORITY".
+- If the question names a topic/area (e.g. "software royalty") rather than a
+  specific case, combine the relationship traversal with a `legal_concepts`/
+  `keywords` filter on EITHER side rather than trying to guess specific case
+  ids:
+    MATCH (overruling:CaseLaw)-[r:OVERRULES]->(overruled:CaseLaw)
+    WHERE ANY(x IN overruling.legal_concepts WHERE toLower(x) CONTAINS 'royalty')
+       OR ANY(x IN overruled.legal_concepts WHERE toLower(x) CONTAINS 'royalty')
+    RETURN overruling, r, overruled LIMIT 25
+  General form with no topic named ("which decisions have been overruled"):
+    MATCH (overruling:CaseLaw)-[r:OVERRULES]->(overruled:CaseLaw)
+    RETURN overruling, r, overruled LIMIT 25
+- Do NOT treat `DISTINGUISHES_CASE`, `RELIES_ON_CASE`, or a plain `cases_cited`
+  text match as answering an overruling question - those relationships/
+  properties do not distinguish "overruled on the merits" from "distinguished
+  on facts" or "merely referred to". Only `OVERRULES`/`OVERRULED_BY` (and, as
+  a fallback if that traversal returns nothing, a case's own
+  `precedents_overruled` list property) represent an actual overruling.
+  Note that extraction only populates this when a judgment's text expressly
+  states it - a case being "set aside and remanded" for fresh consideration
+  WITHOUT a ruling on the merits does NOT populate OVERRULES for that pair,
+  and should not be characterized as "overruled" in the answer either.
+- If neither an OVERRULES/OVERRULED_BY edge nor a `precedents_overruled`
+  match exists for the named topic, do not guess or infer an overruling
+  relationship from unrelated context - return what the graph actually has
+  (e.g. just the candidate cases via a `legal_concepts` match) and let the
+  answer-generation step state plainly that no overruling relationship was
+  found in the ingested material, rather than fabricating one.
+
+LISTING / ENUMERATION QUESTIONS - "list all X", "what case laws do you have",
+"show me the circulars", "how many judgments are ingested" and similar are
+asking to enumerate every node of ONE particular label (or filtered by
+file_type - see below), not to find one specific named entity. For these:
+- Match directly on the label itself with no id filter, e.g. for "list all
+  case laws": `MATCH (n:CaseLaw) RETURN n LIMIT 25`. Do NOT output NO_QUERY
+  just because no specific citation/id was named - the label alone IS the
+  question here.
+- If the question names a file type instead of/alongside a label (e.g. "what
+  circulars do you have", "list generic documents"), filter on the
+  `file_type` property instead (see METADATA LAYER below) rather than
+  guessing a label that may not exist.
+- If the question asks "how many", use `RETURN count(n)` instead of `LIMIT 25`.
+
+AMENDMENT / SUPERSESSION QUESTIONS - there are TWO distinct amendment
+mechanisms in this graph, used for two different situations. Pick the right
+one based on what the question is really asking:
+- `AMENDED_BY` (Section/SubSection/etc.)-[:AMENDED_BY]->(AmendingAct) - used
+  for a FOOTNOTE-level amendment recorded WITHIN a single Act's own text
+  (e.g. "sub-section (2) was substituted by the Finance Act, 2021, w.e.f.
+  1-4-2021" printed as a footnote under that provision in the SAME Act). Use
+  this for questions naming a specific amending Act/Finance Act by name, or
+  asking "what amended section X" - see NAMED-AMENDING-ACT QUESTIONS above
+  for exactly how to match the named AmendingAct node and which direction to
+  traverse the relationship.
+- `SUPERSEDED_BY` (old node)-[:SUPERSEDED_BY]->(new node) - used when a
+  WHOLE NEW DOCUMENT was ingested in "amendment" mode and one or more of its
+  provisions share an id with an existing provision from an EARLIER document
+  (e.g. a later consolidated edition of the SAME Act re-ingested under the
+  same namespace). The relationship points FROM the OLD/superseded node
+  (which is given `status: 'superseded'`) TO the NEW/current node that
+  replaced it. Use this for questions like "which provisions are now
+  superseded" or "what changed in the latest edition of <document>". It does
+  NOT connect the Income-tax Act, 1961 to the Income-tax Act, 2025 - those
+  are separately namespaced and renumbered; see 1961 ACT VS 2025 ACT below.
+  - GENERAL (no specific section named), e.g. "what sections were amended by
+    the 2025 Act":
+      MATCH (old)-[r:SUPERSEDED_BY]->(new)
+      RETURN old, new LIMIT 25
+  - SPECIFIC section named, e.g. "how did section 17 change in the latest
+    edition" - build the id from the named section EXACTLY as described
+    above, and match it on EITHER side of SUPERSEDED_BY with OPTIONAL MATCH
+    (the section may be the OLD version or already the CURRENT one - OPTIONAL
+    MATCH covers both without you having to know which):
+      MATCH (n)
+      WHERE n.id = 'Section_17' OR n.id ENDS WITH '__Section_17'
+      OPTIONAL MATCH (old)-[r:SUPERSEDED_BY]->(n)
+      OPTIONAL MATCH (n)-[r2:SUPERSEDED_BY]->(new)
+      RETURN n, old, new LIMIT 5
+    This ALWAYS returns at least the current `n` even if no supersession
+    exists yet for that id (e.g. that specific section was left unchanged by
+    the newer Act, or the newer Act isn't fully ingested) - never output
+    NO_QUERY just because you're not sure supersession happened; matching
+    the plain node by id is a valid, useful answer on its own.
+  Do not filter this query down to `old.file_type` / `new.file_type` unless
+  the question names a specific source document to distinguish from,
+  since `SUPERSEDED_BY` by construction only ever links an older version to
+  its newer replacement.
+1961 ACT VS 2025 ACT (RENUMBERING) QUESTIONS - the Income-tax Act, 2025 (in
+force from 1 April 2026) replaced the Income-tax Act, 1961 and renumbered its
+sections, so the SAME number usually means a DIFFERENT provision in each Act
+(e.g. 1961 Act Section 90, treaty relief, corresponds to 2025 Act Section
+159, while 2025 Act Section 90 is unrelated):
+- `CORRESPONDS_TO` (Section)-[:CORRESPONDS_TO]->(Section) links a section of
+  one Act to the section of the other Act covering the same subject matter.
+  It is stored in BOTH directions and carries `basis`/`confidence`
+  properties. Use it for "what is the 2025 Act equivalent of section X",
+  "which section replaced section X", "what changed in section X between the
+  1961 Act and the 2025 Act", "corresponding provision":
+    MATCH (n:Section)
+    WHERE n.id = 'Section_90' OR n.id ENDS WITH '__Section_90'
+    OPTIONAL MATCH (n)-[r:CORRESPONDS_TO]->(m:Section)
+    RETURN n, r, m LIMIT 25
+  OPTIONAL MATCH keeps `n` even when no correspondence has been mapped for
+  that section yet - never output NO_QUERY just because a mapping might be
+  missing.
+- Only use CORRESPONDS_TO if it appears in the valid relationship types
+  above; otherwise return the matched section(s) alone.
+
+- Do not assume amendment info lives only in AMENDED_BY - if the question
+  mentions a whole Act/document ingested more recently (not a specific
+  numbered amending Act footnote), SUPERSEDED_BY is more likely correct. But
+  if the question NAMES a specific amending Act by number/year, always
+  prefer NAMED-AMENDING-ACT QUESTIONS above over this general guidance.
+
+METADATA LAYER - SCALAR properties, every node carries these when captured.
+Use them whenever the question implies a version/hierarchy/time/context/
+file-type constraint, instead of ignoring that part of the question. Match
+these with plain equality (`n.status = 'in force'`):
+- `status` (string, e.g. "in force", "omitted", "repealed", "superseded") -
+  use for questions like "what's currently in force" / "is this still good law".
+- `effective_from` / `effective_to` (date strings, e.g. "2021-04-01") - use for
+  "as of <date>" or "before/after <date>" questions: a provision applies at
+  date D if effective_from <= D AND (effective_to IS NULL OR effective_to >= D).
+- `authority_level` (string, e.g. "Statute", "DelegatedLegislation", "Judicial") -
+  use for "what does the statute (vs. a circular) say" type questions, to
+  filter to/prioritize a specific authority tier.
+- `jurisdiction` (string, e.g. "India") - use if the question specifies one.
+- `file_type` (string, e.g. "act_pdf", "caselaw_pdf", "generic") - the file
+  type this entity was ingested as, matching the webapp's Ingest tab
+  dropdown. Use when the question refers to a file type by name rather than
+  an ontology label ("case law" -> file_type: 'caselaw_pdf' is usually also
+  just the CaseLaw label - prefer the label when both would work).
+- `forum_level` (string, case law only: "Tribunal", "High Court", "Supreme
+  Court", "AAR", "Commissioner (Appeals)") - use for "what did the Tribunal
+  hold" vs "what did the High Court hold" type questions, instead of
+  matching free-text `court` values.
+
+METADATA LAYER - LIST properties, LLM-tagged at ingestion wherever the source
+text clearly supported it (never guaranteed present). These are STRING LISTS,
+not scalars - `n.legal_concepts = 'demerger'` will NEVER match a list
+property; you MUST use containment syntax:
+    ANY(x IN n.legal_concepts WHERE toLower(x) CONTAINS 'demerger')
+  or, for an exact-ish tag:
+    'demerger' IN n.legal_concepts
+- `legal_concepts` - short topical tags a tax professional would search by
+  (e.g. "demerger", "cost-of-acquisition", "deemed-dividend", "slump-sale",
+  "treaty-relief"). This is the PRIMARY field for topic/issue questions like
+  "what is the meaning of X" or "why are Y excluded from Z" - use it FIRST
+  alongside any exact section/case id match, not instead of it.
+- `statutes_cited` - other Income-tax Act section citations mentioned in this
+  node's text (e.g. "Section 46(2)"). Use for "which provisions discuss
+  section X" cross-reference questions.
+- `other_act_references` - references to a DIFFERENT statute (e.g. "Companies
+  Act 2013 Section 233"). Use for questions naming a non-Income-tax-Act
+  section, like fast-track demergers under Companies Act s.233.
+- `treaty_references` - tax treaty/DTAA article references (e.g.
+  "India-Mauritius DTAA Article 13"). Use for treaty-relief questions.
+- `cases_cited` - case law referenced by another case (precedents followed/
+  distinguished/referred to). To find OTHER cases that cite a given case, use
+  `ANY(x IN n.cases_cited WHERE toLower(x) CONTAINS '<case name>')`. To find
+  what a SPECIFIC named case itself relied on ("what earlier cases did X rely
+  on"), do NOT filter on cases_cited - instead match that case directly (see
+  NAMED-CASE QUESTIONS above) and return it; its own `cases_cited` property
+  on the matched node already IS the full answer.
+- `precedents_overruled` - list of case names THIS node's own judgment
+  expressly overrules (a subset already also folded into `cases_cited`
+  above). Prefer the `OVERRULES`/`OVERRULED_BY` graph relationship (see
+  OVERRULING / REVERSAL QUESTIONS above) over this property when possible,
+  since the relationship also gives you the target node's own properties
+  (court/forum_level/etc.) in one traversal - use this property only as a
+  fallback if the relationship traversal returns nothing.
+- `defines_terms` - terms this node's text statutorily DEFINES (e.g.
+  "assessed to income-tax", "demerger"). Use FIRST for "meaning of <term>" /
+  "definition of <term>" questions - this jumps straight to the defining
+  provision instead of a broad text search.
+Example - "Can a non-tax-neutral fast-track demerger be taxed as a slump sale
+under section 50B?" (needs both a concept match AND a cross-act reference):
+    MATCH (n)
+    WHERE ANY(x IN n.legal_concepts WHERE toLower(x) CONTAINS 'demerger')
+       OR ANY(x IN n.other_act_references WHERE x CONTAINS '233')
+       OR n.id = 'Section_50B' OR n.id ENDS WITH '__Section_50B'
+    RETURN n LIMIT 25
+- If the question does NOT mention any of these, do not add filters on them -
+  don't invent a status/date/concept/file-type constraint nobody asked for.
+
+Rules:
+- Output ONLY the Cypher query text. No prose, no markdown fences, no explanation,
+  no trailing semicolon.
+- Write ONE statement ending in ONE RETURN clause (several MATCH / OPTIONAL MATCH /
+  WHERE clauses before it are fine). Never use UNION or multiple RETURN clauses.
+- Neo4j 5 syntax only: test a property with `n.prop IS NOT NULL` / `IS NULL`
+  (the old `exists(n.prop)` function no longer exists in Neo4j 5). Never call
+  the `id(n)` function - it returns Neo4j's internal number, NOT the `id`
+  property; always write `n.id`. No `cypher(...)`/`$$` wrappers, no `::agtype`
+  casts, no `$parameters` - write literal values inline.
+- The query must be complete and read-only (MATCH/OPTIONAL MATCH/WHERE/WITH/RETURN
+  only - never CREATE/MERGE/SET/DELETE). Close every bracket and quote. A query
+  that would be cut off is worse than NO_QUERY - keep it short and simple.
+- Always LIMIT results to at most 25 rows unless the question clearly asks for a count.
+- Use only the labels/relationship types listed above - never invent new ones.
+- Prefer returning whole nodes/relationships (e.g. RETURN n, r, m) so the caller can
+  both explain the answer and visualize the matched subgraph.
+- If the question cannot be answered with the available labels/relationships, output
+  exactly: NO_QUERY
+""",
+        ),
     ],
 
     "answer_generation": [

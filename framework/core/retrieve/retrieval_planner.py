@@ -101,7 +101,12 @@ def plan_retrieval(question: str, schema: dict, prior_attempts: list[dict] | Non
         prior_attempts=_format_prior_attempts(prior_attempts),
         question=question,
     )
-    raw = llm_client.complete(system=system, user_content=question, max_tokens=300,
+    # 2026-10-14: was max_tokens=300 - the plan JSON carries a free-text
+    # `reasoning` field plus a query_text, and a cut-off JSON object fails
+    # json.loads() and silently degrades to CYPHER with an EMPTY query_text
+    # (see _parse_plan()), i.e. NL2Cypher on "". Same headroom reasoning as
+    # graphrag.NL2CYPHER_MAX_TOKENS.
+    raw = llm_client.complete(system=system, user_content=question, max_tokens=600,
                                trace=trace, name="retrieval_plan")
     plan = _parse_plan(raw)
     logger.info(f"[retrieval_planner] plan={plan}")

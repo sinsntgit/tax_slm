@@ -85,9 +85,22 @@ def run_tool(retriever: GraphRAGRetriever, plan: dict, trace=None) -> dict:
 
     if tool == "CITATION":
         citation = plan.get("citation") or ""
-        hit = retriever.retrieve_by_citation(citation) if citation else None
-        chunks = [{"chunk_id": hit["chunk_id"], "text": hit["text"], "source": "citation"}] if hit else []
-        return {"plain_rows": [], "chunks": chunks, "cypher": None}
+        # 2026-10-14: every Act's match for the citation (the 1961 and 2025
+        # Acts share section numbers for unrelated provisions) plus the
+        # CORRESPONDS_TO counterpart in the other Act - same helpers
+        # GraphRAGRetriever.retrieve()'s citation path uses; was
+        # retrieve_by_citation(), which returned one arbitrary Act's chunk.
+        hits = retriever.retrieve_citation_matches(citation) if citation else []
+        chunks = [{"chunk_id": h["chunk_id"], "text": h["text"], "source": "citation"} for h in hits]
+        correspondence = {"rows": [], "chunks": []}
+        if hits:
+            try:
+                correspondence = retriever.get_act_correspondence_context(
+                    [h["entity_id"] for h in hits if h.get("entity_id")])
+            except Exception as e:
+                logger.warning(f"[retrieval_orchestrator] act-correspondence lookup failed: {e}")
+        chunks += [c for c in correspondence["chunks"] if c["chunk_id"] not in {x["chunk_id"] for x in chunks}]
+        return {"plain_rows": correspondence["rows"], "chunks": chunks, "cypher": None}
 
     # Should be unreachable - retrieval_planner._parse_plan() already
     # defaults any unrecognized tool value to "CYPHER" before this function

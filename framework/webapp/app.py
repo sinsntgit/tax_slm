@@ -368,9 +368,20 @@ def api_upload():
         return jsonify({"error": "No file selected."}), 400
     try:
         content = f.read()
-        saved_path = PIPELINE.save_upload(f.filename, content)
+        # 2026-10-14: duplicate reporting (see domain_packs/tax/ingest_dedup.py)
+        # - identical bytes reuse the existing upload, and the UI is told when
+        # this exact file is already in the graph so it can offer "re-ingest
+        # anyway" instead of silently creating a duplicate document. getattr:
+        # a pack without these helpers keeps the plain save_upload() path.
+        dedup_info, already_ingested = {}, []
+        if hasattr(PIPELINE, "save_upload_dedup"):
+            saved_path, dedup_info = PIPELINE.save_upload_dedup(f.filename, content)
+            already_ingested = PIPELINE.describe_upload_duplicates(saved_path)
+        else:
+            saved_path = PIPELINE.save_upload(f.filename, content)
         return jsonify({
             "upload_path": str(saved_path), "filename": f.filename, "size_bytes": len(content),
+            **dedup_info, "already_ingested": already_ingested,
         })
     except Exception as e:
         app.logger.exception("Failed in /api/upload")
@@ -441,7 +452,10 @@ def api_ingest_start():
     if not upload_path or not file_type:
         return jsonify({"error": "upload_path and file_type are required."}), 400
     try:
-        job_id = PIPELINE.start_ingestion_job(Path(upload_path), file_type, doc_meta, mode)
+        # 2026-10-14: force_reingest - "re-ingest anyway" for a file whose
+        # exact bytes are already in the graph (otherwise the job skips it).
+        extra = {"force_reingest": True} if body.get("force_reingest") else {}
+        job_id = PIPELINE.start_ingestion_job(Path(upload_path), file_type, doc_meta, mode, **extra)
         return jsonify({"job_id": job_id})
     except Exception as e:
         app.logger.exception("Failed in /api/ingest/start")
@@ -477,7 +491,9 @@ def api_ingest_batch_start():
     if not upload_paths or not isinstance(upload_paths, list) or not file_type:
         return jsonify({"error": "upload_paths (non-empty list) and file_type are required."}), 400
     try:
-        batch_id = PIPELINE.start_batch_ingestion_job([Path(p) for p in upload_paths], file_type, doc_meta, mode)
+        extra = {"force_reingest": True} if body.get("force_reingest") else {}  # 2026-10-14: see /api/ingest/start
+        batch_id = PIPELINE.start_batch_ingestion_job([Path(p) for p in upload_paths], file_type, doc_meta, mode,
+                                                      **extra)
         return jsonify({"batch_id": batch_id, "total": len(upload_paths)})
     except Exception as e:
         app.logger.exception("Failed in /api/ingest/batch/start")
@@ -1185,13 +1201,27 @@ def _dedupe_semantic_graph_trace(trace: dict | None) -> dict | None:
     return {"files_used": files_used, "files_not_found": files_not_found}
 
 
+def _resolve_include_parent_context(retrieval_mode: str, include_parent_context: bool | None) -> bool:
+    """2026-10-14: NEW. Whether _api_ask_impl() hydrates PART_OF parent-
+    section context (GraphRAGRetriever.get_parent_section_context()) for its
+    top chunks. An explicit True/False from the caller wins; None keeps the
+    rule that existed before this parameter: every mode EXCEPT "vector_only",
+    the graph-free Simple RAG ablation baseline (parent context comes from a
+    PART_OF graph walk, so it must not leak into that baseline)."""
+    if include_parent_context is not None:
+        return bool(include_parent_context)
+    return retrieval_mode != "vector_only"
+
+
 def _api_ask_impl(question: str, metadata_filters: dict | None, retrieval_mode: str = "hybrid",
                    extra_gen_instructions: str = "", skip_internal_quality_gate: bool = False,
                    bypass_cache: bool = False, answer_mode: str = "research",
                    auto_evaluate: bool = False,
                    supplementary_chunks: list[dict] | None = None,
                    include_full_chunks: bool = False,
-                   fast_mode: bool = False, skip_rerank: bool = False) -> tuple[dict, dict]:
+                   fast_mode: bool = False, skip_rerank: bool = False,
+                   include_parent_context: bool | None = None,
+                   mode_label: str | None = None) -> tuple[dict, dict]:
     """2026-08-26: EXTENDED with 4 new params and a new return shape.
     Returns (response, internal) - `response` is the exact JSON-able dict
     the /api/ask route sends to the client (unchanged shape); `internal` is
@@ -1291,6 +1321,20 @@ def _api_ask_impl(question: str, metadata_filters: dict | None, retrieval_mode: 
         fast_mode: a caller can request fast_mode retrieval with reranking
         still on, or normal retrieval with reranking off, though the two are
         expected to be used together in practice (see /api/ask/fast).
+      - include_parent_context / mode_label: 2026-10-14 NEW, INTERNAL ONLY
+        (not exposed on any route). Added for _run_unstructured_agent()'s
+        retrieval_mode="agentic" branch, which reuses retrieval_mode=
+        "vector_only" purely as the cheapest retrieval plumbing for an
+        evidence pool the agentic orchestrator ALREADY gathered (graph
+        included) - see _resolve_include_parent_context().
+        include_parent_context=None (default) keeps the historical rule
+        (parent-section context for every mode except the graph-free
+        "vector_only" Simple RAG baseline); True/False forces it.
+        mode_label (default: retrieval_mode) is the mode name this answer is
+        cached under and reported as in response["retrieval_mode"]/evaluation
+        logs - without it an agentic answer was cached under the SAME key as
+        a real Simple RAG answer to the same question, so either mode could
+        be served the other's cached answer.
     """
 
     # 2026-09-07: NEW - fast_mode skips detect_intent() (one LLM round-trip)
@@ -1304,7 +1348,12 @@ def _api_ask_impl(question: str, metadata_filters: dict | None, retrieval_mode: 
     # never matched and every /api/ask was a guaranteed cache MISS (the
     # cache was being written but never read back). Built ONCE here and
     # reused for both the read and the write so they can't drift apart again.
-    cache_extra_key = f"{retrieval_mode}:{answer_mode}:{'fast' if fast_mode else 'normal'}"
+    # 2026-10-14: keyed on reported_mode (mode_label, else retrieval_mode) -
+    # see this function's mode_label docstring for the agentic/vector_only
+    # cache collision this prevents.
+    reported_mode = mode_label or retrieval_mode
+    use_parent_context = _resolve_include_parent_context(retrieval_mode, include_parent_context)
+    cache_extra_key = f"{reported_mode}:{answer_mode}:{'fast' if fast_mode else 'normal'}"
     if not bypass_cache:
         cached = cache.get_cached_answer(question, metadata_filters, extra_key=cache_extra_key)
         if cached:
@@ -1434,8 +1483,10 @@ def _api_ask_impl(question: str, metadata_filters: dict | None, retrieval_mode: 
     # walks the graph's PART_OF relationships, so including it would let
     # graph-derived content leak into the "Simple RAG" baseline's context,
     # defeating the point of the comparison (see graphrag.py's docstring).
-    parent_context = {} if retrieval_mode == "vector_only" else \
-        retriever.get_parent_section_context([c["chunk_id"] for c in top_chunks])
+    # 2026-10-14: decided by _resolve_include_parent_context() (same default
+    # rule, plus the internal include_parent_context override agentic uses).
+    parent_context = retriever.get_parent_section_context([c["chunk_id"] for c in top_chunks]) \
+        if use_parent_context else {}
     for ref in grounding_info["source_references"]:
         ref["document"] = doc_details.get(str(ref["chunk_id"]), {})
         ref["parent_context"] = parent_context.get(str(ref["chunk_id"]), {})
@@ -1707,8 +1758,7 @@ def _api_ask_impl(question: str, metadata_filters: dict | None, retrieval_mode: 
         wider_ids = [c["chunk_id"] for c in wider_chunks]
         wider_doc_details = retriever.get_document_details(wider_ids)
         # 2026-08-26: same vector_only guard as the first-pass parent_context above.
-        wider_parent_context = {} if retrieval_mode == "vector_only" else \
-            retriever.get_parent_section_context(wider_ids)
+        wider_parent_context = retriever.get_parent_section_context(wider_ids) if use_parent_context else {}
 
         gap_text = "; ".join(quality["gaps"]) if quality["gaps"] else "the answer was judged too thin or under-cited"
         retry_instructions = (
@@ -1791,7 +1841,7 @@ def _api_ask_impl(question: str, metadata_filters: dict | None, retrieval_mode: 
             observability.log_span(trace, "answer_evaluation_auto", answer_text, auto_evaluation)
             try:
                 evaluation_log.record_evaluation(question, answer_text, auto_evaluation,
-                                                  source="auto_post_generation", retrieval_mode=retrieval_mode)
+                                                  source="auto_post_generation", retrieval_mode=reported_mode)
             except Exception as log_err:
                 app.logger.warning(f"evaluation_log.record_evaluation() failed (non-fatal): {log_err}")
         except Exception as e:
@@ -1827,7 +1877,7 @@ def _api_ask_impl(question: str, metadata_filters: dict | None, retrieval_mode: 
                                     answer_text, general_knowledge_evaluation)
             try:
                 evaluation_log.record_evaluation(question, answer_text, general_knowledge_evaluation,
-                                                  source="auto_general_knowledge", retrieval_mode=retrieval_mode)
+                                                  source="auto_general_knowledge", retrieval_mode=reported_mode)
             except Exception as log_err:
                 app.logger.warning(f"evaluation_log.record_evaluation() failed (non-fatal): {log_err}")
         except Exception as e:
@@ -1890,7 +1940,7 @@ def _api_ask_impl(question: str, metadata_filters: dict | None, retrieval_mode: 
         # show which framework categories had evidence, without bloating the
         # response payload with the full context text already sent to the LLM.
         "category_coverage": category_retrieval.summarize_category_coverage(category_results),
-        "retrieval_mode": retrieval_mode,  # 2026-08-26: NEW - surfaced so the UI can label which mode produced this answer
+        "retrieval_mode": reported_mode,  # 2026-08-26: NEW - surfaced so the UI can label which mode produced this answer (2026-10-14: mode_label-aware)
         "answer_mode": answer_mode,  # 2026-09-03: NEW - surfaced so the UI can badge lookup/research/opinion
         # 2026-09-05: NEW - count of feedback-driven supplementary chunks
         # actually merged in (0 if supplementary_chunks was None/empty, or
@@ -2809,19 +2859,17 @@ def _run_unstructured_agent(question: str, metadata_filters: dict | None, retrie
     evidence panel claim agentic mode never touched the graph even when its
     planner chose CYPHER and found rows.
 
-    KNOWN GAP (accepted, not yet fixed): because generation is reached via
-    retrieval_mode="vector_only", it also inherits that mode's skip of
-    get_parent_section_context() (see _api_ask_impl()'s parent_context local
-    - "vector_only" deliberately excludes PART_OF-graph-derived surrounding-
-    provision text, to keep that mode a clean graph-free baseline). Agentic
-    mode DID do real graph traversal when its planner chose CYPHER, so this
-    skip is an artifact of reusing vector_only's plumbing, not a deliberate
-    design choice for agentic mode specifically - it means an agentic answer
-    may cite a chunk without the same surrounding-section context a hybrid-
-    mode answer citing the identical chunk would carry. Left as-is for now;
-    revisit by hydrating parent context for orchestrator_result's chunk_ids
-    directly onto response["grounding"]["source_references"] if this proves
-    to matter in practice."""
+    2026-10-14: FIXED the former KNOWN GAP here. Because generation is
+    reached via retrieval_mode="vector_only", it used to inherit that mode's
+    skip of get_parent_section_context() ("vector_only" deliberately excludes
+    PART_OF-graph-derived surrounding-provision text to stay a clean
+    graph-free baseline) - an artifact of reusing vector_only's plumbing, not
+    a design choice: agentic answers cited chunks WITHOUT the surrounding
+    section a hybrid answer citing the identical chunk carried. The call now
+    passes include_parent_context=True explicitly (real Simple RAG calls keep
+    the default None -> skipped), and mode_label="agentic" so the answer is
+    cached/reported as agentic rather than colliding with a genuine
+    vector_only answer's cache entry (and being badged "Simple RAG")."""
     started_at = time.time()
 
     if retrieval_mode == "agentic":
@@ -2830,6 +2878,7 @@ def _run_unstructured_agent(question: str, metadata_filters: dict | None, retrie
         response, internal = _api_ask_impl(
             question, metadata_filters, retrieval_mode="vector_only", answer_mode=answer_mode,
             supplementary_chunks=orchestrator_result["chunks"] + supplementary,
+            include_parent_context=True, mode_label="agentic",  # 2026-10-14: see docstring
             **api_ask_impl_kwargs)
         # Patch in what the orchestrator actually found - see this branch's
         # comment above for why vector_only's own retrieve() call can't
