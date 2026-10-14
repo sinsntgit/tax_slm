@@ -94,10 +94,40 @@ def model_chunk_budget(reserve_system: int = DEFAULT_RESERVE_FOR_SYSTEM_PROMPT,
     """How many tokens of DOCUMENT TEXT can go into one extraction call for
     whichever provider is currently selected (llm_client.USE_MODEL),
     reserving headroom for the system prompt and the model's own JSON
-    output."""
+    output.
+
+    2026-10-14 (phase0/followups): a LOCAL model (vLLM/Ollama, typically an
+    8-32k window) has no entry in MODEL_CONTEXT_WINDOWS, so it used to fall
+    through to the 100k default - one "whole document" group far bigger than
+    the server accepts. When llm_client.context_window_tokens() knows the
+    window (LOCAL_LLM_CONTEXT_LENGTH, honouring USE_MODEL_INGESTION and an
+    LLM_ROUTE_ENRICHMENT* route - the enrichment calls are named
+    enrichment_group_<i>_of_<n>), that window is used via
+    llm_client.local_text_token_budget(). API providers are unchanged."""
+    local_window = _configured_local_window()
+    if local_window:
+        return llm_client.local_text_token_budget(local_window, reserve_system, reserve_output)
     window = MODEL_CONTEXT_WINDOWS.get(llm_client.USE_MODEL, 100_000)
     budget = window - reserve_system - reserve_output
     return max(budget, 2_000)  # never go below a sane floor even for a tiny/misconfigured window
+
+
+def _configured_local_window() -> int | None:
+    """2026-10-14: LOCAL_LLM_CONTEXT_LENGTH for the provider that will serve
+    the enrichment calls, or None (API provider, or LOCAL with no window
+    configured - then the old table/100k default applies and a warning says
+    so, rather than guessing a window for an unknown model). Never raises:
+    a bad USE_MODEL value surfaces on the real call, not in sizing."""
+    try:
+        window = llm_client.context_window_tokens("ingestion", name="enrichment_group")
+        if not window:
+            config = llm_client.refresh_model_config("ingestion", name="enrichment_group")
+            if config.use_model == "LOCAL":
+                step_logger.log("  WARNING: LOCAL model with no LOCAL_LLM_CONTEXT_LENGTH set - sizing "
+                                "extraction groups for a 100k window; set it to the server's max_model_len.")
+        return window
+    except Exception:
+        return None
 
 
 def generic_chunk_id(index: int, document_id: str) -> str:

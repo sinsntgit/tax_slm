@@ -193,6 +193,21 @@ def llm_chunk_info() -> dict:
     llm_client.refresh_model_config(purpose="ingestion")
     window = MODEL_CONTEXT_WINDOWS.get(llm_client.USE_MODEL, 100_000)
     budget = max(window - 1_500 - 2_000, 2_000)
+    # 2026-10-14 (phase0/followups): a LOCAL model has no table entry (was
+    # shown as 100k); use LOCAL_LLM_CONTEXT_LENGTH when configured, with the
+    # same budget arithmetic extract_generic.model_chunk_budget() uses, so the
+    # UI shows what ingestion will actually do. Name matches its enrichment calls.
+    try:
+        local_window = llm_client.context_window_tokens("ingestion", name="enrichment_group")
+    except Exception:
+        local_window = None
+    if local_window:
+        config = llm_client.refresh_model_config("ingestion", name="enrichment_group")
+        return {
+            "provider": config.use_model, "model": config.model_name,
+            "context_window_tokens": local_window,
+            "extraction_call_budget_tokens": llm_client.local_text_token_budget(local_window, 1_500, 2_000),
+        }
     return {
         "provider": llm_client.USE_MODEL, "model": llm_client.MODEL_NAME,
         "context_window_tokens": window, "extraction_call_budget_tokens": budget,

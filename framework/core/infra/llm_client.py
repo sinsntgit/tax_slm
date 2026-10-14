@@ -803,6 +803,29 @@ def context_window_tokens(purpose: str = "ingestion", name: str | None = None) -
     return config.context_length if config.use_model == "LOCAL" else None
 
 
+# 2026-10-14 (phase0/followups): chunk-group sizing for a LOCAL window. The
+# ingestion converters count document text with tiktoken cl100k (~4 chars per
+# token on English legal text), while _local_effective_max_tokens() estimates
+# the prompt at _CHARS_PER_TOKEN_ESTIMATE (3.0) chars per token. If a group
+# filled `window - reserves` tiktoken tokens, that estimate would come out ~33%
+# larger than the window and clamp the completion to 64 tokens (truncated,
+# unparseable JSON). So the text budget is scaled into the same conservative
+# units the clamp uses - errs on smaller groups (more calls), never overflow.
+_TIKTOKEN_CHARS_PER_TOKEN = 4.0
+
+
+def local_text_token_budget(window: int, reserve_system: int, reserve_output: int) -> int:
+    """How many tiktoken-counted tokens of document text fit in one call to a
+    LOCAL model with this context window, after reserving room for the
+    system prompt, the completion and the chat-template overhead. Shared by
+    extract_generic.model_chunk_budget() and pipeline.llm_chunk_info() so
+    the UI shows exactly the budget ingestion uses. Floor of 256 tokens (a
+    paragraph): below that the window is misconfigured and the per-call
+    clamp/warning in _local_effective_max_tokens() takes over."""
+    usable = window - reserve_system - reserve_output - _CHAT_TEMPLATE_OVERHEAD_TOKENS
+    return max(int(usable * _CHARS_PER_TOKEN_ESTIMATE / _TIKTOKEN_CHARS_PER_TOKEN), 256)
+
+
 _DISPATCH = {
     "CLAUDE": _complete_claude,
     "GEMINI": _complete_gemini,
