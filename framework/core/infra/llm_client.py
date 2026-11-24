@@ -407,16 +407,71 @@ def _get_client(config: ModelConfig):
         return client
 
 
+# 2026-11-23: NEW - whether the INSTALLED anthropic SDK's Messages.create()
+# still accepts `temperature`. Reported crash: "TypeError: Messages.create() got
+# an unexpected keyword argument 'temperature'" on every Claude call (the first
+# being intent_detection), so /api/ask returned 500 for every question. The
+# anthropic SDK dropped the `temperature` (and `top_p`) parameters from
+# Messages.create in 1.0.0 (verified: 0.125.0 has it, 1.0.0 / 1.17.0 / 2.12.0
+# do not), and requirements.txt only pins anthropic>=0.40.0, so any fresh
+# install gets a version without it. Sending it whenever the Settings page has a
+# temperature saved (0.0 on the dev machine) therefore broke every Claude call.
+# Decided once per process by signature inspection, with a TypeError fallback
+# below in case inspection can't tell (wrapped/decorated methods).
+_claude_temperature_supported: bool | None = None
+
+
+def _claude_accepts_temperature(client) -> bool:
+    global _claude_temperature_supported
+    if _claude_temperature_supported is None:
+        try:
+            import inspect
+            params = inspect.signature(client.messages.create).parameters
+            accepts_kwargs = any(p.kind is inspect.Parameter.VAR_KEYWORD for p in params.values())
+            _claude_temperature_supported = "temperature" in params or accepts_kwargs
+        except (TypeError, ValueError):
+            _claude_temperature_supported = True  # can't tell - try it; the TypeError fallback catches it
+        if not _claude_temperature_supported:
+            step_logger.log("llm_client: installed anthropic SDK's Messages.create() has no 'temperature' "
+                             "parameter (removed in anthropic 1.0.0) - the Settings-page temperature is not "
+                             "sent to Claude; the model's default sampling is used.")
+    return _claude_temperature_supported
+
+
 def _complete_claude(config: ModelConfig, system: str, user_content: str, max_tokens: int) -> tuple[str, dict | None]:
+    global _claude_temperature_supported
     client = _get_client(config)
-    kwargs = {} if config.temperature is None else {"temperature": config.temperature}
-    response = client.messages.create(
-        model=config.model_name,
-        max_tokens=max_tokens,
-        system=system,
-        messages=[{"role": "user", "content": user_content}],
-        **kwargs,
-    )
+    kwargs = {}
+    if config.temperature is not None and _claude_accepts_temperature(client):
+        kwargs["temperature"] = config.temperature
+    try:
+        response = client.messages.create(
+            model=config.model_name,
+            max_tokens=max_tokens,
+            system=system,
+            messages=[{"role": "user", "content": user_content}],
+            **kwargs,
+        )
+    except TypeError as e:
+        # 2026-11-23: see _claude_accepts_temperature() - same "drop it and
+        # retry once" shape _complete_gpt already uses for its own temperature
+        # rejection. Only for THIS TypeError; anything else propagates as before.
+        if "temperature" not in kwargs or "temperature" not in str(e):
+            raise
+        _claude_temperature_supported = False
+        step_logger.log(f"llm_client: Claude call rejected temperature ({e}) - retrying without it, "
+                         f"and not sending it again this run.")
+        kwargs.pop("temperature")
+        response = client.messages.create(
+            model=config.model_name,
+            max_tokens=max_tokens,
+            system=system,
+            messages=[{"role": "user", "content": user_content}],
+        )
+    return _claude_response_to_result(config, response, max_tokens)
+
+
+def _claude_response_to_result(config: ModelConfig, response, max_tokens: int) -> tuple[str, dict | None]:
     if getattr(response, "stop_reason", None) == "max_tokens":
         # The response was cut off mid-generation because it hit max_tokens -
         # for a JSON-producing caller (e.g. extract_entities.py's semantic
